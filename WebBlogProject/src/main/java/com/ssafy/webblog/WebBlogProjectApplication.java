@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.ssafy.webblog.controller.article.FileUploadProperties;
+import com.ssafy.webblog.controller.account.normal.FileUploadProperties;
 import com.ssafy.webblog.interceptor.JwtInterceptor;
 
 @SpringBootApplication

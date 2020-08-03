@@ -1,4 +1,4 @@
-package com.ssafy.webblog.controller.article;
+package com.ssafy.webblog.controller.account.normal;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
