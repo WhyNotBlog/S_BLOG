@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-row align="center" justify="center" class="loginModal">
-      <v-col class="loginModal">
+    <v-row align="center" justify="center" class="registModal">
+      <v-col class="registModal">
         <v-card class="elevation-12" style="background-color:#f1f3f5">
           <v-toolbar color="#595959" dark flat>
             <v-icon left>person_add</v-icon>
@@ -16,7 +16,7 @@
             <v-form ref="form">
               <v-text-field
                 id="email"
-                label="Email"
+                label="Email*"
                 name="email"
                 ref="email"
                 prepend-icon="mdi-email"
@@ -32,7 +32,7 @@
               <v-text-field
                 id="nickname"
                 ref="nickname"
-                label="Nickname"
+                label="Nickname*"
                 name="nickname"
                 prepend-icon="mdi-account-circle"
                 type="text"
@@ -46,7 +46,7 @@
 
               <v-text-field
                 id="password"
-                label="Password"
+                label="Password*"
                 ref="password"
                 name="password"
                 prepend-icon="mdi-lock"
@@ -58,7 +58,7 @@
 
               <v-text-field
                 id="passwordCheck"
-                label="Password Check"
+                label="Password Check*"
                 name="passwordCheck"
                 prepend-icon="mdi-lock"
                 type="password"
@@ -242,7 +242,7 @@ export default {
 </script>
 
 <style scoped>
-.loginModal {
+.registModal {
   padding: 0;
   margin: 0;
 }

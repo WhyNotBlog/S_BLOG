@@ -23,7 +23,7 @@
           <v-form ref="form">
             <v-text-field
               id="email"
-              label="Email"
+              label="Email*"
               name="email"
               prepend-inner-icon="mdi-email"
               type="text"
@@ -35,17 +35,20 @@
 
             <v-text-field
               id="nickname"
-              label="Nickname"
+              label="Nickname*"
               name="nickname"
               prepend-inner-icon="mdi-account-circle"
               type="text"
               color="black"
               v-model="nickname"
-              :rules="[rules.nicknameRequired]"
+              :rules="[rules.nicknameRequired, rules.nicknameCheck]"
+              :append-icon="nicknameIcon"
+              @change="reCheckNickname"
+              @click:append="searchNickname"
             ></v-text-field>
             <v-text-field
               id="password"
-              label="Password"
+              label="Password*"
               name="password"
               prepend-inner-icon="mdi-lock"
               type="password"
@@ -56,7 +59,7 @@
 
             <v-text-field
               id="passwordCheck"
-              label="Password Check"
+              label="Password Check*"
               name="passwordCheck"
               prepend-inner-icon="mdi-lock"
               type="password"
@@ -84,9 +87,9 @@
         </div>
 
         <div class="btns">
-          <v-btn color="black white--text" @click="dropHandler">Drop</v-btn>
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn color="black white--text" @click="updateHandler">Update</v-btn>
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
       </div>
     </div>
@@ -116,11 +119,12 @@
           <v-form ref="form">
             <v-text-field
               id="email"
-              label="Email"
+              label="Email*"
               name="email"
               prepend-inner-icon="mdi-email"
               type="text"
               color="black"
+              append-icon="mdi-lock"
               v-model="email"
               readonly
               filled
@@ -128,17 +132,20 @@
 
             <v-text-field
               id="nickname"
-              label="Nickname"
+              label="Nickname*"
               name="nickname"
               prepend-inner-icon="mdi-account-circle"
               type="text"
               color="black"
               v-model="nickname"
-              :rules="[rules.nicknameRequired]"
+              :rules="[rules.nicknameRequired, rules.nicknameCheck]"
+              :append-icon="nicknameIcon"
+              @change="reCheckNickname"
+              @click:append="searchNickname"
             ></v-text-field>
             <v-text-field
               id="password"
-              label="Password"
+              label="Password*"
               name="password"
               prepend-inner-icon="mdi-lock"
               type="password"
@@ -149,7 +156,7 @@
 
             <v-text-field
               id="passwordCheck"
-              label="Password Check"
+              label="Password Check*"
               name="passwordCheck"
               prepend-inner-icon="mdi-lock"
               type="password"
@@ -177,7 +184,7 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler">계정 삭제하기</v-btn>
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
           <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
@@ -230,6 +237,8 @@ export default {
   },
 
   created() {
+    this.rules.nicknameCheck = true;
+
     if (this.loggedIn == null) {
       this.loginModal = true;
       this.$router.push("/");
@@ -245,6 +254,7 @@ export default {
         if (res.status) {
           let data = res.data.data;
           this.nickname = data.nickname;
+          this.nicknameChecked = this.nickname;
           this.email = data.email;
           this.gitUrl = data.giturl;
           this.introduce = data.introduce;
@@ -309,7 +319,7 @@ export default {
           if (res.status) {
             this.loggedIn = this.nickname;
             alert("회원정보 수정이 완료되었습니다.");
-            this.$router.push("/");
+            this.$router.push("/user/info");
           }
         })
         .catch((err) => {
@@ -346,10 +356,40 @@ export default {
           console.log(err);
         });
     },
+    searchNickname() {
+      if (this.nickname == "") {
+        this.$refs.nickname.focus();
+        return;
+      }
+      axios
+        .get(process.env.VUE_APP_ACCOUNT + "findNickname/" + this.nickname)
+        .then((res) => {
+          if (res.data.data == 0) {
+            alert("이미 존재하는 닉네임입니다.");
+            this.nickname = "";
+            this.$refs.nickname.focus();
+            this.nicknameIcon = "mdi-checkbox-multiple-blank-outline";
+            return;
+          }
+          this.nicknameIcon = "mdi-checkbox-multiple-marked";
+          this.rules.nicknameCheck = true;
+          this.nicknameChecked = this.nickname;
+        });
+    },
+
+    reCheckNickname() {
+      if (this.nickname != this.nicknameChecked) {
+        this.nicknameIcon = "mdi-checkbox-multiple-blank-outline";
+        this.rules.nicknameCheck = () =>
+          false || "닉네임은 중복확인이 필요합니다.";
+      }
+    },
   },
 
   data() {
     return {
+      nicknameIcon: "mdi-checkbox-multiple-marked",
+      nicknameChecked: "",
       imgSrc: "",
       fileName: "",
       selectedFile: "",
@@ -373,6 +413,7 @@ export default {
         password: (value) =>
           /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value) ||
           "패스워드는 8자리 이상의 문자, 숫자 조합이어야 합니다.",
+        nicknameCheck: () => false || "닉네임은 중복확인이 필요합니다.",
       },
     };
   },
