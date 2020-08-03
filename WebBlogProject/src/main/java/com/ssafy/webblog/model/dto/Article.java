@@ -38,5 +38,6 @@ public class Article {
     private LocalDateTime editdate;
     
     private int modify;
-
+    private int hits;
+    private int type;
 }
