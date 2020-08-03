@@ -8,6 +8,7 @@ import Update from "@/components/article/Update";
 import SNSLogin from "@/components/user/SNSLogin";
 import Auth from "@/components/user/Auth";
 import Info from "@/components/user/Info";
+import UserUpdate from "@/components/user/Update";
 import Email from "@/components/user/Email";
 import SNSRegist from "@/components/user/SNSRegist";
 import SNSCombine from "@/components/user/SNSCombine";
@@ -63,6 +64,11 @@ const routes = [
     name: "Auth",
     props: true,
     component: Auth,
+  },
+  {
+    path: "/user/update",
+    name: "update",
+    component: UserUpdate,
   },
   {
     path: "/user/info",

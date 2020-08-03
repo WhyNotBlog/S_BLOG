@@ -1,185 +1,43 @@
 <template>
   <div class="page">
     <br />
-    <div v-show="mobileView">
-      <div>
-        <v-layout column>
-          <div class="profile">
-            <v-avatar>
-              <img :src="profile" @error="imgError" />
-            </v-avatar>
-          </div>
-          <br />
-          <div class="file">
-            <form enctype="multipart/form-data">
-              <v-file-input class="fileInput" label="File" @change="fileUpload($event)"></v-file-input>
-            </form>
-            <v-btn text v-on:click="addItem">등록하기</v-btn>
-          </div>
-        </v-layout>
-      </div>
-      <div>
-        <div class="main">
-          <v-form ref="form">
-            <v-text-field
-              id="email"
-              label="Email"
-              name="email"
-              prepend-inner-icon="mdi-email"
-              type="text"
-              color="black"
-              v-model="email"
-              readonly
-              filled
-            ></v-text-field>
-
-            <v-text-field
-              id="nickname"
-              label="Nickname"
-              name="nickname"
-              prepend-inner-icon="mdi-account-circle"
-              type="text"
-              color="black"
-              v-model="nickname"
-              :rules="[rules.nicknameRequired]"
-            ></v-text-field>
-            <v-text-field
-              id="password"
-              label="Password"
-              name="password"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              color="black"
-              v-model="password"
-              :rules="[rules.passwordRequired, rules.password]"
-            ></v-text-field>
-
-            <v-text-field
-              id="passwordCheck"
-              label="Password Check"
-              name="passwordCheck"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              color="black"
-              v-model="passwordCheck"
-              :rules="[rules.passwordCheckRequired, rules.passwordCheck]"
-            ></v-text-field>
-
-            <v-text-field
-              id="gitUrl"
-              label="Git URL"
-              name="gitUrl"
-              prepend-inner-icon="mdi-git"
-              type="text"
-              color="black"
-              v-model="gitUrl"
-            ></v-text-field>
-
-            <v-textarea
-              v-model="introduce"
-              label="Introduce"
-              prepend-inner-icon="mdi-comment-processing"
-            ></v-textarea>
-          </v-form>
-        </div>
-
-        <div class="btns">
-          <v-btn color="black white--text" @click="dropHandler">Drop</v-btn>
-          <br />
-          <v-btn color="black white--text" @click="updateHandler">Update</v-btn>
-        </div>
-      </div>
-    </div>
 
     <v-layout row justify-space-around v-show="!mobileView">
-      <v-flex xs12 sm12 md3 lg3 xl3>
-        <v-layout column>
-          <div class="profile">
-            <v-avatar>
-              <img :src="profile" @error="imgError" />
-            </v-avatar>
-          </div>
-          <br />
-          <div class="file">
-            <div class="fileData">
-              <form enctype="multipart/form-data">
-                <v-file-input label="Profile Image" @change="fileUpload($event)"></v-file-input>
-              </form>
-            </div>
-            <v-btn color="black" text v-on:click="addItem">등록하기</v-btn>
-          </div>
-        </v-layout>
+      <v-flex xs12 sm12 md3 lg3 xl3 class="backImg">
+        <div class="profile">
+          <v-avatar>
+            <img :src="profile" />
+          </v-avatar>
+        </div>
       </v-flex>
 
       <v-flex xs12 sm12 md5 lg5 xl5>
-        <div class="main">
-          <v-form ref="form">
-            <v-text-field
-              id="email"
-              label="Email"
-              name="email"
-              prepend-inner-icon="mdi-email"
-              type="text"
-              color="black"
-              v-model="email"
-              readonly
-              filled
-            ></v-text-field>
+        <div class="infoBox">
+          <h2>{{nickname}}</h2>
+          <p>{{introduce}}</p>
+          <v-divider style="margin:5px"></v-divider>
 
-            <v-text-field
-              id="nickname"
-              label="Nickname"
-              name="nickname"
-              prepend-inner-icon="mdi-account-circle"
-              type="text"
-              color="black"
-              v-model="nickname"
-              :rules="[rules.nicknameRequired]"
-            ></v-text-field>
-            <v-text-field
-              id="password"
-              label="Password"
-              name="password"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              color="black"
-              v-model="password"
-              :rules="[rules.passwordRequired, rules.password]"
-            ></v-text-field>
-
-            <v-text-field
-              id="passwordCheck"
-              label="Password Check"
-              name="passwordCheck"
-              prepend-inner-icon="mdi-lock"
-              type="password"
-              color="black"
-              v-model="passwordCheck"
-              :rules="[rules.passwordCheckRequired, rules.passwordCheck]"
-            ></v-text-field>
-
-            <v-text-field
-              id="gitUrl"
-              label="Git URL"
-              name="gitUrl"
-              prepend-inner-icon="mdi-git"
-              type="text"
-              color="black"
-              v-model="gitUrl"
-            ></v-text-field>
-
-            <v-textarea
-              v-model="introduce"
-              label="Introduce"
-              prepend-inner-icon="mdi-comment-processing"
-            ></v-textarea>
-          </v-form>
+          <div style="text-align:center">
+            <v-layout row wrap justify-space-around>
+              <v-flex xs3 sm3 md3 lg3 xl3>
+                <h4>게시물</h4>
+                <div>0</div>
+              </v-flex>
+              <v-flex xs3 sm3 md3 lg3 xl3>
+                <h4>팔로워</h4>
+                <div>0</div>
+              </v-flex>
+              <v-flex xs3 sm3 md3 lg3 xl3>
+                <h4>팔로잉</h4>
+                <div>0</div>
+              </v-flex>
+            </v-layout>
+          </div>
         </div>
 
-        <div class="btns">
-          <v-btn color="#9FA9D8" dark @click="dropHandler">회원 탈퇴</v-btn>
-          <br />
-          <v-btn color="#9FA9D8" dark @click="updateHandler">정보 수정</v-btn>
+        <br />
+        <div>
+          <v-btn color="#9fa9d8" dark @click="moveUpdate">프로필 편집</v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -256,95 +114,8 @@ export default {
   },
 
   methods: {
-    dropHandler() {
-      axios
-        .delete(process.env.VUE_APP_ACCOUNT + "delete/" + this.loggedIn, {
-          headers: {
-            "jwt-auth-token": this.jwtAuthToken,
-          },
-        })
-        .then((res) => {
-          if (res.status) {
-            alert("탈퇴 처리가 되었습니다!");
-            this.loggedIn = null;
-
-            this.jwtAuthToken = null;
-            this.$router.push("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("회원탈퇴 실패");
-        });
-    },
-    updateHandler() {
-      if (this.$refs.form.validate()) {
-        this.update();
-      }
-    },
-
-    imgError() {
-      console.log("err");
-      this.profile = `${require("@/assets/profile.svg")}`;
-    },
-    update() {
-      axios
-        .put(
-          process.env.VUE_APP_ACCOUNT + "update",
-          {
-            nickname: this.nickname,
-            password: this.password,
-            email: this.email,
-            giturl: this.gitUrl,
-            introduce: this.introduce,
-            id: this.fileName,
-          },
-          {
-            headers: {
-              "jwt-auth-token": this.jwtAuthToken,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status) {
-            this.loggedIn = this.nickname;
-            alert("회원정보 수정이 완료되었습니다.");
-            this.$router.push("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("회원정보 수정 실패");
-        });
-    },
-    fileUpload(file) {
-      this.selectedFile = file;
-    },
-    addItem() {
-      const data = new FormData(); // 서버로 전송할 폼데이터
-      const file = this.selectedFile; // 선택된 파일객체
-      data.append("file", file); // 폼데이터에 파일을 추가
-      console.log(file);
-      console.log(data);
-      //   데이터를 서버로 전송하는 코드 추가
-      axios
-        .post(process.env.VUE_APP_ARTICLE + "upload", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            filename: this.fileName,
-          },
-        })
-        .then(() => {
-          this.profile =
-            process.env.VUE_APP_ARTICLE +
-            "downloadFile/" +
-            this.fileName +
-            ".jpg";
-          location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    moveUpdate() {
+      this.$router.push("/user/update");
     },
   },
 
@@ -359,21 +130,6 @@ export default {
       email: "",
       gitUrl: "",
       introduce: "",
-      rules: {
-        nicknameRequired: (value) => !!value || "닉네임은 필수값입니다.",
-        passwordRequired: (value) => !!value || "패스워드는 필수값입니다.",
-        passwordCheckRequired: (value) =>
-          !!value || "패스워드 확인은 필수값입니다.",
-        emailRequired: (value) => !!value || "이메일은 필수값입니다.",
-        email: (value) =>
-          /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(value) ||
-          "이메일 형식이 아닙니다.",
-        passwordCheck: (value) =>
-          !(value != this.password) || "패스워드와 일치하지 않습니다.",
-        password: (value) =>
-          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value) ||
-          "패스워드는 8자리 이상의 문자, 숫자 조합이어야 합니다.",
-      },
     };
   },
 };
@@ -383,7 +139,7 @@ export default {
 .v-avatar[data-v-2d7fd89c] {
   width: 200px !important;
   height: 200px !important;
-  max-width: 200px !important;
+  max-width: 200px;
 }
 
 .theme--light.v-btn:hover::before,
@@ -393,29 +149,15 @@ export default {
   opacity: 0;
 }
 
-.profile,
-.fileData,
-.main,
-.btns {
+.profile {
   display: flex;
   justify-content: center;
-}
-
-.file {
-  text-align: center;
-}
-
-.v-file-input {
-  width: 225px !important;
-}
-
-.v-text-field {
-  width: 400px;
+  min-width: 200px;
 }
 
 .v-btn {
-  margin: 5px;
-  width: 190px;
+  width: 120px;
+  float: right;
 }
 @media screen and (max-width: 500px) {
   .v-text-field {
@@ -446,10 +188,5 @@ export default {
   .v-btn {
     width: 120px;
   }
-}
-.v-avatar {
-  width: 150px !important;
-  height: 150px !important;
-  max-width: 150px;
 }
 </style>
