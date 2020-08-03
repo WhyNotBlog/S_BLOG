@@ -82,7 +82,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text @click="loginModalOpen">이미 계정이 있으신가요?</v-btn>
-            <v-btn color="#595959" outlined @click="joinHandler">회원가입</v-btn>
+            <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler">회원가입</v-btn>
           </v-card-actions>
 
           <br />
@@ -251,5 +251,9 @@ export default {
 .theme--dark.v-btn:hover::before,
 .theme--dark.v-btn:focus::before {
   opacity: 0;
+}
+
+.joinBtn:hover {
+  opacity: 0.7;
 }
 </style>
