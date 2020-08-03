@@ -2,8 +2,18 @@
   <div class="page">
     <br />
 
-    <v-layout row justify-space-around v-show="!mobileView">
-      <v-flex xs12 sm12 md3 lg3 xl3 class="backImg">
+    <v-layout row wrap>
+      <v-flex>
+        <img
+          src="@/assets/back.jpg"
+          width="100%"
+          height="150vh"
+          style="object-position: center 50%"
+        />
+      </v-flex>
+    </v-layout>
+    <v-layout row justify-space-around>
+      <v-flex xs12 sm12 md3 lg3 xl3>
         <div class="profile">
           <v-avatar>
             <img :src="profile" />
@@ -14,33 +24,37 @@
       <v-flex xs12 sm12 md5 lg5 xl5>
         <div class="infoBox">
           <h2>{{nickname}}</h2>
-          <p>{{introduce}}</p>
-          <v-divider style="margin:5px"></v-divider>
-
-          <div style="text-align:center">
-            <v-layout row wrap justify-space-around>
-              <v-flex xs3 sm3 md3 lg3 xl3>
-                <h4>게시물</h4>
-                <div>0</div>
-              </v-flex>
-              <v-flex xs3 sm3 md3 lg3 xl3>
-                <h4>팔로워</h4>
-                <div>0</div>
-              </v-flex>
-              <v-flex xs3 sm3 md3 lg3 xl3>
-                <h4>팔로잉</h4>
-                <div>0</div>
-              </v-flex>
-            </v-layout>
-          </div>
-        </div>
-
-        <br />
-        <div>
-          <v-btn color="#9fa9d8" dark @click="moveUpdate">프로필 편집</v-btn>
+          <a :href="gitUrl">{{gitUrl}}</a>
+          <br />
+          <span>{{introduce}}</span>
+          <br />
         </div>
       </v-flex>
     </v-layout>
+    <br />
+
+    <v-divider style="margin:5px"></v-divider>
+
+    <div style="text-align:center">
+      <v-layout row wrap justify-space-around>
+        <v-flex xs3 sm3 md3 lg3 xl3>
+          <h4>게시물</h4>
+          <div>0</div>
+        </v-flex>
+        <v-flex xs3 sm3 md3 lg3 xl3>
+          <h4>팔로워</h4>
+          <div>0</div>
+        </v-flex>
+        <v-flex xs3 sm3 md3 lg3 xl3>
+          <h4>팔로잉</h4>
+          <div>0</div>
+        </v-flex>
+      </v-layout>
+      <br />
+      <div>
+        <v-btn color="#9fa9d8" dark @click="moveUpdate">프로필 편집</v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
