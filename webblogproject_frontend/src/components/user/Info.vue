@@ -2,8 +2,8 @@
   <div class="page">
     <br />
 
-    <v-layout row wrap>
-      <v-flex>
+    <v-layout col wrap>
+      <v-flex sm12 md12 lg12 xl12>
         <img
           src="@/assets/back.jpg"
           width="100%"
@@ -23,10 +23,9 @@
 
       <v-flex xs12 sm12 md5 lg5 xl5>
         <div class="infoBox">
-          <h2>{{nickname}}</h2>
-          <a :href="gitUrl">{{gitUrl}}</a>
-          <br />
-          <span>{{introduce}}</span>
+          <h2>{{ nickname }}</h2>
+          <a :href="gitUrl" v-show="gitUrl != ''">{{ gitUrl }}<br /></a>
+          <span>{{ introduce }}</span>
           <br />
         </div>
       </v-flex>
