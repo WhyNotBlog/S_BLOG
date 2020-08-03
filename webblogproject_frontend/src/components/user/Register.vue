@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-row align="center" justify="center" class="loginModal">
-      <v-col class="loginModal">
+    <v-row align="center" justify="center" class="registModal">
+      <v-col class="registModal">
         <v-card class="elevation-12" style="background-color:#f1f3f5">
           <v-toolbar color="#595959" dark flat>
             <v-icon left>person_add</v-icon>
@@ -16,7 +16,7 @@
             <v-form ref="form">
               <v-text-field
                 id="email"
-                label="Email"
+                label="Email*"
                 name="email"
                 ref="email"
                 prepend-icon="mdi-email"
@@ -32,7 +32,7 @@
               <v-text-field
                 id="nickname"
                 ref="nickname"
-                label="Nickname"
+                label="Nickname*"
                 name="nickname"
                 prepend-icon="mdi-account-circle"
                 type="text"
@@ -46,7 +46,7 @@
 
               <v-text-field
                 id="password"
-                label="Password"
+                label="Password*"
                 ref="password"
                 name="password"
                 prepend-icon="mdi-lock"
@@ -58,7 +58,7 @@
 
               <v-text-field
                 id="passwordCheck"
-                label="Password Check"
+                label="Password Check*"
                 name="passwordCheck"
                 prepend-icon="mdi-lock"
                 type="password"
@@ -82,7 +82,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn text @click="loginModalOpen">이미 계정이 있으신가요?</v-btn>
-            <v-btn color="#595959" outlined @click="joinHandler">회원가입</v-btn>
+            <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler">회원가입</v-btn>
           </v-card-actions>
 
           <br />
@@ -242,7 +242,7 @@ export default {
 </script>
 
 <style scoped>
-.loginModal {
+.registModal {
   padding: 0;
   margin: 0;
 }
@@ -251,5 +251,9 @@ export default {
 .theme--dark.v-btn:hover::before,
 .theme--dark.v-btn:focus::before {
   opacity: 0;
+}
+
+.joinBtn:hover {
+  opacity: 0.7;
 }
 </style>
