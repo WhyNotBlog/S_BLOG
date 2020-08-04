@@ -45,6 +45,7 @@ export default {
     name : 'Comment',
     data() {
         return {
+            valid : true,
             comment : '',
             commentRules : [(v) => v.length !== 0 || "내용을 반드시 작성해야합니다.",
                             () => this.loggedIn !== null || "로그인을 해야 댓글을 작성할 수 있습니다."],

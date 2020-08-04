@@ -38,11 +38,12 @@
         id="text"
       >
       <viewer 
-    :initialValue="article.content"
-    :value="viewerText"
-    height="500px"
-    />
-      </div>
+      id="markdown-viewer"
+      :initialValue="article.content"
+      :value="viewerText"
+      height="500px"
+      />
+        </div>
     </div>
       <Comment :articleId="article.articleid" />
   </div>
@@ -63,6 +64,7 @@ export default {
       article : new Object(
       ),
       tags : new Array(),
+      viewerText : '',
     };
   },
   components : {
@@ -70,21 +72,16 @@ export default {
     viewer : Viewer,
   },
   created() {
-    axios.get(process.env.VUE_APP_ARTICLE + this.$route.params.articleId)
-    .then((res) => {
-      this.article = res.data.data;
-      axios.get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
+    this.article = this.$store.state.currentArticle;
+    axios.get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
         .then((res) => {
           let tagData = res.data.data;
           this.tags = tagData;          
         })
         .catch((e) => console.log(e));
-    })
-    .catch((e) => console.log(e));
-
   },
   mounted() {
-
+    
   },
   computed : {
     loggedIn: {
@@ -98,7 +95,6 @@ export default {
   },
   methods: {
     changeLiked() {
-      // axios.post 추가
       this.article.isLiked = !this.article.isLiked;
     },
     updateArticle() {
