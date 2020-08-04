@@ -66,7 +66,12 @@ public class ArticleService {
 
 	public List<Article> searchAll() {
 		List<Article> result = null;
-		result = artiDao.getArticleBy();
+		result = artiDao.findAll();
+		return result;
+	}
+	
+	public List<Article> getArticleListByWriterid(int writerid){
+		List<Article> result = artiDao.getArticleByWriterid(writerid);
 		return result;
 	}
 

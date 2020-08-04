@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 /*임시로 일단 만들었습니다*/
 //글번호	제목	내용	작성자id	작성자nickname	카테고리	작성일자	수정여부
-public class Article {
+public class Articletemp {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="articleid")
@@ -37,9 +37,6 @@ public class Article {
     @Column(insertable = false, updatable = false)
     private LocalDateTime editdate;
     
-    private int modify;
-    private int hits;
-    private int type;
-    
     private int writerid;
+  
 }
