@@ -14,7 +14,7 @@
         <div class="infoBox">
           <h2>
             {{ nickname }}
-            <v-btn text v-show="gitUrl != ''" @click="moveGit">
+            <v-btn color="white" text v-show="gitUrl != ''" @click="moveGit">
               <v-icon>mdi-git</v-icon>
             </v-btn>
           </h2>
@@ -24,6 +24,7 @@
         </div>
       </v-flex>
     </v-layout>
+
     <br />
 
     <v-divider style="margin:5px"></v-divider>
@@ -115,6 +116,24 @@ export default {
           this.introduce = data.introduce;
           this.loggedIn = data.nickname;
           this.fileName = data.id;
+
+          axios
+            .get(
+              process.env.VUE_APP_ARTICLE +
+                "searchBy/nickname/" +
+                this.nickname,
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch(() => {});
@@ -125,7 +144,7 @@ export default {
       this.$router.push("/user/update");
     },
     moveGit() {
-      window.location.href = this.gitUrl;
+      location.href = this.gitUrl;
     },
   },
 
@@ -195,7 +214,12 @@ export default {
 
 .backImg {
   background-image: url("../../assets/back.jpg");
-  background-size: 150vh;
+  border-radius: 2rem;
+  background-size: 152vh;
   padding: 20px;
+}
+
+.infoBox {
+  color: white;
 }
 </style>
