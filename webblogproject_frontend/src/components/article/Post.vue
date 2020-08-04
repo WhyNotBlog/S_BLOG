@@ -4,12 +4,46 @@
             <v-row>
                 <v-col>
                     <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
-                        <div id="title">
-                            <v-text-field v-model="title" :rules="titleRules" :counter="30" label="Title" data-vv-name="title" required autofocus></v-text-field>
+                        <div class="d-flex" id="title">
+                            <v-text-field class="mx-3" color="secondary" style="width:60%;" v-model="title" :rules="titleRules" :counter="30" label="Title" data-vv-name="title" required autofocus></v-text-field>
+
+                            <v-select class="d-inline-block mx-3" id="selectedCategory" :items="categories" label="Category" color="secondary" outlined v-model="category"></v-select>
                         </div>
 
-                        <div id="content">
-                            <editor :value="editorText" :options="editorOptions" :html="editorHtml" :visible="editorVisible" initialEditType="wysiwyg" previewStyle="vertical" :plugins="editorPlugin" ref="tuiEditor" height="500px" mode="wysiwyg" @change="mdChange" />
+                        <div class="text-center my-3" id="change-content">
+                            <v-btn class="mx-3" @click="changeContent" color="secondary">{{ contentBtn }}</v-btn>
+
+                            <v-dialog v-model="dialog" persistent max-width="290">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn color="secondary" dark v-show="isMD" v-bind="attrs" v-on="on">
+                                        마크다운 미리보기
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title class="headline">{{ title }}</v-card-title>
+                                    <v-card-text>
+                                        <viewer :value="editorMarkdown" height="500px" />
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="gray darken-1" text @click="dialog = false">Close</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </div>
+
+                        <div v-if="!isMD" id="main-content">
+                            <div id="content">
+                                <v-textarea v-model="content" label="Content" :rules="contentRules" :counter="3000" data-vv-name="content" required></v-textarea>
+                            </div>
+
+                            <div id="picture">
+                                <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
+                            </div>
+                        </div>
+
+                        <div v-if="isMD">
+                            <editor :value="editorText" :options="editorOptions" :html="editorHtml" :visible="editorVisible" previewStyle="vertical" initialEditType="wysiwyg" :plugins="editorPlugin" ref="tuiEditor" height="500px" mode="wysiwyg" @change="mdChange" />
                         </div>
 
                         <div class="text-center" id="tags">
@@ -35,7 +69,7 @@
 <script>
 import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/vue-editor";
+import { Editor, Viewer } from "@toast-ui/vue-editor";
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -47,21 +81,17 @@ export default {
             dialog: false,
             valid: true,
             titleRules: [(v) => !!v || "제목은 반드시 작성해야합니다.", (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다."],
-            // contentRules: [
-            //   (v) => !!v || "내용을 반드시 작성해야합니다.",
-            //   (v) =>
-            //     (v && v.length <= 3000) ||
-            //     "내용은 최대 3,000자까지 작성이 가능합니다.",
-            // ],
+            contentRules: [(v) => !!v || "내용을 반드시 작성해야합니다.", (v) => (v && v.length <= 3000) || "내용은 최대 3,000자까지 작성이 가능합니다."],
             tag: new String(),
             tags: new Array(),
             tagsSelected: new Array(),
-            tagsRules: [() => !(this.tags.length === 0) || "최소 한개의 카테고리를 추가해야합니다!", () => !this.tags.includes(this.tag) || "이미 추가된 카테고리입니다.", () => (this.tags && this.tags.length <= 5) || "카테고리는 최대 5개까지만 추가가 가능합니다."],
+            tagsRules: [() => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!", () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.", () => (this.tags && this.tags.length <= 5) || "태그는 최대 5개까지만 추가가 가능합니다."],
             isMD: false,
             contentBtn: "마크다운으로",
             title: "",
             content: "",
             editornickname: "",
+            categories: new Array(),
             category: new String(),
             modify: 0,
 
@@ -110,10 +140,7 @@ export default {
                         this.tag = "";
                     }
                 }
-                this.category = this.tags.toString();
             }
-
-            this.category = this.tags.toString();
         },
         closeTag(tagIndex) {
             if (this.tags) {
@@ -132,9 +159,9 @@ export default {
                     axios
                         .post(process.env.VUE_APP_ARTICLE + "regist", {
                             title: this.title,
-                            content: this.editorMarkdown,
+                            content: this.content,
                             editornickname: this.loggedIn,
-                            category: new String(),
+                            category: this.category,
                             modify: this.modify,
                         })
                         .then((res) => {
@@ -156,6 +183,17 @@ export default {
                 .catch((e) => console.log(e));
         },
         ...mapActions(["setCurrentArticleId"]),
+        changeContent() {
+            if (!this.isMD) {
+                this.editorText = "";
+                this.contentBtn = "일반 편집기로";
+            } else if (this.isMD) {
+                this.content = "";
+                this.contentBtn = "마크다운으로";
+            }
+
+            this.isMD = !this.isMD;
+        },
         mdChange() {
             let html = this.$refs.tuiEditor.invoke("getHtml");
             let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
@@ -166,8 +204,12 @@ export default {
     },
     components: {
         editor: Editor,
+        viewer: Viewer,
     },
-    created() {},
+    created() {
+        this.categories = this.$store.state.categories;
+        this.category = this.categories[0];
+    },
     computed: {
         loggedIn: {
             get() {
