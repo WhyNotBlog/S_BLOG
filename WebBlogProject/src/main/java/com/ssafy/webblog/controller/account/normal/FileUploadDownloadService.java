@@ -1,4 +1,4 @@
-package com.ssafy.webblog.controller.article;
+package com.ssafy.webblog.controller.account.normal;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;

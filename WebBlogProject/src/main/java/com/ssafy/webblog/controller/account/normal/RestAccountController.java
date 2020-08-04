@@ -2,6 +2,7 @@ package com.ssafy.webblog.controller.account.normal;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -22,7 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,11 +66,17 @@ public class RestAccountController {
 
 	@Autowired
 	SendEmailService sService;	
+	
+	@Autowired
+    private FileUploadDownloadService service;
 
 	@Value("${backurl}")
 	private String backurl;
 	@Value("${fronturl}")
 	private String fronturl;
+	@Value("${profileUrl}")
+	private String profileUrl;	
+	
 	
 	@PostMapping("/login")
 	@ApiOperation(value = "로그인")
@@ -380,6 +390,53 @@ public class RestAccountController {
 		else entity = handleSuccess(1);
 		return entity;
 	}
+	
+	@PostMapping("/upload")
+	@ApiOperation(value = "파일 업로드")
+	public ResponseEntity<Map<String, Object>> getArticle(HttpServletResponse res, HttpServletRequest req, @RequestParam("file") MultipartFile[] file)
+			throws JsonProcessingException, IOException {
+		ResponseEntity<Map<String, Object>> entity = null;		
+		try {
+			String filename = req.getHeader("filename");
+			String realPath = System.getProperty("user.dir") + profileUrl + filename;
+			System.out.println(realPath);
+			User user = userAccountService.getUserById(Integer.parseInt(filename));
+			for (MultipartFile multipartFile : file) {			
+				multipartFile.transferTo(new File(realPath + ".jpg"));
+			}		
+			user.setPicture(realPath + ".jpg");
+			userAccountService.updateUser(user);
+			entity = handleSuccess("");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException{
+         // Load file as Resource
+        Resource resource = service.loadFileAsResource(fileName);
+ 
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+ 
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+ 
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();

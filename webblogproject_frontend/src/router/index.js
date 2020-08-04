@@ -11,6 +11,7 @@ import CKEditor from '@/components/article/CKEditor';
 import SNSLogin from "@/components/user/SNSLogin";
 import Auth from "@/components/user/Auth";
 import Info from "@/components/user/Info";
+import UserUpdate from "@/components/user/Update";
 import Email from "@/components/user/Email";
 import SNSRegist from "@/components/user/SNSRegist";
 import SNSCombine from "@/components/user/SNSCombine";
@@ -18,7 +19,7 @@ import Test from "@/components/article/test";
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err);
+    return originalPush.call(this, location).catch((err) => err);
 };
 
 Vue.use(VueRouter);
@@ -83,6 +84,11 @@ const routes = [
     component: Auth,
   },
   {
+    path: "/user/update",
+    name: "update",
+    component: UserUpdate,
+  },
+  {
     path: "/user/info",
     name: "info",
     component: Info,
@@ -105,9 +111,9 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+    mode: "history",
+    base: process.env.BASE_URL,
+    routes,
 });
 
 export default router;

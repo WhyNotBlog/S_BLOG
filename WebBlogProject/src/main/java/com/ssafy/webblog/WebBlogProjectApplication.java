@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.ssafy.webblog.controller.article.FileUploadProperties;
+import com.ssafy.webblog.controller.account.normal.FileUploadProperties;
 import com.ssafy.webblog.interceptor.JwtInterceptor;
 
 @SpringBootApplication
@@ -50,7 +50,8 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 	    		  "/account/snsRegist", 
 	    		  "/account/getProfile", 
 	    		  "/account/setProfile", 
-	    		  "/account/combineId")); // 적용 제외 경로
+	    		  "/account/combineId",
+	    		  "/account/downloadFile/**")); // 적용 제외 경로
 	   }
 	// Interceptor를 이용해서 처리하므로 전역의 Cross origin 처리를 해준다.
 	@Override
