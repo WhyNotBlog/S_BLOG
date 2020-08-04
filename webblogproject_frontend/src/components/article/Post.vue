@@ -229,7 +229,7 @@ export default {
   },
   postArticle() {
     axios
-      .get(process.env.VUE_APP_ARTICLE + "/searchBy/allarticle")
+      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
       .then(res => {
         let lastArticleId = 0;
         if (res.data.data.length !== 0) {
@@ -251,7 +251,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
+          this.setCurrentArticleId(lastArtifwcleId+1);
           this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
         })
         .catch((e) => console.log(e))
@@ -277,7 +277,6 @@ export default {
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
       this.editorHtml = html;
       this.editorMarkdown = markdown;
-      console.log(this.editorMarkdown);
     },
   },
   components: {
