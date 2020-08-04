@@ -6,7 +6,12 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+      paths: ["auth"],
+    }),
+  ],
   state: {
     registModal: false,
     loginModal: false,
