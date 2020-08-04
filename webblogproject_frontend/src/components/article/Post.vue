@@ -19,14 +19,14 @@
               ></v-text-field>
 
               <v-select
-              class="d-inline-block mx-3"
-              id="selectedCategory"
-              :items="categories"
-              label="Category"
-              color="secondary"
-              outlined
-              v-model="category"
-            ></v-select>
+                class="d-inline-block mx-3"
+                id="selectedCategory"
+                :items="categories"
+                label="Category"
+                color="secondary"
+                outlined
+                v-model="category"
+              ></v-select>
             </div>
 
             <div class="text-center my-3" id="change-content">
@@ -34,23 +34,12 @@
 
               <v-dialog v-model="dialog" persistent max-width="290">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="secondary"
-                    dark
-                    v-show="isMD"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    마크다운 미리보기
-                  </v-btn>
+                  <v-btn color="secondary" dark v-show="isMD" v-bind="attrs" v-on="on">마크다운 미리보기</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="headline">{{ title }}</v-card-title>
                   <v-card-text>
-                    <viewer 
-                    :value="editorMarkdown"
-                    height="500px"
-                    />
+                    <viewer :value="editorMarkdown" height="500px" />
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -70,26 +59,26 @@
                   data-vv-name="content"
                   required
                 ></v-textarea>
-                </div>
+              </div>
 
-                <div id="picture">
-                  <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
-                </div>
+              <div id="picture">
+                <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
+              </div>
             </div>
 
             <div v-if="isMD">
-              <editor 
-              :value="editorText"
-              :options="editorOptions"
-              :html="editorHtml"
-              :visible="editorVisible"
-              previewStyle="vertical"
-              initialEditType="wysiwyg"
-              :plugins="editorPlugin"
-              ref="tuiEditor"
-              height="500px"
-              mode="wysiwyg"
-              @change="mdChange"
+              <editor
+                :value="editorText"
+                :options="editorOptions"
+                :html="editorHtml"
+                :visible="editorVisible"
+                previewStyle="vertical"
+                initialEditType="wysiwyg"
+                :plugins="editorPlugin"
+                ref="tuiEditor"
+                height="500px"
+                mode="wysiwyg"
+                @change="mdChange"
               />
             </div>
 
@@ -118,13 +107,12 @@
               ></v-text-field>
               <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
             </div>
-
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
-              <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
-            </div>
+            <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
+            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -132,9 +120,9 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor, Viewer } from '@toast-ui/vue-editor';
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor, Viewer } from "@toast-ui/vue-editor";
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -143,7 +131,7 @@ export default {
   name: "Post",
   data() {
     return {
-      dialog : false,
+      dialog: false,
       valid: true,
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
@@ -165,30 +153,30 @@ export default {
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
       ],
-      isMD : false,
-      contentBtn : '마크다운으로',
+      isMD: false,
+      contentBtn: "마크다운으로",
       title: "",
       content: "",
       editornickname: "",
-      categories : new Array(),
+      categories: new Array(),
       category: new String(),
       modify: 0,
 
-      editorText: '',
+      editorText: "",
       editorOptions: {
-          hideModeSwitch: true
+        hideModeSwitch: true,
       },
-      editorHtml: '',
-      editorMarkdown: '',
+      editorHtml: "",
+      editorMarkdown: "",
       editorVisible: true,
-      editorPlugin : [],
-      viewerText : '',
+      editorPlugin: [],
+      viewerText: "",
     };
   },
   methods: {
     validate() {
-      if(this.$refs.form.validate()) {
-      this.postArticle();
+      if (this.$refs.form.validate()) {
+        this.postArticle();
       }
     },
     reset() {
@@ -221,70 +209,74 @@ export default {
         }
       }
     },
-  closeTag(tagIndex) {
-    if (this.tags) {
-      this.tags.splice(tagIndex, 1);
-      this.tagsSelected.splice(tagIndex, 1);
-    }
-  },
-  postArticle() {
-    axios
-      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
-      .then(res => {
-        let lastArticleId = 0;
-        if (res.data.data.length !== 0) {
-          lastArticleId = res.data.data[res.data.data.length-1].articleid;
-        }
-        axios
-      .post(process.env.VUE_APP_ARTICLE + "regist", {
-        title: this.title,
-        content: this.content,
-        editornickname: this.loggedIn,
-        category: this.category,
-        modify: this.modify,
-      })
-      .then(res => {
-        console.log(res);
-        axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : lastArticleId+1,
-          tags : String(this.tags),
-        })
+    closeTag(tagIndex) {
+      if (this.tags) {
+        this.tags.splice(tagIndex, 1);
+        this.tagsSelected.splice(tagIndex, 1);
+      }
+    },
+    postArticle() {
+      axios
+        .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
         .then((res) => {
-          console.log(res);
-          this.setCurrentArticleId(lastArtifwcleId+1);
-          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
+          let lastArticleId = 0;
+          if (res.data.data.length !== 0) {
+            lastArticleId = res.data.data[res.data.data.length - 1].articleid;
+          }
+          axios
+            .post(process.env.VUE_APP_ARTICLE + "regist", {
+              title: this.title,
+              content: this.content,
+              editornickname: this.loggedIn,
+              category: this.category,
+              modify: this.modify,
+            })
+            .then((res) => {
+              console.log(res);
+              axios
+                .post(process.env.VUE_APP_TAG + "regist", {
+                  articleid: lastArticleId + 1,
+                  tags: String(this.tags),
+                })
+                .then((res) => {
+                  console.log(res);
+                  this.setCurrentArticleId(lastArticleId + 1);
+                  this.$router.push({
+                    name: "Article",
+                    params: { articleId: lastArticleId + 1 },
+                  });
+                })
+                .catch((e) => console.log(e));
+            })
+            .catch((e) => console.log(e));
         })
-        .catch((e) => console.log(e))
-        })
-      .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
+        .catch((e) => console.log(e));
     },
     ...mapActions(["setCurrentArticleId"]),
     changeContent() {
       if (!this.isMD) {
-        this.editorText = '';
-        this.contentBtn = '일반 편집기로';
+        this.editorText = "";
+        this.contentBtn = "일반 편집기로";
       } else if (this.isMD) {
-        this.content = '';
-        this.contentBtn = '마크다운으로';
+        this.content = "";
+        this.contentBtn = "마크다운으로";
       }
-      
+
       this.isMD = !this.isMD;
     },
     mdChange() {
-      let html = this.$refs.tuiEditor.invoke('getHtml');
-      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      let html = this.$refs.tuiEditor.invoke("getHtml");
+      let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
   },
   components: {
-    editor : Editor,
-    viewer : Viewer,
+    editor: Editor,
+    viewer: Viewer,
   },
   created() {
-    this.categories =this.$store.state.categories;
+    this.categories = this.$store.state.categories;
     this.category = this.categories[0];
   },
   computed: {
