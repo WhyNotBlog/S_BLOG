@@ -9,9 +9,11 @@ import com.ssafy.webblog.model.dto.Article;
 
 public interface ArticleDao extends JpaRepository<Article, String> {
 	//검색을 위한 select
-	List<Article> getArticleByEditornickname(String editornickname);
+	List<Article> getArticleByEditornicknameContaining(String editornickname);
 	
-	List<Article> getArticleByTitle(String title);
+	//List<Article> getArticleByTitle(String title);
+	
+	List<Article> getArticleByTitleContaining(String title);
 	
 	List<Article> getArticleByCategory(String editornickname);
 
