@@ -1,18 +1,7 @@
 <template>
   <div class="page">
     <br />
-
-    <v-layout col wrap>
-      <v-flex sm12 md12 lg12 xl12>
-        <img
-          src="@/assets/back.jpg"
-          width="100%"
-          height="150vh"
-          style="object-position: center 50%"
-        />
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-space-around>
+    <v-layout row justify-space-around class="backImg">
       <v-flex xs12 sm12 md3 lg3 xl3>
         <div class="profile">
           <v-avatar>
@@ -177,16 +166,9 @@ export default {
 
 <style scoped>
 .v-avatar[data-v-2d7fd89c] {
-  width: 200px !important;
-  height: 200px !important;
-  max-width: 200px;
-}
-
-.theme--light.v-btn:hover::before,
-.theme--light.v-btn:focus::before,
-.theme--dark.v-btn:hover::before,
-.theme--dark.v-btn:focus::before {
-  opacity: 0;
+  width: 150px !important;
+  height: 150px !important;
+  min-width: 170px;
 }
 
 .profile {
@@ -196,38 +178,7 @@ export default {
 }
 
 .v-btn {
-  width: 120px;
   float: right;
-}
-@media screen and (max-width: 500px) {
-  .v-text-field {
-    width: 340px;
-  }
-  .v-btn {
-    width: 170px;
-  }
-}
-
-.input {
-  width: 50%;
-}
-
-@media screen and (max-width: 350px) {
-  .v-text-field {
-    width: 270px;
-  }
-  .v-btn {
-    width: 150px;
-  }
-}
-
-@media screen and (max-width: 280px) {
-  .v-text-field {
-    width: 250px;
-  }
-  .v-btn {
-    width: 120px;
-  }
 }
 
 .backImg {

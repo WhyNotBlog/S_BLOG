@@ -22,10 +22,13 @@
               class="d-inline-block mx-3"
               id="selectedCategory"
               :items="categories"
+              item-text="name"
+              item-value="value"
               label="Category"
               color="secondary"
               outlined
               v-model="category"
+              @change="changeCategory"
             ></v-select>
             </div>
 
@@ -122,6 +125,7 @@ export default {
       editornickname: "",
       categories : new Array(),
       category: new String(),
+      categoryInt : 0,
       modify: 0,
 
       editorText: '',
@@ -190,7 +194,7 @@ export default {
         title: this.title,
         content: this.editorMarkdown,
         editornickname: this.loggedIn,
-        category: this.category,
+        category: this.categoryInt,
         modify: this.modify,
       })
       .then(res => {
@@ -216,6 +220,9 @@ export default {
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
       this.editorHtml = html;
       this.editorMarkdown = markdown;
+    },
+    changeCategory() {
+        this.categoryInt = this.categories.indexOf(this.category);
     },
   },
   components: {
