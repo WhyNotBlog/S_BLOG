@@ -4,8 +4,11 @@
       <v-row>
         <v-col>
           <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
-            <div id="title">
+            <div class="d-flex" id="title">
               <v-text-field
+                class="mx-3"
+                color="secondary"
+                style="width:60%;"
                 v-model="title"
                 :rules="titleRules"
                 :counter="30"
@@ -14,6 +17,16 @@
                 required
                 autofocus
               ></v-text-field>
+
+              <v-select
+              class="d-inline-block mx-3"
+              id="selectedCategory"
+              :items="categories"
+              label="Category"
+              color="secondary"
+              outlined
+              v-model="category"
+            ></v-select>
             </div>
 
             <div class="text-center my-3" id="change-content">
@@ -146,17 +159,18 @@ export default {
       tags: new Array(),
       tagsSelected: new Array(),
       tagsRules: [
-        () => !(this.tags.length === 0) || "최소 한개의 카테고리를 추가해야합니다!",
-        () => !this.tags.includes(this.tag) || "이미 추가된 카테고리입니다.",
+        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
+        () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.",
         () =>
           (this.tags && this.tags.length <= 5) ||
-          "카테고리는 최대 5개까지만 추가가 가능합니다.",
+          "태그는 최대 5개까지만 추가가 가능합니다.",
       ],
       isMD : false,
       contentBtn : '마크다운으로',
       title: "",
       content: "",
       editornickname: "",
+      categories : new Array(),
       category: new String(),
       modify: 0,
 
@@ -205,10 +219,7 @@ export default {
             this.tag = "";
           }
         }
-        this.category = this.tags.toString();
       }
-
-      this.category = this.tags.toString();
     },
   closeTag(tagIndex) {
     if (this.tags) {
@@ -229,7 +240,7 @@ export default {
         title: this.title,
         content: this.content,
         editornickname: this.loggedIn,
-        category: new String(),
+        category: this.category,
         modify: this.modify,
       })
       .then(res => {
@@ -274,6 +285,8 @@ export default {
     viewer : Viewer,
   },
   created() {
+    this.categories =this.$store.state.categories;
+    this.category = this.categories[0];
   },
   computed: {
     loggedIn: {
