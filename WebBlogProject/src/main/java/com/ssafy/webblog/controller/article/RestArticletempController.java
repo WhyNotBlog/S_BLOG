@@ -43,14 +43,14 @@ public class RestArticletempController {
 	@Autowired
 	TagService tService;
 	
-	@GetMapping("/{articleId}")
+	@GetMapping("/{articleid}")
 	@ApiOperation(value = "임시 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getArticle(HttpServletResponse res, @PathVariable int articleid)
+	public ResponseEntity<Map<String, Object>> getArticletemp(HttpServletResponse res, @PathVariable String articleid)
 			throws JsonProcessingException, IOException {
 		logger.debug("Articletemp select by article id: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			Articletemp result = artiTempService.getArticletempByArticletempid(articleid);
+			Articletemp result = artiTempService.getArticletempByArticletempid(Integer.parseInt(articleid));
 			logger.debug(result.toString());
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
@@ -61,7 +61,7 @@ public class RestArticletempController {
 	
 	@PostMapping("/regist")
 	@ApiOperation(value = "임시 게시글 등록")
-	public ResponseEntity<Map<String, Object>> articleRegist(HttpServletResponse res, @RequestBody Articletemp articletemp)
+	public ResponseEntity<Map<String, Object>> articletempRegist(HttpServletResponse res, @RequestBody Articletemp articletemp)
 			throws IOException {
 		logger.debug("Articletemp regist : " + articletemp.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -77,7 +77,7 @@ public class RestArticletempController {
 
 	@DeleteMapping("/delete/{articleid}")
 	@ApiOperation(value = "임시 게시글 삭제")
-	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable String articleid)
+	public ResponseEntity<Map<String, Object>> articletempDelete(HttpServletResponse res, @PathVariable String articleid)
 			throws IOException {
 		logger.debug("delete articletemp by articleid: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -89,22 +89,38 @@ public class RestArticletempController {
 		}
 		return entity;
 	}
-//	
-//	@PutMapping("/update")
-//	@ApiOperation(value = "게시글 수정")
-//	public ResponseEntity<Map<String, Object>> articleUpdate(HttpServletResponse res, @RequestBody Articletemp articletemp)
-//			throws  IOException {
-//		logger.debug("update article temp before : " + artiTempService.getArticletempByArticletempid(articletemp.getArticleid())
-//		logger.debug("update article temp after : " + articletemp.toString());
-//		ResponseEntity<Map<String, Object>> entity = null;
-//		try {
-//			Articletemp result = artiTempService.updateArticle(articletemp);
-//			entity = handleSuccess(result);
-//		} catch (RuntimeException e) {
-//			entity = handleException(e);
-//		}
-//		return entity;
-//	}
+	
+	@PutMapping("/update")
+	@ApiOperation(value = "임시 게시글 수정")
+	public ResponseEntity<Map<String, Object>> articletempUpdate(HttpServletResponse res, @RequestBody Articletemp articletemp)
+			throws  IOException {
+		logger.debug("update article temp before : " + artiTempService.getArticletempByArticletempid(articletemp.getArticleid()));
+		logger.debug("update article temp after : " + articletemp.toString());
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			Articletemp result = artiTempService.updateArticletemp(articletemp);
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	@GetMapping("/user/{userid}")
+	@ApiOperation(value = "유저가 작성중인 임시 게시글 조회")
+	public ResponseEntity<Map<String, Object>> getArticletempBy(HttpServletResponse res, @PathVariable int userid)
+			throws JsonProcessingException, IOException {
+		logger.debug("Articletemp select by user id: " + userid);
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Articletemp> result = artiTempService.getArticletempListByWriterid(userid);
+			logger.debug(result.toString());
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
 
 
 	
