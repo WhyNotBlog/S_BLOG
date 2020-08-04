@@ -39,7 +39,6 @@ public class Article {
     
     private int modify;
     private int hits;
-    private int type;
     
     private int writerid;
 }
