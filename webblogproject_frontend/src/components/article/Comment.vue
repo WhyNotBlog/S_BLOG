@@ -63,12 +63,12 @@ export default {
         postComment() {
             if (this.loggedIn !== null) {
             axios.post(process.env.VUE_APP_COMMENT + 'regist', {
-                articleid : this.$store.state.currentArticleId,
+                articleid : this.$store.state.currentArticle.articleid,
                 commentcontent : this.comment,
                 commentornickname : this.loggedIn,
             })
             .then((res) => {
-                axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticleId)
+                axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticle.articleid)
                 .then((res) => {
                 this.comments = res.data.data;
                 })
@@ -83,7 +83,7 @@ export default {
             axios.delete(process.env.VUE_APP_COMMENT + 'delete/' + currentComment.commentid)
             .then((res) => {
                 alert('댓글 삭제에 성공했습니다.');
-                axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticleId)
+                axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticle.articleid)
                 .then((res) => {
                 this.comments = res.data.data;
                 })
@@ -123,7 +123,7 @@ export default {
         }
     },
     created() {
-        axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticleId)
+        axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticle.articleid)
         .then((res) => {
         this.comments = res.data.data;
     });
