@@ -100,10 +100,10 @@ export default {
     //   });
     // },
 
-    ...mapActions(["setCurrentArticleId"]),
+    ...mapActions(["setCurrentArticle"]),
 
     moveToArticle(article) {
-      this.setCurrentArticleId(article.articleid);
+      this.setCurrentArticle(article);
       this.$router.push({
         name: "Article",
         params: { articleId: article.articleid },
