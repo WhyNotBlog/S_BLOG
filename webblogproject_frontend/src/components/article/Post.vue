@@ -116,8 +116,6 @@ export default {
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
       ],
-      isMD: false,
-      contentBtn: "마크다운으로",
       title: "",
       content: "",
       editornickname: "",
@@ -172,15 +170,34 @@ export default {
         }
       }
     },
-    closeTag(tagIndex) {
-      if (this.tags) {
-        this.tags.splice(tagIndex, 1);
-        this.tagsSelected.splice(tagIndex, 1);
-      }
-    },
-    postArticle() {
-      axios
-        .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
+  closeTag(tagIndex) {
+    if (this.tags) {
+      this.tags.splice(tagIndex, 1);
+      this.tagsSelected.splice(tagIndex, 1);
+    }
+  },
+  postArticle() {
+    axios
+      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
+      .then(res => {
+        let lastArticleId = 0;
+        if (res.data.data.length !== 0) {
+          lastArticleId = res.data.data[res.data.data.length-1].articleid;
+        }
+        axios
+      .post(process.env.VUE_APP_ARTICLE + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.category,
+        modify: this.modify,
+      })
+      .then(res => {
+        console.log(res);
+        axios.post(process.env.VUE_APP_TAG + "regist", {
+          articleid : lastArticleId+1,
+          tags : String(this.tags),
+        })
         .then((res) => {
           let lastArticleId = 0;
           if (res.data.data.length !== 0) {
@@ -216,17 +233,6 @@ export default {
         .catch((e) => console.log(e));
     },
     ...mapActions(["setCurrentArticleId"]),
-    changeContent() {
-      if (!this.isMD) {
-        this.editorText = "";
-        this.contentBtn = "일반 편집기로";
-      } else if (this.isMD) {
-        this.content = "";
-        this.contentBtn = "마크다운으로";
-      }
-
-      this.isMD = !this.isMD;
-    },
     mdChange() {
       let html = this.$refs.tuiEditor.invoke("getHtml");
       let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
