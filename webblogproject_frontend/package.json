@@ -10,11 +10,6 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^21.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
-<<<<<<< HEAD
-=======
-    "@toast-ui/editor-plugin-code-syntax-highlight": "^1.0.0",
-    "@toast-ui/editor-plugin-color-syntax": "^1.0.1",
->>>>>>> 1740662af39276d25233816f4d9e7961b35cde80
     "@toast-ui/vue-editor": "^2.3.0",
     "@vue/cli": "^4.4.6",
     "axios": "^0.19.2",

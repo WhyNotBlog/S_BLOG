@@ -6,6 +6,7 @@ import Article from "@/components/article/Article";
 import Post from "@/components/article/Post";
 import Update from "@/components/article/Update";
 import MDEditor from '@/components/article/MDEditor';
+import MDViewer from '@/components/article/MDViewer';
 import CKEditor from '@/components/article/CKEditor';
 import SNSLogin from "@/components/user/SNSLogin";
 import Auth from "@/components/user/Auth";
@@ -60,6 +61,11 @@ const routes = [
     path: "/article/editor",
     name: "MDEditor",
     component: MDEditor,
+  },
+  {
+    path: "/article/viewer",
+    name: "MDViewer",
+    component: MDViewer,
   },
   {
     path: "/article/ckeditor",

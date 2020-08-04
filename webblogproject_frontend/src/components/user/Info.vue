@@ -1,19 +1,8 @@
 <template>
   <div class="page">
     <br />
-
-    <v-layout col wrap>
-      <v-flex sm12 md12 lg12 xl12>
-        <img
-          src="@/assets/back.jpg"
-          width="100%"
-          height="150vh"
-          style="object-position: center 50%"
-        />
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-space-around>
-      <v-flex xs12 sm12 md3 lg3 xl3>
+    <v-layout row justify-space-around class="backImg">
+      <v-flex xs12 sm12 md5 lg5 xl5>
         <div class="profile">
           <v-avatar>
             <img :src="profile" />
@@ -23,8 +12,13 @@
 
       <v-flex xs12 sm12 md5 lg5 xl5>
         <div class="infoBox">
-          <h2>{{ nickname }}</h2>
-          <a :href="gitUrl" v-show="gitUrl != ''">{{ gitUrl }}<br /></a>
+          <h2>
+            {{ nickname }}
+            <v-btn text v-show="gitUrl != ''" @click="moveGit">
+              <v-icon>mdi-git</v-icon>
+            </v-btn>
+          </h2>
+
           <span>{{ introduce }}</span>
           <br />
         </div>
@@ -130,6 +124,9 @@ export default {
     moveUpdate() {
       this.$router.push("/user/update");
     },
+    moveGit() {
+      window.location.href = this.gitUrl;
+    },
   },
 
   data() {
@@ -150,16 +147,9 @@ export default {
 
 <style scoped>
 .v-avatar[data-v-2d7fd89c] {
-  width: 200px !important;
-  height: 200px !important;
-  max-width: 200px;
-}
-
-.theme--light.v-btn:hover::before,
-.theme--light.v-btn:focus::before,
-.theme--dark.v-btn:hover::before,
-.theme--dark.v-btn:focus::before {
-  opacity: 0;
+  width: 150px !important;
+  height: 150px !important;
+  max-width: 150px !important;
 }
 
 .profile {
@@ -201,5 +191,11 @@ export default {
   .v-btn {
     width: 120px;
   }
+}
+
+.backImg {
+  background-image: url("../../assets/back.jpg");
+  background-size: 150vh;
+  padding: 20px;
 }
 </style>
