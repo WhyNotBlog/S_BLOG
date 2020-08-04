@@ -192,23 +192,59 @@ export default {
                 this.contentBtn = "마크다운으로";
             }
 
-            this.isMD = !this.isMD;
-        },
-        mdChange() {
-            let html = this.$refs.tuiEditor.invoke("getHtml");
-            let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
-            this.editorHtml = html;
-            this.editorMarkdown = markdown;
-            console.log(this.editorMarkdown);
-        },
+            this.tag = "";
+          }
+        }
+      }
+    },
+  closeTag(tagIndex) {
+    if (this.tags) {
+      this.tags.splice(tagIndex, 1);
+      this.tagsSelected.splice(tagIndex, 1);
+    }
+  },
+  postArticle() {
+    axios
+      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
+      .then(res => {
+        let lastArticleId = 0;
+        if (res.data.data.length !== 0) {
+          lastArticleId = res.data.data[res.data.data.length-1].articleid;
+        }
+        axios
+      .post(process.env.VUE_APP_ARTICLE + "regist", {
+        title: this.title,
+        content: this.content,
+        editornickname: this.loggedIn,
+        category: this.category,
+        modify: this.modify,
+      })
+      .then(res => {
+        console.log(res);
+        axios.post(process.env.VUE_APP_TAG + "regist", {
+          articleid : lastArticleId+1,
+          tags : String(this.tags),
+        })
+        .then((res) => {
+          console.log(res);
+          this.setCurrentArticleId(lastArticleId+1);
+          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
+        })
+        .catch((e) => console.log(e))
+        })
+      .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e));
     },
     components: {
         editor: Editor,
         viewer: Viewer,
     },
-    created() {
-        this.categories = this.$store.state.categories;
-        this.category = this.categories[0];
+    mdChange() {
+      let html = this.$refs.tuiEditor.invoke('getHtml');
+      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      this.editorHtml = html;
+      this.editorMarkdown = markdown;
     },
     computed: {
         loggedIn: {
