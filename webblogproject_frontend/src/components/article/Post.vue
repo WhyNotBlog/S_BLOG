@@ -33,70 +33,48 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/vue-editor';
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
 import { mapActions } from "vuex";
 
 export default {
-  value: true,
-  name: "Post",
-  data() {
-    return {
-      dialog : false,
-      valid: true,
-      titleRules: [
-        (v) => !!v || "제목은 반드시 작성해야합니다.",
-        (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
-      ],
-      // contentRules: [
-      //   (v) => !!v || "내용을 반드시 작성해야합니다.",
-      //   (v) =>
-      //     (v && v.length <= 3000) ||
-      //     "내용은 최대 3,000자까지 작성이 가능합니다.",
-      // ],
-      tag: new String(),
-      tags: new Array(),
-      tagsSelected: new Array(),
-      tagsRules: [
-        () => !(this.tags.length === 0) || "최소 한개의 카테고리를 추가해야합니다!",
-        () => !this.tags.includes(this.tag) || "이미 추가된 카테고리입니다.",
-        () =>
-          (this.tags && this.tags.length <= 5) ||
-          "카테고리는 최대 5개까지만 추가가 가능합니다.",
-      ],
-      isMD : false,
-      contentBtn : '마크다운으로',
-      title: "",
-      content: "",
-      editornickname: "",
-      category: new String(),
-      modify: 0,
+    value: true,
+    name: "Post",
+    data() {
+        return {
+            dialog: false,
+            valid: true,
+            titleRules: [(v) => !!v || "제목은 반드시 작성해야합니다.", (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다."],
+            // contentRules: [
+            //   (v) => !!v || "내용을 반드시 작성해야합니다.",
+            //   (v) =>
+            //     (v && v.length <= 3000) ||
+            //     "내용은 최대 3,000자까지 작성이 가능합니다.",
+            // ],
+            tag: new String(),
+            tags: new Array(),
+            tagsSelected: new Array(),
+            tagsRules: [() => !(this.tags.length === 0) || "최소 한개의 카테고리를 추가해야합니다!", () => !this.tags.includes(this.tag) || "이미 추가된 카테고리입니다.", () => (this.tags && this.tags.length <= 5) || "카테고리는 최대 5개까지만 추가가 가능합니다."],
+            isMD: false,
+            contentBtn: "마크다운으로",
+            title: "",
+            content: "",
+            editornickname: "",
+            category: new String(),
+            modify: 0,
 
-      editorText: '',
-      editorOptions: {
-          hideModeSwitch: true
-      },
-      editorHtml: '',
-      editorMarkdown: '',
-      editorVisible: true,
-      editorPlugin : [],
-      viewerText : '',
-    };
-  },
-  methods: {
-    validate() {
-      if(this.$refs.form.validate()) {
-      this.postArticle();
-      }
-    },
-    reset() {
-      this.tags = new Array();
-      this.$refs.form.reset();
-    },
-    selectIndex(tag) {
-      return this.tags.indexOf(tag);
+            editorText: "",
+            editorOptions: {
+                hideModeSwitch: true,
+            },
+            editorHtml: "",
+            editorMarkdown: "",
+            editorVisible: true,
+            editorPlugin: [],
+            viewerText: "",
+        };
     },
     methods: {
         validate() {
@@ -154,7 +132,7 @@ export default {
                     axios
                         .post(process.env.VUE_APP_ARTICLE + "regist", {
                             title: this.title,
-                            content: this.content,
+                            content: this.editorMarkdown,
                             editornickname: this.loggedIn,
                             category: new String(),
                             modify: this.modify,
@@ -178,78 +156,27 @@ export default {
                 .catch((e) => console.log(e));
         },
         ...mapActions(["setCurrentArticleId"]),
-        changeContent() {
-            if (!this.isMD) {
-                this.editorText = "";
-                this.contentBtn = "일반 편집기로";
-            } else if (this.isMD) {
-                this.content = "";
-                this.contentBtn = "마크다운으로";
-            }
-
-      this.category = this.tags.toString();
+        mdChange() {
+            let html = this.$refs.tuiEditor.invoke("getHtml");
+            let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
+            this.editorHtml = html;
+            this.editorMarkdown = markdown;
+            console.log(this.editorMarkdown);
+        },
     },
-  closeTag(tagIndex) {
-    if (this.tags) {
-      this.tags.splice(tagIndex, 1);
-      this.tagsSelected.splice(tagIndex, 1);
-    }
-  },
-  postArticle() {
-    axios
-      .get(process.env.VUE_APP_ARTICLE + "/searchBy/allarticle")
-      .then(res => {
-        let lastArticleId = 0;
-        if (res.data.data.length !== 0) {
-          lastArticleId = res.data.data[res.data.data.length-1].articleid;
-        }
-        axios
-      .post(process.env.VUE_APP_ARTICLE + "regist", {
-        title: this.title,
-        content: this.editorMarkdown,
-        editornickname: this.loggedIn,
-        category: new String(),
-        modify: this.modify,
-      })
-      .then(res => {
-        console.log(res);
-        axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : lastArticleId+1,
-          tags : String(this.tags),
-        })
-        .then((res) => {
-          console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
-          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
-        })
-        .catch((e) => console.log(e))
-        })
-      .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
+    components: {
+        editor: Editor,
     },
-    ...mapActions(["setCurrentArticleId"]),
-    mdChange() {
-      let html = this.$refs.tuiEditor.invoke('getHtml');
-      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
-      this.editorHtml = html;
-      this.editorMarkdown = markdown;
-      console.log(this.editorMarkdown);
-    },
-  },
-  components: {
-    editor : Editor,
-  },
-  created() {
-  },
-  computed: {
-    loggedIn: {
-      get() {
-        return this.$store.getters.loggedIn;
-      },
-      set(value) {
-        this.$store.dispatch("setLoggedIn", value);
-      },
+    created() {},
+    computed: {
+        loggedIn: {
+            get() {
+                return this.$store.getters.loggedIn;
+            },
+            set(value) {
+                this.$store.dispatch("setLoggedIn", value);
+            },
+        },
     },
 };
 </script>
