@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
     currentArticleId: new Number(),
+    categories: ['알고리즘/Basic', '알고리즘/기출 문제', '웹/Frontend', '웹/Backend', '어플/Andriod', '어플/IOS'],
   },
   mutations: {
     setJwtAuthToken(state, payload) {
