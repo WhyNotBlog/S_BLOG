@@ -251,7 +251,7 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
+          this.setCurrentArticleId(lastArtifwcleId+1);
           this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
         })
         .catch((e) => console.log(e))
