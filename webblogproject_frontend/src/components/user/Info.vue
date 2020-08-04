@@ -23,13 +23,19 @@
 
       <v-flex xs12 sm12 md5 lg5 xl5>
         <div class="infoBox">
-          <h2>{{ nickname }}</h2>
-          <a :href="gitUrl" v-show="gitUrl != ''">{{ gitUrl }}<br /></a>
+          <h2>
+            {{ nickname }}
+            <v-btn color="white" text v-show="gitUrl != ''" @click="moveGit">
+              <v-icon>mdi-git</v-icon>
+            </v-btn>
+          </h2>
+
           <span>{{ introduce }}</span>
           <br />
         </div>
       </v-flex>
     </v-layout>
+
     <br />
 
     <v-divider style="margin:5px"></v-divider>
@@ -121,6 +127,24 @@ export default {
           this.introduce = data.introduce;
           this.loggedIn = data.nickname;
           this.fileName = data.id;
+
+          axios
+            .get(
+              process.env.VUE_APP_ARTICLE +
+                "searchBy/nickname/" +
+                this.nickname,
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch(() => {});
@@ -129,6 +153,9 @@ export default {
   methods: {
     moveUpdate() {
       this.$router.push("/user/update");
+    },
+    moveGit() {
+      location.href = this.gitUrl;
     },
   },
 
@@ -201,5 +228,16 @@ export default {
   .v-btn {
     width: 120px;
   }
+}
+
+.backImg {
+  background-image: url("../../assets/back.jpg");
+  border-radius: 2rem;
+  background-size: 152vh;
+  padding: 20px;
+}
+
+.infoBox {
+  color: white;
 }
 </style>
