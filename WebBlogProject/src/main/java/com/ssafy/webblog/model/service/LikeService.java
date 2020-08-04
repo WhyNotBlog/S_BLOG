@@ -33,5 +33,18 @@ public class LikeService {
 		List<Like> result = lDao.getLikeByArticleid(articleid);
 		return result.size();
 	}
+	public Like registLike(Like like) {
+		Like result = lDao.save(like);
+		return result;
+	}
+	
+	public void deleteLike(Like like) {
+		lDao.delete(like);
+	}
+	
+	public int getLikekeyByUseridAndArticleid(int userid, int articleid) {
+		Like result = lDao.getLikeByUseridAndArticleid(userid, articleid);
+		return result.getLikekey();
+	}
 
 }
