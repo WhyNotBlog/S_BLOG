@@ -32,7 +32,7 @@ public class Article {
     
     private String editornickname;
     
-    private String category;
+    private int category;
     
     @Column(insertable = false, updatable = false)
     private LocalDateTime editdate;

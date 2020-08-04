@@ -57,7 +57,7 @@ public class ArticleService {
 		if (By == 1) {
 			result = artiDao.getArticleByEditornickname(input);
 		} else if (By == 2) {
-			result = artiDao.getArticleByCategory(input);
+			result = artiDao.getArticleByCategory(Integer.parseInt(input));
 		} else {
 			result = artiDao.getArticleByTitle(input);
 		}
