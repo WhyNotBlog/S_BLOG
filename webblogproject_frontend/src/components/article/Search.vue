@@ -30,9 +30,9 @@ export default {
   },
   methods: {
     searchContent() {
-      console.log("search");
+      console.log(this.search);
       axios
-        .get(process.VUE_APP_ARTICLE + "/" + this.search)
+        .get(process.env.VUE_APP_ARTICLE + "searchBy/title/" + this.search)
         .then((res) => {
           console.log(res);
         })
