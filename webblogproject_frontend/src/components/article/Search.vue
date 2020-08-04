@@ -17,24 +17,38 @@
         ></v-text-field>
       </v-flex>
     </v-layout>
+    <span v-show="isSearch">
+      총
+      <strong>{{count}}</strong>개의 게시물이 있습니다!
+    </span>
+    <PostView :data="this.articles" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import PostView from "@/components/PostView";
+
 export default {
   data() {
     return {
       search: "",
+      articles: new Array(),
+      count: 0,
+      isSearch: false,
     };
   },
+  components: { PostView },
   methods: {
     searchContent() {
-      console.log(this.search);
+      //console.log(this.search);
       axios
         .get(process.env.VUE_APP_ARTICLE + "searchBy/title/" + this.search)
         .then((res) => {
-          console.log(res);
+          //console.log(res);
+          this.isSearch = true;
+          this.count = res.data.data.length;
+          this.articles = res.data.data;
         })
         .catch((err) => {
           console.log(err);

@@ -33,7 +33,7 @@
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
-          <div>0</div>
+          <div>{{contentCnt}}</div>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
@@ -49,13 +49,19 @@
         <v-btn color="#9fa9d8" dark @click="moveUpdate">프로필 편집</v-btn>
       </div>
     </div>
+    <br />
+    <br />
+    <PostView :data="this.articles" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import PostView from "@/components/PostView";
+
 export default {
   name: "info",
+  components: { PostView },
   computed: {
     jwtAuthToken: {
       get() {
@@ -129,7 +135,9 @@ export default {
               }
             )
             .then((res) => {
-              console.log(res);
+              //console.log(res);
+              this.contentCnt = res.data.data.length;
+              this.articles = res.data.data;
             })
             .catch((err) => {
               console.log(err);
@@ -159,6 +167,8 @@ export default {
       email: "",
       gitUrl: "",
       introduce: "",
+      articles: Array(),
+      contentCnt: 0,
     };
   },
 };

@@ -1,15 +1,6 @@
 <template>
-  <v-row class="d-flex justify-space-around">
-    <v-col
-      class="d-flex justify-space-around align-center"
-      v-for="article in articles"
-      :key="article.id"
-      xl4
-      lg4
-      md6
-      sm12
-      xs12
-    >
+  <v-layout row justify-start style="margin:auto">
+    <v-flex v-for="article in articles" :key="article.id" xl4 lg4 md6 sm12 xs12>
       <div class="content">
         <v-card class="d-inline-block my-3" :min-width="moblieWidth">
           <v-img class="white--text align-end" height="168px" :src="article.imageSrc"></v-img>
@@ -20,8 +11,8 @@
 
           <v-card-text class="card-text text--primary">
             <div class="text-center">
-              {{ article.content.slice(0, 50)
-              }}{{ article.content.length > 50 ? "..." : "" }}
+              {{ article.content.slice(0, 20)
+              }}{{ article.content.length > 20 ? "..." : "" }}
             </div>
           </v-card-text>
           <v-footer class="d-flex justify-space-around">
@@ -37,25 +28,25 @@
           </v-footer>
 
           <!-- <v-card-actions class="justify-space-around">
-              <v-btn color="orange" icon @click="copyLink(article.id)">
-                <v-icon middle color>mdi-share</v-icon>
-              </v-btn>
-              <v-btn
-                color="red accent-4"
-                icon
-                v-if="article.isLiked"
-                @click="changeLiked(article.id)"
-              >
-                <v-icon middle color="red accent-4">mdi-heart</v-icon>
-              </v-btn>
-              <v-btn color="red accent-4" icon v-else @click="changeLiked(article.id)">
-                <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
-              </v-btn>
+            <v-btn color="orange" icon @click="copyLink(article.id)">
+              <v-icon middle color>mdi-share</v-icon>
+            </v-btn>
+            <v-btn
+              color="red accent-4"
+              icon
+              v-if="article.isLiked"
+              @click="changeLiked(article.id)"
+            >
+              <v-icon middle color="red accent-4">mdi-heart</v-icon>
+            </v-btn>
+            <v-btn color="red accent-4" icon v-else @click="changeLiked(article.id)">
+              <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+            </v-btn>
           </v-card-actions>-->
         </v-card>
       </div>
-    </v-col>
-  </v-row>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
