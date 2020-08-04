@@ -8,7 +8,7 @@
         <v-flex xs8 sm8 md8 lg9>
           <router-view />
         </v-flex>
-        <v-flex xs2 sm2 md2 lg2 v-show="!isMobile">
+        <v-flex xs2 sm2 md2 lg2>
           <div class="sidebar">
             <Sidebar />
           </div>
@@ -24,11 +24,7 @@ import Sidebar from "@/components/Sidebar";
 
 export default {
   name: "App",
-  computed: {
-    isMobile() {
-      return window.innerWidth < 700;
-    },
-  },
+
   components: {
     Header,
     Sidebar,
@@ -44,5 +40,11 @@ export default {
 .sidebar {
   position: fixed;
   margin-right: 10px;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
 }
 </style>

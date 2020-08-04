@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="navActive"></v-app-bar-nav-icon>
 
       <v-btn @click="moveHome" :ripple="false" class="mainbtn">
-        <img src="@/assets/logo.png" width="130px" />
+        <img src="@/assets/logo.png" width="120px" />
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -30,7 +30,7 @@
 
         <v-tooltip bottom color="secondary">
           <template #activator="{ on}">
-            <v-btn text fab slot="activator" @click="movePost" min-width="56px">
+            <v-btn class="icon2" text fab slot="activator" @click="movePost" min-width="56px">
               <v-icon v-on="on">mdi-pencil</v-icon>
             </v-btn>
           </template>
@@ -125,8 +125,6 @@
 import Login from "@/components/user/Login";
 import Register from "@/components/user/Register";
 
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -139,6 +137,7 @@ export default {
         },
         { icon: "find_in_page", text: "Search", route: "/search" },
         { icon: "account_circle", text: "Profile", route: "/user/info" },
+        { icon: "mdi-pencil", text: "Post", route: "/article/post" },
       ],
     };
   },
@@ -214,26 +213,29 @@ export default {
       this.registModal = false;
     },
     logout() {
-      axios
-        .post(
-          process.env.VUE_APP_ACCOUNT + "logout",
-          {},
-          {
-            headers: {
-              "jwt-auth-token": this.jwtAuthToken,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status) {
-            this.loggedIn = null;
-            this.jwtAuthToken = null;
-            this.$router.push("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.loggedIn = null;
+      this.jwtAuthToken = null;
+      this.$router.push("/");
+      // axios
+      //   .post(
+      //     process.env.VUE_APP_ACCOUNT + "logout",
+      //     {},
+      //     {
+      //       headers: {
+      //         "jwt-auth-token": this.jwtAuthToken,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     if (res.status) {
+      //       this.loggedIn = null;
+      //       this.jwtAuthToken = null;
+      //       this.$router.push("/");
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
   },
 };
@@ -253,7 +255,7 @@ export default {
     width: 80% !important;
   }
 }
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 400px) {
   .icon2 {
     display: none;
   }
