@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="navActive"></v-app-bar-nav-icon>
 
       <v-btn @click="moveHome" :ripple="false" class="mainbtn">
-        <img src="@/assets/logo.png" width="120px" />
+        <img src="@/assets/logo.png" width="130px" />
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -124,6 +124,9 @@
 <script>
 import Login from "@/components/user/Login";
 import Register from "@/components/user/Register";
+
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -211,9 +214,26 @@ export default {
       this.registModal = false;
     },
     logout() {
-      this.loggedIn = null;
-      this.jwtAuthToken = null;
-      this.$router.push("/");
+      axios
+        .post(
+          process.env.VUE_APP_ACCOUNT + "logout",
+          {},
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status) {
+            this.loggedIn = null;
+            this.jwtAuthToken = null;
+            this.$router.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

@@ -13,4 +13,6 @@ public interface LikeDao extends JpaRepository<Like, String> {
 	
 	
 	List<Like> getLikeByUserid(int userid);
+	
+	Like getLikeByUseridAndArticleid(int userid, int articleid);
 }
