@@ -55,11 +55,11 @@ public class ArticleService {
 		 * 0 : default search => title 1 : nickname검색 2 : 카테고리별 검색
 		 */
 		if (By == 1) {
-			result = artiDao.getArticleByEditornickname(input);
+			result = artiDao.getArticleByEditornicknameContaining(input);
 		} else if (By == 2) {
 			result = artiDao.getArticleByCategory(Integer.parseInt(input));
 		} else {
-			result = artiDao.getArticleByTitle(input);
+			result = artiDao.getArticleByTitleContaining(input);
 		}
 		return result;
 	}
