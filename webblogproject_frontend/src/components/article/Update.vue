@@ -1,201 +1,235 @@
 <template>
   <div>
-  <v-container fluid>
-    <v-row>
-      <v-col>
-      <v-form class="mx-10 full-width"
-      ref="form"
-      v-model="valid"
-      lazy-validation>
-    <div id="title">
-      <v-text-field
-        v-model="title"
-        :rules="titleRules"
-        :counter="30"
-        label="Title"
-        data-vv-name="title"
-        required
-        autofocus
-      ></v-text-field>
-    </div>
+    <v-container fluid>
+      <v-row>
+        <v-col>
+          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
+            <div class="d-flex" id="title">
+              <v-text-field
+                class="mx-3"
+                color="secondary"
+                style="width:60%;"
+                v-model="title"
+                :rules="titleRules"
+                :counter="30"
+                label="Title"
+                data-vv-name="title"
+                required
+                autofocus
+              ></v-text-field>
 
-    <div id="content">
-      <v-textarea
-        v-model="content"
-        label="Content"
-        :rules="contentRules"
-        :counter="3000"
-        data-vv-name="content"
-        required
-      ></v-textarea>
-    </div>
+              <v-select
+              class="d-inline-block mx-3"
+              id="selectedCategory"
+              :items="categories"
+              item-text="name"
+              item-value="value"
+              label="Category"
+              color="secondary"
+              outlined
+              v-model="category"
+              @change="changeCategory"
+            ></v-select>
+            </div>
 
-    <div id="picture">
-      <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
-    </div>
+            <div id="content">
+              <editor 
+              :value="editorText"
+              :options="editorOptions"
+              :html="editorHtml"
+              :visible="editorVisible"
+              previewStyle="vertical"
+              initialEditType="wysiwyg"
+              :plugins="editorPlugin"
+              ref="tuiEditor"
+              height="500px"
+              mode="wysiwyg"
+              @change="mdChange"
+              />
+            </div>
 
-    <div class="text-center" id="tags">
-      <v-chip
-        class="ma-2 text-button chip-btn"
-        color="secondary"
-        v-for="tag in tags"
-        :key="selectIndex(tag)"
-        v-show="tagsSelected[selectIndex(tag)]"
-        close
-        @click:close="closeTag(selectIndex(tag))"
-      >
-        #{{ tag }}
-      </v-chip>
-    </div>
+            <div class="text-center" id="tags">
+              <v-chip
+                class="ma-2 text-button chip-btn"
+                color="secondary"
+                v-for="tag in tags"
+                :key="selectIndex(tag)"
+                v-show="tagsSelected[selectIndex(tag)]"
+                close
+                @click:close="closeTag(selectIndex(tag))"
+              >#{{ tag }}</v-chip>
+            </div>
 
-    <div class="text-center" id="tag">
-      <v-text-field
-        id="tagInput"
-        class="d-inline-block mx-2"
-        v-model="tag"
-        label="Tag"
-        :rules="tagsRules"
-        data-vv-name="tag"
-        color="secondary"
-        style="width:50%; height:5%;"
-      ></v-text-field>
-      <v-btn 
-      color="secondary"
-      class="d-inline-block mx-2 mr-4"
-      @click="addTag"
-      >
-        태그 추가
-      </v-btn>
-    </div>
+            <div class="text-center" id="tag">
+              <v-text-field
+                id="tagInput"
+                class="d-inline-block mx-2"
+                v-model="tag"
+                label="Tag"
+                :rules="tagsRules"
+                data-vv-name="tag"
+                color="secondary"
+                style="width:50%; height:5%;"
+              ></v-text-field>
+              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+            </div>
 
-    <div class="text-center" id="btn">
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="updateArticle"
-      >
-        Submit
-      </v-btn>
-  
-      <v-btn
-        color="warning"
-        class="mr-4"
-        @click="reset"
-      >
-        Reset
-      </v-btn>
-    </div>
-      </v-form>
-    </v-col>
-    </v-row>
-  </v-container>
+          </v-form>
+
+          <div class="text-center" id="btn">
+              <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
+              <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+            </div>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/vue-editor';
+import axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
-    value : true,
-    name : "Post",
-    data() {
-        return {
-    valid: true,
-    titleRules: [
-      v => !!v || '제목은 반드시 작성해야합니다.',
-      v => (v && v.length <= 30) || '제목은 30글자 이하여야 합니다.',
-    ],
-    contentRules: [
-        v => (!!v || '내용을 반드시 작성해야합니다.'),
-        v => (v && v.length <= 3000) || '내용은 최대 3,000자까지 작성이 가능합니다.'
-    ],
-    tag : new String(),
-    tags : new Array(),
-    tagsSelected : new Array(),
-    tagsRules : [
-        () => !(this.tags.length === 0) || "최소 한개의 카테고리를 추가해야합니다!",
-        () => !this.tags.includes(this.tag) || '이미 추가된 카테고리입니다.',
-        () => (this.tags && this.tags.length <= 5) || '카테고리는 최대 5개까지만 추가가 가능합니다.'],
-    articleid : null,
-    title : '',
-    content : '',
-    editornickname : '',
-    category : new String(),
-    modify : 1,
+    value: true,
+  name: "Post",
+  data() {
+    return {
+      dialog : false,
+      valid: true,
+      titleRules: [
+        (v) => !!v || "제목은 반드시 작성해야합니다.",
+        (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
+      ],
+      contentRules: [
+        (v) => !!v || "내용을 반드시 작성해야합니다.",
+        (v) =>
+          (v && v.length <= 3000) ||
+          "내용은 최대 3,000자까지 작성이 가능합니다.",
+      ],
+      tag: new String(),
+      tags: new Array(),
+      tagsSelected: new Array(),
+      tagsRules: [
+        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
+        () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.",
+        () =>
+          (this.tags && this.tags.length <= 5) ||
+          "태그는 최대 5개까지만 추가가 가능합니다.",
+      ],
+      title: "",
+      content: "",
+      editornickname: "",
+      categories : new Array(),
+      category: new String(),
+      categoryInt : 0,
+      modify: 0,
+
+      editorText: '',
+      editorOptions: {
+          hideModeSwitch: true
+      },
+      editorHtml: '',
+      editorMarkdown: '',
+      editorVisible: true,
+      editorPlugin : [],
+      viewerText : '',
+    };
+  },
+  methods: {
+    validate() {
+      if(this.$refs.form.validate()) {
+      this.postArticle();
       }
     },
-    methods : {
-    validate () {
-      this.$refs.form.validate()
-    },
-    reset () {
+    reset() {
       this.tags = new Array();
-      this.$refs.form.reset()
+      this.$refs.form.reset();
     },
     selectIndex(tag) {
-        return this.tags.indexOf(tag)
+      return this.tags.indexOf(tag);
     },
     addTag() {
       if (this.tag) {
-
         if (!this.tags.includes(this.tag)) {
-
           if (this.tags.length < 5) {
-          this.tagsSelected.push(true);
-          this.tags.push(this.tag);
-          this.tag = '';
+            this.tagsSelected.push(true);
+            this.tags.push(this.tag);
+            this.tag = "";
           } else {
             if (this.tags.length === 5) {
-            this.tags.push('limiter');
-            this.tagsSelected.push(false);
+              this.tags.push("limiter");
+              this.tagsSelected.push(false);
 
-            setTimeout(
-              () => {
-            this.tags.splice(5,1)
-            this.tagsSelected.splice(5,1)
-              }, 1)}
-
-            this.tag = '';
+              setTimeout(() => {
+                this.tags.splice(5, 1);
+                this.tagsSelected.splice(5, 1);
+              }, 1);
             }
+
+            this.tag = "";
+          }
         }
-        this.category = this.tags.toString();
+      }
+    },
+  closeTag(tagIndex) {
+    if (this.tags) {
+      this.tags.splice(tagIndex, 1);
+      this.tagsSelected.splice(tagIndex, 1);
+    }
+  },
+  postArticle() {
+    axios
+      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
+      .then(res => {
+        let lastArticleId = 0;
+        if (res.data.data.length !== 0) {
+          lastArticleId = res.data.data[res.data.data.length-1].articleid;
         }
-      },
-    closeTag(tagIndex) {
-      if (this.tags) {
-        this.tags.splice(tagIndex,1)
-        this.tagsSelected.splice(tagIndex,1)    
-        }
-      },
-    updateArticle() {
-      axios.put(process.env.VUE_APP_ARTICLE + 'update', { 
-        articleid : this.articleid,
-        title : this.title,
-        content : this.content,
-        editornickname : this.loggedIn,
-        category : this.category,
-        modify : this.modify
+        axios
+      .post(process.env.VUE_APP_ARTICLE + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
       })
       .then(res => {
         console.log(res);
-        axios.put(process.env.VUE_APP_TAG + "update", {
-          articleid : this.articleid,
+        axios.post(process.env.VUE_APP_TAG + "regist", {
+          articleid : lastArticleId+1,
           tags : String(this.tags),
         })
         .then((res) => {
           console.log(res);
-          this.$router.push({name : 'Article', params : { articleId : this.articleid }})
+          this.setCurrentArticleId(lastArticleId+1);
+          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
         })
         .catch((e) => console.log(e))
         })
-      .catch(e => console.log(e))
-      },
+      .catch((e) => console.log(e));
+      })
+      .catch((e) => console.log(e));
     },
-    components : {
+    ...mapActions(["setCurrentArticleId"]),
+    mdChange() {
+      let html = this.$refs.tuiEditor.invoke('getHtml');
+      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      this.editorHtml = html;
+      this.editorMarkdown = markdown;
     },
+    changeCategory() {
+        this.categoryInt = this.categories.indexOf(this.category);
+    },
+  },
+  components: {
+    editor : Editor,
+  },
     created() {
-        axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticleId)
+        axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
         .then((res) => {
         if (res.status) {
         let data = res.data.data;
@@ -203,7 +237,7 @@ export default {
         this.title = data.title;
         this.content = data.content;
         this.editornickname = data.editornickname;
-        this.category = data.category;
+        this.categoryInt = data.category;
         this.editdate = data.editdate;
         this.modify = data.modify;
         }
