@@ -19,14 +19,14 @@
               ></v-text-field>
 
               <v-select
-              class="d-inline-block mx-3"
-              id="selectedCategory"
-              :items="categories"
-              label="Category"
-              color="secondary"
-              outlined
-              v-model="category"
-            ></v-select>
+                class="d-inline-block mx-3"
+                id="selectedCategory"
+                :items="categories"
+                label="Category"
+                color="secondary"
+                outlined
+                v-model="category"
+              ></v-select>
             </div>
 
             <div id="content">
@@ -70,13 +70,12 @@
               ></v-text-field>
               <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
             </div>
-
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
-              <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
-            </div>
+            <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
+            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -95,7 +94,7 @@ export default {
   name: "Post",
   data() {
     return {
-      dialog : false,
+      dialog: false,
       valid: true,
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
@@ -117,30 +116,30 @@ export default {
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
       ],
-      isMD : false,
-      contentBtn : '마크다운으로',
+      isMD: false,
+      contentBtn: "마크다운으로",
       title: "",
       content: "",
       editornickname: "",
-      categories : new Array(),
+      categories: new Array(),
       category: new String(),
       modify: 0,
 
-      editorText: '',
+      editorText: "",
       editorOptions: {
-          hideModeSwitch: true
+        hideModeSwitch: true,
       },
-      editorHtml: '',
-      editorMarkdown: '',
+      editorHtml: "",
+      editorMarkdown: "",
       editorVisible: true,
-      editorPlugin : [],
-      viewerText : '',
+      editorPlugin: [],
+      viewerText: "",
     };
   },
   methods: {
     validate() {
-      if(this.$refs.form.validate()) {
-      this.postArticle();
+      if (this.$refs.form.validate()) {
+        this.postArticle();
       }
     },
     reset() {
@@ -173,60 +172,64 @@ export default {
         }
       }
     },
-  closeTag(tagIndex) {
-    if (this.tags) {
-      this.tags.splice(tagIndex, 1);
-      this.tagsSelected.splice(tagIndex, 1);
-    }
-  },
-  postArticle() {
-    axios
-      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
-      .then(res => {
-        let lastArticleId = 0;
-        if (res.data.data.length !== 0) {
-          lastArticleId = res.data.data[res.data.data.length-1].articleid;
-        }
-        axios
-      .post(process.env.VUE_APP_ARTICLE + "regist", {
-        title: this.title,
-        content: this.content,
-        editornickname: this.loggedIn,
-        category: this.category,
-        modify: this.modify,
-      })
-      .then(res => {
-        console.log(res);
-        axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : lastArticleId+1,
-          tags : String(this.tags),
-        })
+    closeTag(tagIndex) {
+      if (this.tags) {
+        this.tags.splice(tagIndex, 1);
+        this.tagsSelected.splice(tagIndex, 1);
+      }
+    },
+    postArticle() {
+      axios
+        .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
         .then((res) => {
-          console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
-          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
+          let lastArticleId = 0;
+          if (res.data.data.length !== 0) {
+            lastArticleId = res.data.data[res.data.data.length - 1].articleid;
+          }
+          axios
+            .post(process.env.VUE_APP_ARTICLE + "regist", {
+              title: this.title,
+              content: this.content,
+              editornickname: this.loggedIn,
+              category: this.category,
+              modify: this.modify,
+            })
+            .then((res) => {
+              console.log(res);
+              axios
+                .post(process.env.VUE_APP_TAG + "regist", {
+                  articleid: lastArticleId + 1,
+                  tags: String(this.tags),
+                })
+                .then((res) => {
+                  console.log(res);
+                  this.setCurrentArticleId(lastArticleId + 1);
+                  this.$router.push({
+                    name: "Article",
+                    params: { articleId: lastArticleId + 1 },
+                  });
+                })
+                .catch((e) => console.log(e));
+            })
+            .catch((e) => console.log(e));
         })
-        .catch((e) => console.log(e))
-        })
-      .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
+        .catch((e) => console.log(e));
     },
     ...mapActions(["setCurrentArticleId"]),
     changeContent() {
       if (!this.isMD) {
-        this.editorText = '';
-        this.contentBtn = '일반 편집기로';
+        this.editorText = "";
+        this.contentBtn = "일반 편집기로";
       } else if (this.isMD) {
-        this.content = '';
-        this.contentBtn = '마크다운으로';
+        this.content = "";
+        this.contentBtn = "마크다운으로";
       }
-      
+
       this.isMD = !this.isMD;
     },
     mdChange() {
-      let html = this.$refs.tuiEditor.invoke('getHtml');
-      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      let html = this.$refs.tuiEditor.invoke("getHtml");
+      let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
