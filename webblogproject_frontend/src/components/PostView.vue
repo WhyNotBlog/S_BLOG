@@ -90,10 +90,10 @@ export default {
       alert("링크가 복사되었습니다!");
     },
 
-    ...mapActions(["setCurrentArticleId"]),
+    ...mapActions(["setCurrentArticle"]),
 
     moveToArticle(article) {
-      this.setCurrentArticleId(article.articleid);
+      this.setCurrentArticle(article);
       this.$router.push({
         name: "Article",
         params: { articleId: article.articleid },
