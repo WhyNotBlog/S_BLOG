@@ -94,12 +94,13 @@ import axios from "axios";
 import { mapActions } from "vuex";
 
 export default {
-    value: true,
+  value: true,
   name: "Post",
   data() {
     return {
       dialog : false,
       valid: true,
+      article : new Object(),
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
         (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
@@ -204,8 +205,16 @@ export default {
           tags : String(this.tags),
         })
         .then((res) => {
-          console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
+            console.log(res);
+          this.article = {
+            articleid : lastArticleId+1,
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+          };
+          this.setCurrentArticle(this.article);
           this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
         })
         .catch((e) => console.log(e))
@@ -214,7 +223,7 @@ export default {
       })
       .catch((e) => console.log(e));
     },
-    ...mapActions(["setCurrentArticleId"]),
+    ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
@@ -229,6 +238,7 @@ export default {
     editor : Editor,
   },
     created() {
+      this.categories = this.$store.state.categories;
         axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
         .then((res) => {
         if (res.status) {
@@ -240,6 +250,7 @@ export default {
         this.categoryInt = data.category;
         this.editdate = data.editdate;
         this.modify = data.modify;
+        this.category = this.categories[this.categoryInt]
         }
 
         axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
