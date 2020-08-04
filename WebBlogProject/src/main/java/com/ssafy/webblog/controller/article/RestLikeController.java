@@ -2,7 +2,6 @@ package com.ssafy.webblog.controller.article;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,14 +16,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssafy.webblog.model.dto.Article;
-import com.ssafy.webblog.model.dto.Like;
+import com.ssafy.webblog.model.dto.Likearticle;
 import com.ssafy.webblog.model.service.LikeService;
 
 import io.swagger.annotations.ApiOperation;
@@ -63,12 +59,12 @@ public class RestLikeController {
 	
 	@PostMapping("/regist")
 	@ApiOperation(value = "좋아요 하나 등록")
-	public ResponseEntity<Map<String, Object>> likeRegist(HttpServletResponse res, @RequestBody Like like)
+	public ResponseEntity<Map<String, Object>> likeRegist(HttpServletResponse res, @RequestBody Likearticle like)
 			throws IOException {
-		logger.debug("Like regist : " + like.toString());
+		logger.info("Like regist : " + like.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			Like result = lService.registLike(like);
+			Likearticle result = lService.registLike(like);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -77,14 +73,14 @@ public class RestLikeController {
 	}
 	
 	@DeleteMapping("/delete/{userid}/{articleid}")
-	@ApiOperation(value = "게시글 삭제")
+	@ApiOperation(value = "좋아요 취소")
 	public ResponseEntity<Map<String, Object>> likeDelete(HttpServletResponse res, @PathVariable String userid,@PathVariable String articleid)
 			throws IOException {
 		logger.debug("delete userid - articleid: " + userid + "/" + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			int likekey = lService.getLikekeyByUseridAndArticleid(Integer.parseInt(userid), Integer.parseInt(articleid));
-			Like deleteLike = new Like(likekey, Integer.parseInt(userid), Integer.parseInt(articleid));
+			Likearticle deleteLike = new Likearticle(likekey, Integer.parseInt(userid), Integer.parseInt(articleid));
 			lService.deleteLike(deleteLike);
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
