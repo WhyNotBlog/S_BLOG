@@ -100,6 +100,7 @@ export default {
     return {
       dialog : false,
       valid: true,
+      article : new Object(),
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
         (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
@@ -204,8 +205,16 @@ export default {
           tags : String(this.tags),
         })
         .then((res) => {
-          console.log(res);
-          this.setCurrentArticleId(lastArticleId+1);
+            console.log(res);
+          this.article = {
+            articleid : lastArticleId+1,
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+          };
+          this.setCurrentArticle(this.article);
           this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
         })
         .catch((e) => console.log(e))
@@ -214,7 +223,7 @@ export default {
       })
       .catch((e) => console.log(e));
     },
-    ...mapActions(["setCurrentArticleId"]),
+    ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
