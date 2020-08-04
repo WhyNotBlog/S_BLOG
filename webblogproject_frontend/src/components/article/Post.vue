@@ -16,55 +16,7 @@
               ></v-text-field>
             </div>
 
-            <div class="text-center my-3" id="change-content">
-              <v-btn class="mx-3" @click="changeContent" color="secondary">{{ contentBtn }}</v-btn>
-
-              <v-dialog v-model="dialog" persistent max-width="290">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="secondary"
-                    dark
-                    v-show="isMD"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    마크다운 미리보기
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="headline">{{ title }}</v-card-title>
-                  <v-card-text>
-                    <viewer 
-                    :initialValue="editorMarkdown"
-                    height="500px"
-                    />
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="gray darken-1" text @click="dialog = false">Close</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </div>
-
-            <div v-if="!isMD" id="main-content">
-              <div id="content">
-                <v-textarea
-                  v-model="content"
-                  label="Content"
-                  :rules="contentRules"
-                  :counter="3000"
-                  data-vv-name="content"
-                  required
-                ></v-textarea>
-                </div>
-
-                <div id="picture">
-                  <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
-                </div>
-            </div>
-
-            <div v-if="isMD">
+            <div id="content">
               <editor 
               :value="editorText"
               :options="editorOptions"
@@ -121,7 +73,7 @@
 <script>
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor, Viewer } from '@toast-ui/vue-editor';
+import { Editor } from '@toast-ui/vue-editor';
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -136,12 +88,12 @@ export default {
         (v) => !!v || "제목은 반드시 작성해야합니다.",
         (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
       ],
-      contentRules: [
-        (v) => !!v || "내용을 반드시 작성해야합니다.",
-        (v) =>
-          (v && v.length <= 3000) ||
-          "내용은 최대 3,000자까지 작성이 가능합니다.",
-      ],
+      // contentRules: [
+      //   (v) => !!v || "내용을 반드시 작성해야합니다.",
+      //   (v) =>
+      //     (v && v.length <= 3000) ||
+      //     "내용은 최대 3,000자까지 작성이 가능합니다.",
+      // ],
       tag: new String(),
       tags: new Array(),
       tagsSelected: new Array(),
@@ -227,7 +179,7 @@ export default {
         axios
       .post(process.env.VUE_APP_ARTICLE + "regist", {
         title: this.title,
-        content: this.content,
+        content: this.editorMarkdown,
         editornickname: this.loggedIn,
         category: new String(),
         modify: this.modify,
@@ -250,17 +202,6 @@ export default {
       .catch((e) => console.log(e));
     },
     ...mapActions(["setCurrentArticleId"]),
-    changeContent() {
-      if (!this.isMD) {
-        this.editorText = '';
-        this.contentBtn = '일반 편집기로';
-      } else if (this.isMD) {
-        this.content = '';
-        this.contentBtn = '마크다운으로';
-      }
-      
-      this.isMD = !this.isMD;
-    },
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
@@ -271,7 +212,6 @@ export default {
   },
   components: {
     editor : Editor,
-    viewer : Viewer,
   },
   created() {
   },
