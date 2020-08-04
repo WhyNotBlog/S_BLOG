@@ -5,7 +5,7 @@
     </header>
     <v-container fluid>
       <v-layout justify-space-around>
-        <v-flex xs8 sm8 md8 lg9>
+        <v-flex xs8 sm8 md8 lg9 style="margin:auto">
           <router-view />
         </v-flex>
         <v-flex xs2 sm2 md2 lg2>
