@@ -29,56 +29,19 @@
               ></v-select>
             </div>
 
-            <div class="text-center my-3" id="change-content">
-              <v-btn class="mx-3" @click="changeContent" color="secondary">{{ contentBtn }}</v-btn>
-
-              <v-dialog v-model="dialog" persistent max-width="290">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn color="secondary" dark v-show="isMD" v-bind="attrs" v-on="on">마크다운 미리보기</v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="headline">{{ title }}</v-card-title>
-                  <v-card-text>
-                    <viewer :value="editorMarkdown" height="500px" />
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="gray darken-1" text @click="dialog = false">Close</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </div>
-
-            <div v-if="!isMD" id="main-content">
-              <div id="content">
-                <v-textarea
-                  v-model="content"
-                  label="Content"
-                  :rules="contentRules"
-                  :counter="3000"
-                  data-vv-name="content"
-                  required
-                ></v-textarea>
-              </div>
-
-              <div id="picture">
-                <v-file-input id="pictureFile" chips multiple accept="image/*" label="File input"></v-file-input>
-              </div>
-            </div>
-
-            <div v-if="isMD">
-              <editor
-                :value="editorText"
-                :options="editorOptions"
-                :html="editorHtml"
-                :visible="editorVisible"
-                previewStyle="vertical"
-                initialEditType="wysiwyg"
-                :plugins="editorPlugin"
-                ref="tuiEditor"
-                height="500px"
-                mode="wysiwyg"
-                @change="mdChange"
+            <div id="content">
+              <editor 
+              :value="editorText"
+              :options="editorOptions"
+              :html="editorHtml"
+              :visible="editorVisible"
+              previewStyle="vertical"
+              initialEditType="wysiwyg"
+              :plugins="editorPlugin"
+              ref="tuiEditor"
+              height="500px"
+              mode="wysiwyg"
+              @change="mdChange"
               />
             </div>
 
@@ -120,9 +83,9 @@
 </template>
 
 <script>
-import "codemirror/lib/codemirror.css";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor, Viewer } from "@toast-ui/vue-editor";
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/vue-editor';
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -272,8 +235,7 @@ export default {
     },
   },
   components: {
-    editor: Editor,
-    viewer: Viewer,
+    editor : Editor,
   },
   created() {
     this.categories = this.$store.state.categories;
