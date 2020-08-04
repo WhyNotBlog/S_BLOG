@@ -117,8 +117,6 @@ export default {
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
       ],
-      isMD : false,
-      contentBtn : '마크다운으로',
       title: "",
       content: "",
       editornickname: "",
@@ -190,7 +188,7 @@ export default {
         axios
       .post(process.env.VUE_APP_ARTICLE + "regist", {
         title: this.title,
-        content: this.content,
+        content: this.editorMarkdown,
         editornickname: this.loggedIn,
         category: this.category,
         modify: this.modify,
@@ -213,17 +211,6 @@ export default {
       .catch((e) => console.log(e));
     },
     ...mapActions(["setCurrentArticleId"]),
-    changeContent() {
-      if (!this.isMD) {
-        this.editorText = '';
-        this.contentBtn = '일반 편집기로';
-      } else if (this.isMD) {
-        this.content = '';
-        this.contentBtn = '마크다운으로';
-      }
-      
-      this.isMD = !this.isMD;
-    },
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
