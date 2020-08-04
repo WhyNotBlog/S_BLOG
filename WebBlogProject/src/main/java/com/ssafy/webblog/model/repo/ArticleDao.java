@@ -15,7 +15,7 @@ public interface ArticleDao extends JpaRepository<Article, String> {
 	
 	List<Article> getArticleByTitleContaining(String title);
 	
-	List<Article> getArticleByCategory(String editornickname);
+	List<Article> getArticleByCategory(int editornickname);
 
 	List<Article> getArticleByWriterid(int writerid);
 	
