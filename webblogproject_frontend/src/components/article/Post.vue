@@ -35,7 +35,7 @@
                   <v-card-title class="headline">{{ title }}</v-card-title>
                   <v-card-text>
                     <viewer 
-                    :value="editorMarkdown"
+                    :initialValue="editorMarkdown"
                     height="500px"
                     />
                   </v-card-text>
@@ -70,8 +70,8 @@
               :options="editorOptions"
               :html="editorHtml"
               :visible="editorVisible"
-              previewStyle="vertical"
               initialEditType="wysiwyg"
+              previewStyle="vertical"
               :plugins="editorPlugin"
               ref="tuiEditor"
               height="500px"
