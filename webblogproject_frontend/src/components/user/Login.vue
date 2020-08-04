@@ -130,7 +130,7 @@ export default {
           if (res.status) {
             this.loggedIn = res.data.data.nickname;
             this.profile =
-              process.env.VUE_APP_ARTICLE +
+              process.env.VUE_APP_ACCOUNT +
               "downloadFile/" +
               res.data.data.id +
               ".jpg";
