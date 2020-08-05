@@ -39,6 +39,7 @@
               :html="editorHtml"
               :visible="editorVisible"
               previewStyle="vertical"
+              :initialValue="this.content"
               initialEditType="wysiwyg"
               :plugins="editorPlugin"
               ref="tuiEditor"
@@ -239,30 +240,50 @@ export default {
   },
     created() {
       this.categories = this.$store.state.categories;
-        axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
-        .then((res) => {
-        if (res.status) {
-        let data = res.data.data;
-        this.articleid = data.articleid;
-        this.title = data.title;
-        this.content = data.content;
-        this.editornickname = data.editornickname;
-        this.categoryInt = data.category;
-        this.editdate = data.editdate;
-        this.modify = data.modify;
-        this.category = this.categories[this.categoryInt]
-        }
+      this.article = this.$store.state.currentArticle;
 
-        axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
+      this.articleid = this.article.articleid;
+      this.title = this.article.title;
+      this.content = this.article.content;
+      this.editornickname = this.article.editornickname;
+      this.categoryInt = this.article.category;
+      this.editdate = this.article.editdate;
+      this.modify = this.article.modify;
+      this.category = this.categories[this.categoryInt]
+
+      axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
         .then((res) => {
           let tagData = res.data.data;
           tagData.forEach(obj => {
             this.tags.push(obj.tagname)
             this.tagsSelected.push(true);
-            });
-        })
-        .catch((e) => console.log(e))
+            })
         });
+
+        // axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
+        // .then((res) => {
+        // if (res.status) {
+        // let data = res.data.data;
+        // this.articleid = data.articleid;
+        // this.title = data.title;
+        // this.content = data.content;
+        // this.editornickname = data.editornickname;
+        // this.categoryInt = data.category;
+        // this.editdate = data.editdate;
+        // this.modify = data.modify;
+        // this.category = this.categories[this.categoryInt]
+        // }
+
+        // axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
+        // .then((res) => {
+        //   let tagData = res.data.data;
+        //   tagData.forEach(obj => {
+        //     this.tags.push(obj.tagname)
+        //     this.tagsSelected.push(true);
+        //     });
+        // })
+        // .catch((e) => console.log(e))
+        // });
     },
     computed : {
       loggedIn: {

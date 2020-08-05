@@ -99,6 +99,7 @@ export default {
   name: "TempArticle",
   data() {
     return {
+      user : new Object(),
       dialog : false,
       valid: true,
       article : new Object(),

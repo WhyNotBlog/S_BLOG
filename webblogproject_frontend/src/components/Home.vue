@@ -1,10 +1,6 @@
 <template>
   <div>
     <PostView :data="this.articles" />
-
-    <v-btn class="align-self-center" color="purple" text width="5%">
-      <b>더 보기</b>
-    </v-btn>
   </div>
 </template>
 

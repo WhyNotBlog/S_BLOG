@@ -99,6 +99,7 @@ export default {
   name: "Post",
   data() {
     return {
+      user : new Object(),
       dialog : false,
       valid: true,
       article : new Object(),
@@ -231,14 +232,18 @@ export default {
         editornickname: this.loggedIn,
         category: this.categoryInt,
         modify: this.modify,
-      })
-      .then((res) => {
+        writerid : this.user.id
+      }).then((res) => {
         console.log(res);
-        axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
-          writerid : 0,
-          tags : String(this.tags),
-        })
+        alert('임시저장 테스트')
       })
+      // .then((res) => {
+      //   console.log(res);
+      //   axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
+      //     writerid : 0,
+      //     tags : String(this.tags),
+      //   })
+      // })
     },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
@@ -257,8 +262,28 @@ export default {
   created() {
     this.categories = this.$store.state.categories;
     this.category = this.categories[0];
+    axios
+      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+      })
+      .then((res) => {
+        if (res.status) {
+            let data = res.data.data;
+            this.user = data;
+            }
+            })
   },
   computed: {
+    jwtAuthToken: {
+        get() {
+        return this.$store.getters.jwtAuthToken;
+        },
+        set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+        },
+      },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
