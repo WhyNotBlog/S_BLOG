@@ -99,6 +99,7 @@ export default {
   name: "Post",
   data() {
     return {
+      user : new Object(),
       dialog : false,
       valid: true,
       article : new Object(),
@@ -191,7 +192,7 @@ export default {
         editornickname: this.loggedIn,
         category: this.categoryInt,
         modify: this.modify,
-        writerid : this.user.id,
+        writerid : this.writerid,
       })
       .then(res => {
         let data = res.data.data;
@@ -231,6 +232,7 @@ export default {
       this.editdate = this.article.editdate;
       this.modify = this.article.modify;
       this.category = this.categories[this.categoryInt]
+      this.writerid = this.article.writerid;
 
       axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
         .then((res) => {
