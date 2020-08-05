@@ -2,7 +2,7 @@
   <div class="page">
     <br />
     <div v-show="mobileView">
-      <div>
+      <div class="backImg">
         <v-layout column>
           <div class="profile">
             <v-avatar>
@@ -12,17 +12,14 @@
           <br />
           <div class="file">
             <form enctype="multipart/form-data">
-              <v-file-input
-                class="fileInput"
-                label="File"
-                @change="fileUpload($event)"
-              ></v-file-input>
+              <v-file-input class="fileInput" label="File" @change="fileUpload($event)"></v-file-input>
             </form>
-            <v-btn text v-on:click="addItem">등록하기</v-btn>
+            <v-btn text color="595959" v-on:click="addItem">등록하기</v-btn>
           </div>
         </v-layout>
       </div>
       <div>
+        <br />
         <div class="main">
           <v-form ref="form">
             <v-text-field
@@ -91,19 +88,15 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler"
-            >계정 탈퇴를 원하시나요?</v-btn
-          >
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
-            >수정하기</v-btn
-          >
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
       </div>
     </div>
 
     <v-layout row justify-space-around v-show="!mobileView">
-      <v-flex xs12 sm12 md3 lg3 xl3>
+      <v-flex xs8 sm8 md4 lg4 xl4 class="backImg">
         <v-layout column>
           <div class="profile">
             <v-avatar>
@@ -114,18 +107,16 @@
           <div class="file">
             <div class="fileData">
               <form enctype="multipart/form-data">
-                <v-file-input
-                  label="Profile Image"
-                  @change="fileUpload($event)"
-                ></v-file-input>
+                <v-file-input label="Profile Image" @change="fileUpload($event)"></v-file-input>
               </form>
             </div>
-            <v-btn color="black" text v-on:click="addItem">등록하기</v-btn>
+            <v-btn color="595959" text v-on:click="addItem">등록하기</v-btn>
           </div>
         </v-layout>
       </v-flex>
 
       <v-flex xs12 sm12 md5 lg5 xl5>
+        <br />
         <div class="main">
           <v-form ref="form">
             <v-text-field
@@ -195,13 +186,9 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler"
-            >계정 탈퇴를 원하시나요?</v-btn
-          >
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
-            >수정하기</v-btn
-          >
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -463,7 +450,7 @@ export default {
 }
 
 .v-file-input {
-  width: 225px !important;
+  width: 200px !important;
 }
 
 .v-text-field {
@@ -474,6 +461,13 @@ export default {
   margin: 5px;
   width: 190px;
 }
+
+@media screen and (max-width: 1000px) {
+  .v-text-field {
+    width: 380px;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .v-text-field {
     width: 340px;
@@ -491,8 +485,8 @@ export default {
   .v-text-field {
     width: 270px;
   }
-  .v-btn {
-    width: 150px;
+  .changeBtn {
+    width: 130px;
   }
 }
 
@@ -512,5 +506,13 @@ export default {
 
 .changeBtn:hover {
   opacity: 0.7;
+}
+
+.backImg {
+  background-color: #b7b4da;
+  border-radius: 2rem;
+  background-size: 152vh;
+  padding: 20px;
+  box-shadow: 3px 3px 5px 1px #595959;
 }
 </style>

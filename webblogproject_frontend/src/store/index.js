@@ -6,7 +6,11 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+    }),
+  ],
   state: {
     registModal: false,
     loginModal: false,
@@ -14,7 +18,14 @@ const store = new Vuex.Store({
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
     currentArticle: new Object(),
-    categories: ['알고리즘/Basic', '알고리즘/기출 문제', '웹/Frontend', '웹/Backend', '어플/Andriod', '어플/IOS'],
+    categories: [
+      "알고리즘/Basic",
+      "알고리즘/기출 문제",
+      "웹/Frontend",
+      "웹/Backend",
+      "어플/Andriod",
+      "어플/IOS",
+    ],
   },
   mutations: {
     setJwtAuthToken(state, payload) {
