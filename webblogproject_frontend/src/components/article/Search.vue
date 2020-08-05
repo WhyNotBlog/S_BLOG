@@ -20,6 +20,7 @@
         ></v-text-field>
       </v-flex>
     </v-layout>
+
     <span v-show="isSearch">
       총
       <strong>{{count}}</strong>개의 게시물이 있습니다!

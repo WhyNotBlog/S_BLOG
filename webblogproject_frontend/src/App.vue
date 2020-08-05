@@ -17,6 +17,7 @@
     </v-container>
     <br />
     <br />
+    <br />
     <v-footer absolute class="font-weight-medium" style="background-color:#595959;color:white">
       <v-col class="text-center" cols="12">
         {{ new Date().getFullYear() }},

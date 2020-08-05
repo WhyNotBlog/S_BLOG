@@ -66,7 +66,7 @@ export default {
     axios
       .get(process.env.VUE_APP_TAG + "tentaglist")
       .then((res) => {
-        console.log(res.data.data);
+        //console.log(res.data.data);
         this.tag = res.data.data;
       })
       .catch((err) => {
