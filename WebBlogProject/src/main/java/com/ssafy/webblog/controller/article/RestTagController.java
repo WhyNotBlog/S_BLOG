@@ -45,7 +45,7 @@ public class RestTagController {
 	TagService tService;
 
 	@Autowired
-	TagkindService tkSerive;
+	TagkindService tkService;
 
 	@PostMapping("/regist")
 	@ApiOperation(value = "태그 등록")
@@ -64,7 +64,7 @@ public class RestTagController {
 				tmp.setTagname(tag);
 				Tag temp = tService.insertTag(tmp);
 				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag, tagcount));
+				tkService.insertTagkind(new Tagkind(tag, tagcount));
 				
 			}
 			String result = "success";
@@ -110,14 +110,14 @@ public class RestTagController {
 				System.out.println("삭제 : " + tag.toString());
 				tService.deleteTag(tag.getTagid());
 				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
+				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			System.out.println();
 			for (Tag tag : inputTagList) {
 				System.out.println("삽입 : " + tag.toString());
 				tService.insertTag(tag);
 				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
+				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
@@ -158,7 +158,7 @@ public class RestTagController {
 		logger.debug("Searching Ten Tag List");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Tagkind> result = tkSerive.getTagkind();
+			List<Tagkind> result = tkService.getTagkind();
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -176,6 +176,8 @@ public class RestTagController {
 			for(Tag tag : deleteTargets) {
 				logger.info("Tag delete - > " + tag.toString());
 				tService.deleteTag(tag.getTagid());
+				List<Tag> list = tService.getTagByTagname(tag.getTagname());
+				tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
