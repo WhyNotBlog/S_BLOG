@@ -37,7 +37,7 @@ export default {
     if (this.tagKey != "blank") {
       this.typeBox = "태그";
       this.search = this.tagKey;
-      this.isSearch = true;
+      this.searchContent();
     }
   },
 
@@ -45,21 +45,13 @@ export default {
     tag() {
       this.typeBox = "태그";
       this.search = this.tagKey;
-      this.isSearch = true;
+      this.searchContent();
     },
   },
 
   computed: {
     tag() {
       return this.tagKey;
-    },
-    jwtAuthToken: {
-      get() {
-        return this.$store.getters.jwtAuthToken;
-      },
-      set(value) {
-        this.$store.dispatch("setJwtAuthToken", value);
-      },
     },
   },
   data() {
@@ -93,14 +85,19 @@ export default {
           });
       } else if (this.typeBox == "닉네임") {
         axios
-          .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/nickname/" + this.search,
-            {
-              headers: {
-                "jwt-auth-token": this.jwtAuthToken,
-              },
-            }
-          )
+          .get(process.env.VUE_APP_ARTICLE + "searchBy/nickname/" + this.search)
+          .then((res) => {
+            //console.log(res);
+            this.isSearch = true;
+            this.count = res.data.data.length;
+            this.articles = res.data.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .get(process.env.VUE_APP_ARTICLE + "searchby/tag/" + this.search)
           .then((res) => {
             //console.log(res);
             this.isSearch = true;
