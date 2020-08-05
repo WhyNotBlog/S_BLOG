@@ -2,6 +2,8 @@ package com.ssafy.webblog.model.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 //글번호	제목	내용	작성자id	작성자nickname	카테고리	작성일자	수정여부
 public class Follow {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="followkey")
     private int followkey;
     

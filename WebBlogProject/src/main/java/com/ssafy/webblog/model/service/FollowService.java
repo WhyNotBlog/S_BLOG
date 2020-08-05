@@ -17,24 +17,37 @@ public class FollowService {
 
 	@Autowired
 	FollowDao fDao;
-	//내가 팔로우하는 사람 수
-	public int getFollowCount(int userid){
+
+	// 내가 팔로우하는 사람 수
+	public int getFollowCount(int userid) {
 		int result = fDao.getFollowByUserid(userid).size();
 		return result;
 	}
+
 	// 나를 팔로우 하는 사람들 수
-	public int getFollowerCount(int targetid){
-		int result = fDao.getFollowByTargetid(targetid).size();
+	public int getFollowerCount(int userid) {
+		int result = fDao.getFollowByTargetid(userid).size();
 		return result;
 	}
-	//내가 팔로우하는 유저들의 유저id 리스트
-	public List<Integer> getFollowList(int userid){
+
+	// 내가 팔로우하는 유저들의 유저id 리스트
+	public List<Integer> getFollowList(int userid) {
 		List<Follow> Followers = fDao.getFollowByUserid(userid);
 		List<Integer> result = new ArrayList<Integer>();
-		for(Follow tmp : Followers) {
+		for (Follow tmp : Followers) {
 			result.add(tmp.getTargetid());
 		}
 		return result;
+	}
+
+	public Follow insertFollow(Follow follow) {
+		Follow result = fDao.save(follow);
+		return result;
+	}
+	
+	public void deleteFollow(int userid, int targetid) {
+		Follow deleteTargetFollow = fDao.getFollowByUseridAndTargetid(userid, targetid);
+		fDao.delete(deleteTargetFollow);
 	}
 }
 // user/target
