@@ -52,7 +52,7 @@ public class RestFollowController {
 	}
 
 	@DeleteMapping("/delete")
-	@ApiOperation(value = "좋아요 취소")
+	@ApiOperation(value = "팔로우 취소")
 	public ResponseEntity<Map<String, Object>> followDelete(HttpServletResponse res, @RequestBody Follow follow)
 			throws IOException {
 		int userid = follow.getUserid();
@@ -69,7 +69,7 @@ public class RestFollowController {
 	}
 	
 	@GetMapping("/count/{userid}")
-	@ApiOperation(value = "유저id 기준 팔로우 수")
+	@ApiOperation(value = "유저id로 팔로워수, 팔로잉 수")
 	public ResponseEntity<Map<String, Object>> followCount(HttpServletResponse res, @PathVariable String userid)
 			throws IOException {
 		logger.debug("user follpw count : " + userid);
@@ -86,13 +86,28 @@ public class RestFollowController {
 	}
 	
 	@GetMapping("/followingList/{userid}")
-	@ApiOperation(value = "유저id 기준 팔로우 수")
+	@ApiOperation(value = "내가 팔로우하는 user id 리스트")
 	public ResponseEntity<Map<String, Object>> followingUserList(HttpServletResponse res, @PathVariable String userid)
 			throws IOException {
-		logger.debug("user follpw count : " + userid);
+		logger.debug("user following list : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			List<Integer> result = fService.getFollowList(Integer.parseInt(userid));
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	@GetMapping("/followList/{userid}")
+	@ApiOperation(value = "나를 팔로우하는 user id 리스트")
+	public ResponseEntity<Map<String, Object>> followerUserList(HttpServletResponse res, @PathVariable String userid)
+			throws IOException {
+		logger.debug("user follower list : " + userid);
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Integer> result = fService.getFollowingList(Integer.parseInt(userid));
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);

@@ -40,11 +40,21 @@ public class FollowService {
 		return result;
 	}
 
+	// 나를 팔로우하는 유저들의 유저id 리스트
+	public List<Integer> getFollowingList(int userid) {
+		List<Follow> Followings = fDao.getFollowByTargetid(userid);
+		List<Integer> result = new ArrayList<Integer>();
+		for (Follow tmp : Followings) {
+			result.add(tmp.getUserid());
+		}
+		return result;
+	}
+
 	public Follow insertFollow(Follow follow) {
 		Follow result = fDao.save(follow);
 		return result;
 	}
-	
+
 	public void deleteFollow(int userid, int targetid) {
 		Follow deleteTargetFollow = fDao.getFollowByUseridAndTargetid(userid, targetid);
 		fDao.delete(deleteTargetFollow);
