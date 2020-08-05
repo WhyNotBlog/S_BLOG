@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import Home from "@/components/Home";
 import Search from "@/components/article/Search";
 import Article from "@/components/article/Article";
+import TempArticle from "@/components/article/TempArticle";
+import TempList from "@/components/article/TempList";
 import Post from "@/components/article/Post";
 import Update from "@/components/article/Update";
 import MDEditor from "@/components/article/MDEditor";
@@ -56,6 +58,16 @@ const routes = [
     name: "Article",
     component: Article,
     props: true,
+  },
+  {
+    path: "/article/temp/",
+    name: "TempList",
+    component: TempList,
+  },
+  {
+    path: "/article/temp/:writerId",
+    name: "TempArticle",
+    component: TempArticle,
   },
   {
     path: "/article/editor",

@@ -77,7 +77,8 @@
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
+              <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
+              <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
               <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             </div>
         </v-col>
@@ -98,6 +99,7 @@ export default {
   name: "Post",
   data() {
     return {
+      user : new Object(),
       dialog : false,
       valid: true,
       article : new Object(),
@@ -141,7 +143,7 @@ export default {
     };
   },
   methods: {
-    validate() {
+    validateSubmit() {
       if(this.$refs.form.validate()) {
       this.postArticle();
       }
@@ -223,6 +225,26 @@ export default {
       })
       .catch((e) => console.log(e));
     },
+    saveTempArticle() {
+      axios.post(process.env.VUE_APP_ARTICLETEMP + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
+        writerid : this.user.id
+      }).then((res) => {
+        console.log(res);
+        alert('임시저장 테스트')
+      })
+      // .then((res) => {
+      //   console.log(res);
+      //   axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
+      //     writerid : 0,
+      //     tags : String(this.tags),
+      //   })
+      // })
+    },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
@@ -240,8 +262,28 @@ export default {
   created() {
     this.categories = this.$store.state.categories;
     this.category = this.categories[0];
+    axios
+      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+      })
+      .then((res) => {
+        if (res.status) {
+            let data = res.data.data;
+            this.user = data;
+            }
+            })
   },
   computed: {
+    jwtAuthToken: {
+        get() {
+        return this.$store.getters.jwtAuthToken;
+        },
+        set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+        },
+      },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;

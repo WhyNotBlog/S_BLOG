@@ -39,7 +39,6 @@
               :html="editorHtml"
               :visible="editorVisible"
               previewStyle="vertical"
-              :initialValue="this.content"
               initialEditType="wysiwyg"
               :plugins="editorPlugin"
               ref="tuiEditor"
@@ -78,6 +77,7 @@
           </v-form>
 
           <div class="text-center" id="btn">
+              <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
               <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
               <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             </div>
@@ -96,9 +96,10 @@ import { mapActions } from "vuex";
 
 export default {
   value: true,
-  name: "Post",
+  name: "TempArticle",
   data() {
     return {
+      user : new Object(),
       dialog : false,
       valid: true,
       article : new Object(),
@@ -201,6 +202,7 @@ export default {
       })
       .then(res => {
         console.log(res);
+        axios.post(process.env.VUE_APP_ARTICLETEMP, "delete", {articleid : 1})
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : lastArticleId+1,
           tags : String(this.tags),
@@ -224,6 +226,9 @@ export default {
       })
       .catch((e) => console.log(e));
     },
+    saveTempArticle() {
+
+    },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
@@ -240,50 +245,30 @@ export default {
   },
     created() {
       this.categories = this.$store.state.categories;
-      this.article = this.$store.state.currentArticle;
+        axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
+        .then((res) => {
+        if (res.status) {
+        let data = res.data.data;
+        this.articleid = data.articleid;
+        this.title = data.title;
+        this.content = data.content;
+        this.editornickname = data.editornickname;
+        this.categoryInt = data.category;
+        this.editdate = data.editdate;
+        this.modify = data.modify;
+        this.category = this.categories[this.categoryInt]
+        }
 
-      this.articleid = this.article.articleid;
-      this.title = this.article.title;
-      this.content = this.article.content;
-      this.editornickname = this.article.editornickname;
-      this.categoryInt = this.article.category;
-      this.editdate = this.article.editdate;
-      this.modify = this.article.modify;
-      this.category = this.categories[this.categoryInt]
-
-      axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
+        axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
         .then((res) => {
           let tagData = res.data.data;
           tagData.forEach(obj => {
             this.tags.push(obj.tagname)
             this.tagsSelected.push(true);
-            })
+            });
+        })
+        .catch((e) => console.log(e))
         });
-
-        // axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
-        // .then((res) => {
-        // if (res.status) {
-        // let data = res.data.data;
-        // this.articleid = data.articleid;
-        // this.title = data.title;
-        // this.content = data.content;
-        // this.editornickname = data.editornickname;
-        // this.categoryInt = data.category;
-        // this.editdate = data.editdate;
-        // this.modify = data.modify;
-        // this.category = this.categories[this.categoryInt]
-        // }
-
-        // axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
-        // .then((res) => {
-        //   let tagData = res.data.data;
-        //   tagData.forEach(obj => {
-        //     this.tags.push(obj.tagname)
-        //     this.tagsSelected.push(true);
-        //     });
-        // })
-        // .catch((e) => console.log(e))
-        // });
     },
     computed : {
       loggedIn: {
