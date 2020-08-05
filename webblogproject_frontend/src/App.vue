@@ -15,6 +15,15 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <br />
+    <br />
+    <v-footer absolute class="font-weight-medium" style="background-color:#595959;color:white">
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }},
+        <v-icon color="white" size="16px">copyright</v-icon>
+        <strong>외않되</strong>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
