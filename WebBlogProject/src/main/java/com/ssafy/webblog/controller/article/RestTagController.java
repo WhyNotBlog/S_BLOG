@@ -177,7 +177,8 @@ public class RestTagController {
 				logger.info("Tag delete - > " + tag.toString());
 				tService.deleteTag(tag.getTagid());
 				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
+				if(list.size() <= 1) tkService.delete(tag.getTagname());
+				else tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {

@@ -25,4 +25,8 @@ public class TagkindService {
 	public List<Tagkind> getTagkind(){
 		return tDao.findTop5ByOrderByTagcountDesc();
 	}
+
+	public void delete(String tagname) {
+		tDao.deleteTagkindByTagname(tagname);		
+	}
 }
