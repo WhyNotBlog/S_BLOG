@@ -166,7 +166,7 @@ public class RestTagController {
 	}
 
 	@DeleteMapping("/delete")
-	@ApiOperation(value = "전체 태그중 상위 10개")
+	@ApiOperation(value = "아티클이 지워지면 delete")
 	public ResponseEntity<Map<String, Object>> getTagList(@RequestBody String articleid) throws JsonProcessingException, IOException {
 		logger.debug("delete article - > tag delete : " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
