@@ -135,7 +135,7 @@ export default {
           text: "Home",
           route: "/",
         },
-        { icon: "find_in_page", text: "Search", route: "/search" },
+        { icon: "find_in_page", text: "Search", route: "/search/blank" },
         { icon: "account_circle", text: "Profile", route: "/user/info" },
         { icon: "mdi-pencil", text: "Post", route: "/article/post" },
       ],
