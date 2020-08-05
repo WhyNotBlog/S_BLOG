@@ -77,6 +77,7 @@
           </v-form>
 
           <div class="text-center" id="btn">
+              <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
               <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
               <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             </div>
@@ -95,7 +96,7 @@ import { mapActions } from "vuex";
 
 export default {
   value: true,
-  name: "Post",
+  name: "TempArticle",
   data() {
     return {
       dialog : false,
@@ -200,6 +201,7 @@ export default {
       })
       .then(res => {
         console.log(res);
+        axios.post(process.env.VUE_APP_ARTICLETEMP, "delete", {articleid : 1})
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : lastArticleId+1,
           tags : String(this.tags),
@@ -222,6 +224,9 @@ export default {
       .catch((e) => console.log(e));
       })
       .catch((e) => console.log(e));
+    },
+    saveTempArticle() {
+
     },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {

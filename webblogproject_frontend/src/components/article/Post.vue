@@ -77,7 +77,8 @@
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
+              <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
+              <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
               <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             </div>
         </v-col>
@@ -141,7 +142,7 @@ export default {
     };
   },
   methods: {
-    validate() {
+    validateSubmit() {
       if(this.$refs.form.validate()) {
       this.postArticle();
       }
@@ -222,6 +223,22 @@ export default {
       .catch((e) => console.log(e));
       })
       .catch((e) => console.log(e));
+    },
+    saveTempArticle() {
+      axios.post(process.env.VUE_APP_ARTICLETEMP + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
+      })
+      .then((res) => {
+        console.log(res);
+        axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
+          writerid : 0,
+          tags : String(this.tags),
+        })
+      })
     },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
