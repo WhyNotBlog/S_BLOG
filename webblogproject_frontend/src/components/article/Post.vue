@@ -186,13 +186,6 @@ export default {
   },
   postArticle() {
     axios
-      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
-      .then(res => {
-        let lastArticleId = 0;
-        if (res.data.data.length !== 0) {
-          lastArticleId = res.data.data[res.data.data.length-1].articleid;
-        }
-        axios
       .post(process.env.VUE_APP_ARTICLE + "regist", {
         title: this.title,
         content: this.editorMarkdown,
@@ -201,30 +194,17 @@ export default {
         modify: this.modify,
       })
       .then(res => {
-        console.log(res);
+        let data = res.data.data;
+        this.article = data;
+        this.setCurrentArticle(this.article);
         axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : lastArticleId+1,
+          articleid : data.articleid,
           tags : String(this.tags),
+        }).then((res) => {
+          console.log(res.status);
+          this.$router.push({name : 'Article', params : { articleId : this.article.articleid }})
         })
-        .then((res) => {
-            console.log(res);
-          this.article = {
-            articleid : lastArticleId+1,
-            title: this.title,
-            content: this.editorMarkdown,
-            editornickname: this.loggedIn,
-            category: this.categoryInt,
-            modify: this.modify,
-          };
-          this.setCurrentArticle(this.article);
-          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
-        })
-        .catch((e) => console.log(e))
-        })
-      .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
-    },
+    })},
     saveTempArticle() {
       axios.post(process.env.VUE_APP_ARTICLETEMP + "regist", {
         title: this.title,
