@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Article;
-import com.ssafy.webblog.model.dto.Articletemp;
+import com.ssafy.webblog.model.dto.Tag;
 import com.ssafy.webblog.model.service.ArticleService;
 import com.ssafy.webblog.model.service.TagService;
 
@@ -83,6 +83,10 @@ public class RestArticleController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			artiService.deleteArticle(articleid);
+			List<Tag> deleteTagTarget = tService.getTagListByArticleid(Integer.parseInt(articleid));
+			for(Tag tag : deleteTagTarget) {
+				tService.deleteTag(tag.getTagid());
+			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
