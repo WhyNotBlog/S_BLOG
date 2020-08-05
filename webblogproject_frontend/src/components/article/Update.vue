@@ -186,7 +186,8 @@ export default {
   },
   postArticle() {
     axios
-      .post(process.env.VUE_APP_ARTICLE + "regist", {
+      .put(process.env.VUE_APP_ARTICLE + "update", {
+        articleid : this.article.articleid,
         title: this.title,
         content: this.editorMarkdown,
         editornickname: this.loggedIn,
@@ -198,7 +199,7 @@ export default {
         let data = res.data.data;
         this.article = data;
         this.setCurrentArticle(this.article);
-        axios.post(process.env.VUE_APP_TAG + "regist", {
+        axios.put(process.env.VUE_APP_TAG + "update", {
           articleid : data.articleid,
           tags : String(this.tags),
         }).then((res) => {
