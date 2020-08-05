@@ -15,8 +15,6 @@
         </v-list-item>
       </v-list>
 
-      <br />
-
       <v-list subheader>
         <v-subheader>Category</v-subheader>
         <v-divider></v-divider>
@@ -38,6 +36,15 @@
           </v-list-item>
         </v-list-group>
       </v-list>
+
+      <v-list subheader>
+        <v-subheader>Tag</v-subheader>
+        <v-divider style="margin-bottom:10px"></v-divider>
+        <span v-for="item in tag" :key="item.text">
+          <v-btn style="margin:3px; border-radius: 2rem;" dark color="#9FA9D8">#{{item.text}}</v-btn>
+        </span>
+      </v-list>
+      <br />
     </v-list>
   </div>
 </template>
@@ -51,34 +58,46 @@ export default {
           icon: "format_shapes",
           text: "알고리즘",
           items: [
-            { title: "Basic", icon: "search", route: "/search" },
-            { title: "기출 문제", icon: "search", route: "/search" },
+            { title: "Basic", icon: "mdi-login", route: "/search" },
+            { title: "기출 문제", icon: "mdi-shape-plus", route: "/search" },
           ],
         },
         {
           icon: "web",
           text: "웹",
           items: [
-            { title: "frontEnd", icon: "search", route: "/search" },
-            { title: "backEnd", icon: "search", route: "/search" },
+            {
+              title: "FrontEnd",
+              icon: "mdi-television-guide",
+              route: "/search",
+            },
+            {
+              title: "BackEnd",
+              icon: "mdi-image-filter-drama",
+              route: "/search",
+            },
           ],
         },
         {
           icon: "apps",
           text: "어플",
           items: [
-            { title: "android", icon: "android", route: "/search" },
-            { title: "ios", icon: "search", route: "/search" },
+            { title: "Android", icon: "android", route: "/search" },
+            { title: "iOS", icon: "mdi-apple", route: "/search" },
           ],
         },
       ],
       guide: [
-        {
-          icon: "record_voice_over",
-          text: "직무소개",
-        },
+        { icon: "record_voice_over", text: "직무소개" },
         { icon: "create", text: "적성검사" },
         { icon: "emoji_people", text: "로드맵" },
+      ],
+      tag: [
+        { text: "태그1" },
+        { text: "태그2" },
+        { text: "태그3" },
+        { text: "태그4" },
+        { text: "태그5" },
       ],
     };
   },
@@ -94,5 +113,9 @@ export default {
 }
 .v-application .primary--text {
   color: black !important;
+}
+
+.v-list {
+  padding: 0;
 }
 </style>

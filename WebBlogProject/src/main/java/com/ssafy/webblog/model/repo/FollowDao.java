@@ -13,5 +13,6 @@ public interface FollowDao extends JpaRepository<Follow, String> {
 	//내가 팔로우하는 리스트
 	List<Follow> getFollowByUserid(int userid);
 	
-	
+	Follow getFollowByUseridAndTargetid(int userid, int tragetid);
+	//추가 삭제는 jparepository 지원
 }

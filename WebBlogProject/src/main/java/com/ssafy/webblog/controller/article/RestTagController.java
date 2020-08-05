@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Article;
 import com.ssafy.webblog.model.dto.Tag;
+import com.ssafy.webblog.model.dto.Tagkind;
 import com.ssafy.webblog.model.service.TagService;
+import com.ssafy.webblog.model.service.TagkindService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -41,6 +43,9 @@ public class RestTagController {
 	@Autowired
 	TagService tService;
 	
+	@Autowired
+	TagkindService tkSerive;
+	
 	
 	@PostMapping("/regist")
 	@ApiOperation(value = "태그 등록")
@@ -51,14 +56,16 @@ public class RestTagController {
 		logger.debug("Tag regist article id / tagsize" + articleid + " / " + tags);
 		String[] input = tags.split(",");
 		ResponseEntity<Map<String, Object>> entity = null;
-		try {
-			
+		try {			
 			for(String tag : input) {
 				logger.info("tag : " + tag);
 				Tag tmp = new Tag();
 				tmp.setArticleid(articleid);
 				tmp.setTagname(tag);
 				Tag temp = tService.insertTag(tmp);
+				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
+				tkSerive.insertTagkind(new Tagkind(tag, tagcount+1));
+				
 			}
 			String result = "success";
 			entity = handleSuccess(result);
@@ -97,17 +104,21 @@ public class RestTagController {
 					tempTag.setArticleid(articleid);
 					tempTag.setTagname(tagname);
 					inputTagList.add(tempTag);
-				}
+				}			
 			}
 			//중복된거제거하고 업데이트할 내용에 없는 태그 삭제
 			for(Tag tag : currentTagList) {
 				System.out.println("삭제 : " + tag.toString());
 				tService.deleteTag(tag.getTagid());
+				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
+				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount+1));
 			}
 			System.out.println();
 			for(Tag tag : inputTagList) {
 				System.out.println("삽입 : " + tag.toString());
 				tService.insertTag(tag);
+				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
+				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount+1));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
@@ -135,6 +146,21 @@ public class RestTagController {
 		try {
 			List<Tag> result = tService.getTagListByArticleid(Integer.parseInt(articleid));
 			logger.info("Tag list that is registed " + articleid +" : " + result.size());
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	@GetMapping("/tentaglist")
+	@ApiOperation(value = "전체 태그중 상위 10개")
+	public ResponseEntity<Map<String, Object>> getTagList()
+			throws JsonProcessingException, IOException {
+		logger.debug("Searching Ten Tag List");
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Tagkind> result = tkSerive.getTagkind();
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);

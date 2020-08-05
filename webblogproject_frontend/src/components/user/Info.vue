@@ -15,7 +15,7 @@
           <h2>
             {{ nickname }}
             <v-btn color="white" text v-show="gitUrl != ''" @click="moveGit">
-              <v-icon>mdi-git</v-icon>
+              <img src="@/assets/github.svg" width="30px" />
             </v-btn>
           </h2>
 
@@ -27,7 +27,7 @@
 
     <br />
 
-    <v-divider style="margin:5px"></v-divider>
+    <v-divider style="margin:5px auto; width:96%"></v-divider>
 
     <div style="text-align:center">
       <v-layout row wrap justify-space-around>
@@ -46,7 +46,7 @@
       </v-layout>
       <br />
       <div>
-        <v-btn color="#9fa9d8" dark @click="moveUpdate">프로필 편집</v-btn>
+        <v-btn color="#9fa9d8" dark @click="moveUpdate" style="margin-right:10px">프로필 편집</v-btn>
       </div>
     </div>
     <br />
@@ -192,13 +192,16 @@ export default {
 }
 
 .backImg {
-  background-image: url("../../assets/back.jpg");
+  width: 96%;
+  margin: auto;
+  background-color: #b7b4da;
   border-radius: 2rem;
   background-size: 152vh;
   padding: 20px;
+  box-shadow: 3px 3px 5px 1px #595959;
 }
 
 .infoBox {
-  color: white;
+  color: black;
 }
 </style>

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Article;
+import com.ssafy.webblog.model.dto.Articletemp;
 import com.ssafy.webblog.model.service.ArticleService;
 import com.ssafy.webblog.model.service.TagService;
 
@@ -175,6 +176,23 @@ public class RestArticleController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			List<Article> result = artiService.searchAll();
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	
+	@GetMapping("/user/{userid}")
+	@ApiOperation(value = "유저가 작성한 게시글 조회")
+	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletResponse res, @PathVariable String userid)
+			throws JsonProcessingException, IOException {
+		logger.debug("Articletemp select by user id: " + userid);
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Article> result = artiService.getArticleListByWriterid(Integer.parseInt(userid));
+			logger.debug(result.toString());
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
