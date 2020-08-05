@@ -96,7 +96,7 @@ import { mapActions } from "vuex";
 
 export default {
   value: true,
-  name: "TempArticle",
+  name: "Post",
   data() {
     return {
       user : new Object(),
@@ -202,7 +202,6 @@ export default {
       })
       .then(res => {
         console.log(res);
-        axios.post(process.env.VUE_APP_ARTICLETEMP, "delete", {articleid : 1})
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : lastArticleId+1,
           tags : String(this.tags),
@@ -227,7 +226,24 @@ export default {
       .catch((e) => console.log(e));
     },
     saveTempArticle() {
-
+      axios.post(process.env.VUE_APP_ARTICLETEMP + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
+        writerid : this.user.id
+      }).then((res) => {
+        console.log(res);
+        alert('임시저장 테스트')
+      })
+      // .then((res) => {
+      //   console.log(res);
+      //   axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
+      //     writerid : 0,
+      //     tags : String(this.tags),
+      //   })
+      // })
     },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
@@ -243,35 +259,32 @@ export default {
   components: {
     editor : Editor,
   },
-    created() {
-      this.categories = this.$store.state.categories;
-        axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
-        .then((res) => {
+  created() {
+    this.categories = this.$store.state.categories;
+    this.category = this.categories[0];
+    axios
+      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+      })
+      .then((res) => {
         if (res.status) {
-        let data = res.data.data;
-        this.articleid = data.articleid;
-        this.title = data.title;
-        this.content = data.content;
-        this.editornickname = data.editornickname;
-        this.categoryInt = data.category;
-        this.editdate = data.editdate;
-        this.modify = data.modify;
-        this.category = this.categories[this.categoryInt]
-        }
-
-        axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
-        .then((res) => {
-          let tagData = res.data.data;
-          tagData.forEach(obj => {
-            this.tags.push(obj.tagname)
-            this.tagsSelected.push(true);
-            });
-        })
-        .catch((e) => console.log(e))
-        });
-    },
-    computed : {
-      loggedIn: {
+            let data = res.data.data;
+            this.user = data;
+            }
+            })
+  },
+  computed: {
+    jwtAuthToken: {
+        get() {
+        return this.$store.getters.jwtAuthToken;
+        },
+        set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+        },
+      },
+    loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
       },
@@ -279,10 +292,8 @@ export default {
         this.$store.dispatch("setLoggedIn", value);
       },
     },
-    },
-}
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
