@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-start style="margin:auto">
-    <v-flex v-for="article in articles" :key="article.id" xl4 lg4 md6 sm12 xs12>
+    <v-flex v-for="article in articles" :key="article.id" xl3 lg4 md6 sm6 xs12>
       <div class="content">
         <v-card class="d-inline-block my-3" :min-width="moblieWidth">
           <v-img class="white--text align-end" height="168px" :src="article.imageSrc"></v-img>
@@ -58,7 +58,7 @@ export default {
       return this.data;
     },
     moblieWidth() {
-      return window.innerWidth <= 500 ? "220px" : "290px";
+      return window.innerWidth <= 500 ? "220px" : "275px";
     },
   },
   filters: {

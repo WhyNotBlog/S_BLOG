@@ -5,10 +5,10 @@
     </header>
     <v-container fluid>
       <v-layout justify-space-around>
-        <v-flex xs8 sm8 md8 lg9 style="margin:auto">
+        <v-flex xs12 sm12 md8 lg8 xl9 style="margin:auto">
           <router-view />
         </v-flex>
-        <v-flex xs2 sm2 md2 lg2>
+        <v-flex xs2 sm2 md2 lg2 xl2 class="sidebar2">
           <div class="sidebar">
             <Sidebar />
           </div>
@@ -43,7 +43,7 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
-  .sidebar {
+  .sidebar2 {
     display: none;
   }
 }
