@@ -84,5 +84,10 @@ public class TagService {
 		Tag result = tDao.getTagByArticleidAndTagname(articleid, tagname);
 		return result;
 	}
+	
+	public List<Tag> getTagByTagname(String tagname){
+		List<Tag> result = tDao.getTagByTagname(tagname);
+		return result;
+	}
 
 }
