@@ -4,10 +4,10 @@
       <div class="content">
         <v-card class="d-inline-block my-3" :min-width="moblieWidth">
           <v-img class="white--text align-end" height="168px" :src="article.imageSrc"></v-img>
-          <v-card-title
-            @click="moveToArticle(article)"
-            class="card-title justify-center"
-          >{{ article.title }}</v-card-title>
+          <v-card-title @click="moveToArticle(article)" class="card-title justify-center">
+            {{ article.title.slice(0, 10)
+            }}{{ article.title.length > 10 ? "..." : "" }}
+          </v-card-title>
 
           <v-card-text class="card-text text--primary">
             <div class="text-center">
@@ -58,7 +58,7 @@ export default {
       return this.data;
     },
     moblieWidth() {
-      return window.innerWidth <= 500 ? "220px" : "275px";
+      return window.innerWidth <= 500 ? "220px" : "270px";
     },
   },
   filters: {

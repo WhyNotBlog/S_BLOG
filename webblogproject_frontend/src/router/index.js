@@ -5,8 +5,8 @@ import Search from "@/components/article/Search";
 import Article from "@/components/article/Article";
 import Post from "@/components/article/Post";
 import Update from "@/components/article/Update";
-import MDEditor from '@/components/article/MDEditor';
-import CKEditor from '@/components/article/CKEditor';
+import MDEditor from "@/components/article/MDEditor";
+import CKEditor from "@/components/article/CKEditor";
 import SNSLogin from "@/components/user/SNSLogin";
 import Auth from "@/components/user/Auth";
 import Info from "@/components/user/Info";
@@ -18,7 +18,7 @@ import Test from "@/components/article/test";
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-    return originalPush.call(this, location).catch((err) => err);
+  return originalPush.call(this, location).catch((err) => err);
 };
 
 Vue.use(VueRouter);
@@ -35,8 +35,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/search",
+    path: "/search/:tagKey",
     name: "Search",
+    props: true,
     component: Search,
   },
   {
@@ -105,9 +106,9 @@ const routes = [
 ];
 
 const router = new VueRouter({
-    mode: "history",
-    base: process.env.BASE_URL,
-    routes,
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes,
 });
 
 export default router;

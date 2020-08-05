@@ -40,8 +40,13 @@
       <v-list subheader>
         <v-subheader>Tag</v-subheader>
         <v-divider style="margin-bottom:10px"></v-divider>
-        <span v-for="item in tag" :key="item.text">
-          <v-btn style="margin:3px; border-radius: 2rem;" dark color="#9FA9D8">#{{item.text}}</v-btn>
+        <span v-for="item in tag" :key="item.tagname">
+          <v-btn
+            style="margin:3px; border-radius: 2rem;"
+            dark
+            color="#9FA9D8"
+            @click="tagSearch(item.tagname)"
+          >#{{item.tagname}}</v-btn>
         </span>
       </v-list>
       <br />
@@ -50,7 +55,24 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  methods: {
+    tagSearch(tag) {
+      this.$router.push("/search/" + tag);
+    },
+  },
+  created() {
+    axios
+      .get(process.env.VUE_APP_TAG + "tentaglist")
+      .then((res) => {
+        console.log(res.data.data);
+        this.tag = res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   data() {
     return {
       category: [
@@ -92,13 +114,7 @@ export default {
         { icon: "create", text: "적성검사" },
         { icon: "emoji_people", text: "로드맵" },
       ],
-      tag: [
-        { text: "태그1" },
-        { text: "태그2" },
-        { text: "태그3" },
-        { text: "태그4" },
-        { text: "태그5" },
-      ],
+      tag: [],
     };
   },
 };

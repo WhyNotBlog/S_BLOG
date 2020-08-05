@@ -198,7 +198,7 @@ export default {
       this.$router.push("/");
     },
     moveSearch() {
-      this.$router.push("/search");
+      this.$router.push("/search/blank");
     },
     moveInfo() {
       this.$router.push("/user/info");
