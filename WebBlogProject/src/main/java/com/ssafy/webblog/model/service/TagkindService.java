@@ -23,6 +23,6 @@ public class TagkindService {
 	}
 	
 	public List<Tagkind> getTagkind(){
-		return tDao.findTop10ByOrderByTagcountDesc();
+		return tDao.findTop5ByOrderByTagcountDesc();
 	}
 }
