@@ -192,6 +192,7 @@ export default {
         editornickname: this.loggedIn,
         category: this.categoryInt,
         modify: this.modify,
+        writerid : this.user.id,
       })
       .then(res => {
         let data = res.data.data;

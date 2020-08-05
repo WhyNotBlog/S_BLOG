@@ -15,7 +15,7 @@
         <v-btn color="red accent-4" icon v-else @click="changeLiked()">
           <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
         </v-btn>
-        <div class="d-inline-block" v-if="(loggedIn !== null && loggedIn === article.editornickname)">
+        <div class="d-inline-block" v-if="(loggedIn !== null && user.id === article.writerid)">
           <v-btn color="black accent-4" icon @click="updateArticle()">
             <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
           </v-btn>
@@ -61,8 +61,8 @@ export default {
   name: "Article",
   data() {
     return {
-      article : new Object(
-      ),
+      user : new Object(),
+      article : new Object(),
       tags : new Array(),
       viewerText : '',
     };
@@ -72,6 +72,18 @@ export default {
     viewer : Viewer,
   },
   created() {
+    axios
+      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+      })
+      .then((res) => {
+        if (res.status) {
+            let data = res.data.data;
+            this.user = data;
+            }
+            })
     this.article = this.$store.state.currentArticle;
     axios.get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
         .then((res) => {
@@ -84,6 +96,14 @@ export default {
     
   },
   computed : {
+    jwtAuthToken: {
+        get() {
+        return this.$store.getters.jwtAuthToken;
+        },
+        set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+        },
+      },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
