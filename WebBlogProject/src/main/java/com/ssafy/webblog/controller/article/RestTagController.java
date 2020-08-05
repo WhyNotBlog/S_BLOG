@@ -64,7 +64,7 @@ public class RestTagController {
 				tmp.setTagname(tag);
 				Tag temp = tService.insertTag(tmp);
 				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag, tagcount+1));
+				tkSerive.insertTagkind(new Tagkind(tag, tagcount));
 				
 			}
 			String result = "success";
@@ -111,14 +111,14 @@ public class RestTagController {
 				System.out.println("삭제 : " + tag.toString());
 				tService.deleteTag(tag.getTagid());
 				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount+1));
+				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			System.out.println();
 			for(Tag tag : inputTagList) {
 				System.out.println("삽입 : " + tag.toString());
 				tService.insertTag(tag);
 				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
-				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount+1));
+				tkSerive.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
@@ -154,7 +154,7 @@ public class RestTagController {
 	}
 	
 	@GetMapping("/tentaglist")
-	@ApiOperation(value = "전체 태그중 상위 10개")
+	@ApiOperation(value = "전체 태그중 상위 5개")
 	public ResponseEntity<Map<String, Object>> getTagList()
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching Ten Tag List");
