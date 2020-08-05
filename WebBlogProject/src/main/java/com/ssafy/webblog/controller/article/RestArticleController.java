@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Article;
 import com.ssafy.webblog.model.dto.Tag;
+import com.ssafy.webblog.model.dto.Tagkind;
 import com.ssafy.webblog.model.service.ArticleService;
 import com.ssafy.webblog.model.service.TagService;
+import com.ssafy.webblog.model.service.TagkindService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -42,6 +44,8 @@ public class RestArticleController {
 
 	@Autowired
 	TagService tService;
+	@Autowired
+	TagkindService tkService;
 	
 	@GetMapping("/{articleId}")
 	@ApiOperation(value = "게시글 조회")
@@ -86,6 +90,8 @@ public class RestArticleController {
 			List<Tag> deleteTagTarget = tService.getTagListByArticleid(Integer.parseInt(articleid));
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
+				List<Tag> list = tService.getTagByTagname(tag.getTagname());
+				tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
