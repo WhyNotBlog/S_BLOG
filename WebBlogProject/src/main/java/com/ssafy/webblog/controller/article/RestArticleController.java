@@ -71,6 +71,7 @@ public class RestArticleController {
 		try {
 			System.out.println(article.getContent());
 			Article result = artiService.insertArticle(article);
+			System.out.println(result);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -91,7 +92,8 @@ public class RestArticleController {
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
 				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
+				if(list.size() <= 1) tkService.delete(tag.getTagname());
+				else tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
