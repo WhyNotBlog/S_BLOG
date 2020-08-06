@@ -84,11 +84,6 @@ public class RestAccountController {
 			throws JsonProcessingException, IOException {
 		logger.debug("login : " + user.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
-		System.out.println(backurl);
-		System.out.println(fronturl);
-		System.out.println(profileUrl);
-		String realPath = System.getProperty("user.dir") + profileUrl;
-		System.out.println(realPath);
 		try {
 			User result = userAccountService.LoginUserByEmailAndPassword(user.getEmail(), user.getPassword());
 			String token = jwtService.create(result, 0, "");
