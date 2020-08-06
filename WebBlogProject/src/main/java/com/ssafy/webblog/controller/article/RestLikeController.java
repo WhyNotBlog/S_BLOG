@@ -39,7 +39,7 @@ public class RestLikeController {
 	@ApiOperation(value = "아티클 번호에 대한 like수 반환")
 	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
-		String articleids = (String) map.get("articleids");	
+		String articleids = (String) map.get("articleid");	
 		logger.debug("Request Like count by ariticle id " + articleids);
 		String[] input = articleids.split(",");
 		ResponseEntity<Map<String, Object>> entity = null;
