@@ -34,6 +34,7 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 		System.out.println(backurl);
 		System.out.println(fronturl);
 		System.out.println(profileUrl);
+		
 	}
 
 	@Autowired
