@@ -117,11 +117,15 @@ export default {
       tags: new Array(),
       tagsSelected: new Array(),
       tagsRules: [
-        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
+        () => {
+          let regExp = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gi;
+          return !regExp.test(this.tag) || "태그에는 특수문자가 포함될 수 없습니다."
+        },
         () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.",
         () =>
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
+        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
       ],
       title: "",
       content: "",
@@ -156,7 +160,8 @@ export default {
       return this.tags.indexOf(tag);
     },
     addTag() {
-      if (this.tag) {
+      let regExp = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gi;
+      if (this.tag && !regExp.test(this.tag)) {
         if (!this.tags.includes(this.tag)) {
           if (this.tags.length < 5) {
             this.tagsSelected.push(true);
