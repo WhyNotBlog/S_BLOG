@@ -220,16 +220,16 @@ export default {
         modify: this.modify,
         writerid : this.user.id
       }).then((res) => {
-        console.log(res);
-        alert('임시저장에 성공했습니다.')
+        let data = res.data.data;
+        axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
+          articletempid : data.articleid,
+          tagtemps : String(this.tags),
+        }).then((res) => {
+          console.log(res);
+          alert('임시저장에 성공했습니다.');
+          this.$router.push({ name : 'TempList'})
+        })
       })
-      // .then((res) => {
-      //   console.log(res);
-      //   axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
-      //     writerid : 0,
-      //     tags : String(this.tags),
-      //   })
-      // })
     },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {

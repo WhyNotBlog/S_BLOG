@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-start style="margin:auto">
-    <v-flex v-for="article in articles" :key="article.id" xl3 lg4 md6 sm6 xs12>
+    <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
       <div class="content">
         <v-card class="d-inline-block my-3" :min-width="moblieWidth">
           <v-img class="white--text align-end" height="168px" src="@/assets/basic.jpg"></v-img>
@@ -27,22 +27,22 @@
             </div>
           </v-footer>
 
-          <!-- <v-card-actions class="justify-space-around">
-            <v-btn color="orange" icon @click="copyLink(article.id)">
+          <v-card-actions class="justify-space-around">
+            <v-btn color="orange" icon @click="copyLink(article.articleid)">
               <v-icon middle color>mdi-share</v-icon>
             </v-btn>
             <v-btn
               color="red accent-4"
               icon
               v-if="article.isLiked"
-              @click="changeLiked(article.id)"
+              @click="changeLiked(article.articleid)"
             >
               <v-icon middle color="red accent-4">mdi-heart</v-icon>
             </v-btn>
-            <v-btn color="red accent-4" icon v-else @click="changeLiked(article.id)">
+            <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
             </v-btn>
-          </v-card-actions>-->
+          </v-card-actions>
         </v-card>
       </div>
     </v-flex>
@@ -50,10 +50,53 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapActions } from "vuex";
 export default {
+  data() {
+    return {
+      articleList : null,
+      user : new Object(),
+      userLiked : new Array(),
+    }
+  },
+  created() {
+    if (this.loggedIn !== null) {
+    axios
+      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+      })
+      .then((res) => {
+        if (res.status) {
+            let data = res.data.data;
+            this.user = data;
+            axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+            .then(res => this.userLiked = res.data.data)
+            .catch(e => console.log(e))
+            }
+            })
+    }
+  },
   props: { data: Array },
   computed: {
+    jwtAuthToken: {
+        get() {
+        return this.$store.getters.jwtAuthToken;
+        },
+        set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+        },
+      },
+    loggedIn: {
+      get() {
+        return this.$store.getters.loggedIn;
+      },
+      set(value) {
+        this.$store.dispatch("setLoggedIn", value);
+      },
+    },
     articles() {
       return this.data;
     },
@@ -73,7 +116,7 @@ export default {
   methods: {
     copyLink(id) {
       const copyURL = document.createElement("input");
-      copyURL.value = document.URL + id;
+      copyURL.value = document.URL + `article/detail/${id}`;
       document.body.appendChild(copyURL);
       copyURL.select();
       document.execCommand("copy");
@@ -89,6 +132,10 @@ export default {
         name: "Article",
         params: { articleId: article.articleid },
       });
+    },
+
+    changeLiked(id) {
+      console.log(id)
     },
   },
 };
