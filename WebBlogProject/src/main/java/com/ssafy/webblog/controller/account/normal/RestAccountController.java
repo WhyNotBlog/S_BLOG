@@ -87,7 +87,7 @@ public class RestAccountController {
 		System.out.println(backurl);
 		System.out.println(fronturl);
 		System.out.println(profileUrl);
-		String realPath = System.getProperty("user.dir") + "\\profile\\";
+		String realPath = System.getProperty("user.dir") + profileUrl;
 		System.out.println(realPath);
 		try {
 			User result = userAccountService.LoginUserByEmailAndPassword(user.getEmail(), user.getPassword());
