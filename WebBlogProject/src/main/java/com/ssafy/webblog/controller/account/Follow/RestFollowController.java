@@ -57,16 +57,14 @@ public class RestFollowController {
 		return entity;
 	}
 
-	@DeleteMapping("/delete")
+	@DeleteMapping("/delete/{userid}/{targetid}")
 	@ApiOperation(value = "팔로우 취소")
-	public ResponseEntity<Map<String, Object>> followDelete(HttpServletResponse res, @RequestBody Follow follow)
+	public ResponseEntity<Map<String, Object>> followDelete(HttpServletResponse res, @PathVariable String userid, @PathVariable String targetid)
 			throws IOException {
-		int userid = follow.getUserid();
-		int targetid = follow.getTargetid();
 		logger.debug("delete follow [ " + userid + " - > " + targetid + " ]");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			fService.deleteFollow(userid, targetid);
+			fService.deleteFollow(Integer.parseInt(userid), Integer.parseInt(targetid));
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
 			entity = handleException(e);

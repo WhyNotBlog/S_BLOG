@@ -24,7 +24,7 @@ public class Likearticle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="likekey")
     private int likekey;
-    
+     
     private int userid;
     
     private int articleid;
