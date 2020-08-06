@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.webblog.controller.handler.ResultHandler;
 import com.ssafy.webblog.model.dto.Likearticle;
 import com.ssafy.webblog.model.service.LikeService;
 
@@ -36,6 +37,11 @@ public class RestLikeController {
 	@Autowired
 	LikeService lService;
 
+	@Autowired
+	ResultHandler resultHandler;
+	static final Class CLASSNAME = RestLikeController.class;
+	
+	
 	@PostMapping("/articlelist")
 	@ApiOperation(value = "아티클 번호에 대한 like수 반환")
 	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
@@ -51,9 +57,9 @@ public class RestLikeController {
 				int count = lService.getArticleLikeCountByArticleid(Integer.parseInt(id));
 				likeCountMap.put(id, count);
 			}
-			entity = handleSuccess(likeCountMap);
+			entity = resultHandler.handleSuccess(likeCountMap,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -66,9 +72,9 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			Likearticle result = lService.registLike(like);
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -83,9 +89,9 @@ public class RestLikeController {
 			int likekey = lService.getLikekeyByUseridAndArticleid(Integer.parseInt(userid), Integer.parseInt(articleid));
 			Likearticle deleteLike = new Likearticle(likekey, Integer.parseInt(userid), Integer.parseInt(articleid));
 			lService.deleteLike(deleteLike);
-			entity = handleSuccess("success");
+			entity = resultHandler.handleSuccess("success",CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -98,9 +104,9 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			int result = lService.getArticleLikeCountByArticleid(Integer.parseInt(articleid));
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -113,27 +119,12 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			List<Integer> result = lService.getAllArticleByUserid(Integer.parseInt(userid));
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
-	
-	
-	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", true);
-		resultMap.put("data", data);
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-	}
 
-	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-		logger.error("예외 발생 : ", e);
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", false);
-		resultMap.put("data", e.getMessage());
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
 
 }
