@@ -57,4 +57,8 @@ export default {
     display: none;
   }
 }
+
+.v-subheader {
+  height: 34px;
+}
 </style>

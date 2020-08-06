@@ -3,7 +3,7 @@
     <br />
     <v-layout row wrap justify-center>
       <v-flex xs3 sm3 md3 lg3 xl3>
-        <v-select :items="type" label="유형" solo v-model="typeBox"></v-select>
+        <v-select :items="types" label="유형" solo v-model="typeBox"></v-select>
       </v-flex>
       <v-flex xs8 sm8 md8 lg8 xl8>
         <v-text-field
@@ -13,7 +13,7 @@
           color="black"
           placeholder="검색어를 입력하세요"
           v-model="search"
-          @change="searchContent"
+          @change="searchRoute"
           solo
           clearable
           single-line
@@ -35,41 +35,61 @@ import PostView from "@/components/PostView";
 
 export default {
   created() {
-    if (this.tagKey != "blank") {
-      this.typeBox = "태그";
-      this.search = this.tagKey;
-      this.searchContent();
-    }
+    this.searchDefault();
   },
 
   watch: {
-    tag() {
-      this.typeBox = "태그";
-      this.search = this.tagKey;
-      this.searchContent();
+    word() {
+      this.searchDefault();
+    },
+    type() {
+      this.searchDefault();
     },
   },
 
-  computed: {
-    tag() {
-      return this.tagKey;
-    },
-  },
   data() {
     return {
       search: "",
       articles: new Array(),
       count: 0,
       isSearch: false,
-      isTag: false,
       typeBox: "제목",
-      type: ["제목", "닉네임", "태그"],
+      typeEn: "",
+      types: ["제목", "닉네임", "태그"],
     };
   },
 
   components: { PostView },
-  props: ["tagKey"],
+  props: ["type", "word"],
   methods: {
+    searchRoute() {
+      if (this.search == "") return;
+
+      if (this.typeBox == "제목") {
+        this.typeEn = "title";
+      } else if (this.typeBox == "닉네임") {
+        this.typeEn = "nickname";
+      } else {
+        this.typeEn = "tag";
+      }
+      this.$router.push("/search/" + this.typeEn + "/" + this.search);
+    },
+
+    searchDefault() {
+      if (this.type == "title") {
+        this.typeBox = "제목";
+      } else if (this.type == "nickname") {
+        this.typeBox = "닉네임";
+      } else {
+        this.typeBox = "태그";
+      }
+      if (this.word == "blank") this.search = "";
+      else {
+        this.search = this.word;
+        this.searchContent();
+      }
+    },
+
     searchContent() {
       //console.log(this.search);
       if (this.typeBox == "제목") {

@@ -36,8 +36,9 @@ const routes = [
     name: "Home",
     component: Home,
   },
+
   {
-    path: "/search/:tagKey",
+    path: "/search/:type/:word",
     name: "Search",
     props: true,
     component: Search,

@@ -59,7 +59,7 @@ import axios from "axios";
 export default {
   methods: {
     tagSearch(tag) {
-      this.$router.push("/search/" + tag);
+      this.$router.push("/search/tag/" + tag);
     },
   },
   created() {
