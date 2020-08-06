@@ -25,6 +25,12 @@
             <div>
               <b>{{ article.editornickname }}</b>
             </div>
+            <div>
+              <b>|</b>
+            </div>
+            <div>
+              <b>조회수 : {{ article.hits }}</b>
+            </div>
           </v-footer>
 
           <v-card-actions class="justify-space-around">
@@ -127,11 +133,11 @@ export default {
     ...mapActions(["setCurrentArticle"]),
 
     moveToArticle(article) {
-      this.setCurrentArticle(article);
-      this.$router.push({
-        name: "Article",
-        params: { articleId: article.articleid },
-      });
+        this.setCurrentArticle(article);
+        this.$router.push({
+          name: "Article",
+          params: { articleId : article.articleid },
+        });
     },
 
     changeLiked(id) {
