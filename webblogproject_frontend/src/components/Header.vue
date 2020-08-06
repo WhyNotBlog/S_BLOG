@@ -135,7 +135,7 @@ export default {
           text: "Home",
           route: "/",
         },
-        { icon: "find_in_page", text: "Search", route: "/search" },
+        { icon: "find_in_page", text: "Search", route: "/search/title/blank" },
         { icon: "account_circle", text: "Profile", route: "/user/info" },
         { icon: "mdi-pencil", text: "Post", route: "/article/post" },
       ],
@@ -198,7 +198,7 @@ export default {
       this.$router.push("/");
     },
     moveSearch() {
-      this.$router.push("/search/blank");
+      this.$router.push("/search/title/blank");
     },
     moveInfo() {
       this.$router.push("/user/info");
