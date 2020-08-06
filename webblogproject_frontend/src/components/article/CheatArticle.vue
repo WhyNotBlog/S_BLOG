@@ -12,7 +12,7 @@ export default {
     name : 'CheatArticle',
     props : {
         articleId : {
-            type : String,
+            type : Number,
             required : true,
         }
     },

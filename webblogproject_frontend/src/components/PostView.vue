@@ -40,10 +40,10 @@
             <v-btn
               color="red accent-4"
               icon
-              v-if="article.isLiked"
+              v-if="checkLiked(article.articleid)"
               @click="changeLiked(article.articleid)"
             >
-              <v-icon middle color="red accent-4" icon v-if="checkLiked(article.articleid)" @click="changeLiked(article.articleid)">mdi-heart</v-icon>
+              <v-icon middle color="red accent-4" icon @click="changeLiked(article.articleid)">mdi-heart</v-icon>
             </v-btn>
             <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
@@ -147,7 +147,7 @@ export default {
 
     changeLiked(id) {
       if (this.loggedIn !== null) {
-        if (!this.checkLiked(id)) {
+          if (!this.checkLiked(id)) {
             axios.post(process.env.VUE_APP_LIKE + 'regist', {
               userid : this.user.id,
               articleid : id
