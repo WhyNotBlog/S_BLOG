@@ -37,16 +37,34 @@
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
-          <div>0</div>
+
+          <v-dialog v-model="followerModal" persistent width="600px">
+            <template #activator="{ on: dialog, attrs}">
+              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{follower}}</div>
+            </template>
+            <Follow @close-modal="closeModal" type="Follower" :id="this.fileName"></Follow>
+          </v-dialog>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <div>0</div>
+          <v-dialog v-model="followingModal" persistent width="600px">
+            <template #activator="{ on: dialog, attrs}">
+              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{following}}</div>
+            </template>
+
+            <Follow @close-modal="closeModal2" type="Following" :id="this.fileName"></Follow>
+          </v-dialog>
         </v-flex>
       </v-layout>
       <br />
       <div>
-        <v-btn color="#9fa9d8" dark @click="moveUpdate" style="margin-right:10px">프로필 편집</v-btn>
+        <v-btn
+          class="editBtn"
+          color="#9fa9d8"
+          dark
+          @click="moveUpdate"
+          style="margin-right:10px"
+        >프로필 편집</v-btn>
       </div>
     </div>
     <br />
@@ -58,10 +76,11 @@
 <script>
 import axios from "axios";
 import PostView from "@/components/PostView";
+import Follow from "@/components/user/FollowList";
 
 export default {
   name: "info",
-  components: { PostView },
+  components: { PostView, Follow },
   computed: {
     jwtAuthToken: {
       get() {
@@ -124,20 +143,22 @@ export default {
           this.fileName = data.id;
 
           axios
-            .get(
-              process.env.VUE_APP_ARTICLE +
-                "searchBy/nickname/" +
-                this.nickname,
-              {
-                headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
-              }
-            )
+            .get(process.env.VUE_APP_ARTICLE + "user/" + data.id)
             .then((res) => {
               //console.log(res);
               this.contentCnt = res.data.data.length;
               this.articles = res.data.data;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          axios
+            .get(process.env.VUE_APP_FOLLOW + "count/" + data.id)
+            .then((res) => {
+              //console.log(res);
+              this.follower = res.data.data.follower;
+              this.following = res.data.data.following;
             })
             .catch((err) => {
               console.log(err);
@@ -154,6 +175,12 @@ export default {
     moveGit() {
       location.href = this.gitUrl;
     },
+    closeModal() {
+      this.followerModal = false;
+    },
+    closeModal2() {
+      this.followingModal = false;
+    },
   },
 
   data() {
@@ -169,13 +196,17 @@ export default {
       introduce: "",
       articles: Array(),
       contentCnt: 0,
+      following: 0,
+      follower: 0,
+      followerModal: false,
+      followingModal: false,
     };
   },
 };
 </script>
 
 <style scoped>
-.v-avatar[data-v-2d7fd89c] {
+.v-avatar {
   width: 150px !important;
   height: 150px !important;
   min-width: 170px;
@@ -187,7 +218,7 @@ export default {
   min-width: 200px;
 }
 
-.v-btn {
+.editBtn {
   float: right;
 }
 

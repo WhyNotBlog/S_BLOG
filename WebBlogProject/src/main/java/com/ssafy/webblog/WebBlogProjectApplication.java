@@ -3,6 +3,7 @@ package com.ssafy.webblog;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,10 +20,21 @@ import com.ssafy.webblog.interceptor.JwtInterceptor;
 })
 
 public class WebBlogProjectApplication implements WebMvcConfigurer{
-
+	
+	@Value("${backurl}")
+	private static String backurl;
+	@Value("${fronturl}")
+	private static String fronturl;
+	@Value("${profileUrl}")
+	private static String profileUrl;	
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(WebBlogProjectApplication.class, args);
+		System.out.println(backurl);
+		System.out.println(fronturl);
+		System.out.println(profileUrl);
+		
 	}
 
 	@Autowired

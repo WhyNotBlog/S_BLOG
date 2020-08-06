@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ssafy.webblog.controller.comment.RestCommentController;
+import com.ssafy.webblog.controller.handler.ResultHandler;
 import com.ssafy.webblog.model.dto.Article;
 import com.ssafy.webblog.model.dto.Tagkind;
 import com.ssafy.webblog.model.dto.Tagtemp;
@@ -43,7 +45,9 @@ public class RestTagtempController {
 
 	@Autowired
 	TagtempService ttService;
-
+	@Autowired
+	ResultHandler resultHandler;
+	static final Class CLASSNAME = RestTagtempController.class;
 
 	@PostMapping("/regist")
 	@ApiOperation(value = "임시 태그 등록")
@@ -63,9 +67,9 @@ public class RestTagtempController {
 				ttService.insertTagtemp(tmp);
 			}
 			String result = "success";
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -93,9 +97,9 @@ public class RestTagtempController {
 				tmp.setTagname(tag);
 				ttService.insertTagtemp(tmp);
 			}
-			entity = handleSuccess("success");
+			entity = resultHandler.handleSuccess("success",CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
 	}
@@ -109,29 +113,11 @@ public class RestTagtempController {
 		try {
 			List<Tagtemp> result = ttService.getTagtempListByArticleid(Integer.parseInt(articletempid));
 			logger.info("Tagtemp list that is registed " + articletempid + " : " + result.size());
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e,CLASSNAME);
 		}
 		return entity;
-	}
-
-
-	// ------------------------------------------
-
-	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", true);
-		resultMap.put("data", data);
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-	}
-
-	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-		logger.error("예외 발생 : ", e);
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", false);
-		resultMap.put("data", e.getMessage());
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

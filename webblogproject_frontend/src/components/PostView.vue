@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -69,14 +69,14 @@ export default {
   },
   created() {
     if (this.loggedIn !== null) {
-    axios
-      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+      axios
+        .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
           headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
-      })
-      .then((res) => {
-        if (res.status) {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        })
+        .then((res) => {
+          if (res.status) {
             let data = res.data.data;
             this.user = data;
             axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
@@ -88,13 +88,13 @@ export default {
   props: { data: Array },
   computed: {
     jwtAuthToken: {
-        get() {
+      get() {
         return this.$store.getters.jwtAuthToken;
-        },
-        set(value) {
-        this.$store.dispatch("setJwtAuthToken", value);
-        },
       },
+      set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+      },
+    },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;

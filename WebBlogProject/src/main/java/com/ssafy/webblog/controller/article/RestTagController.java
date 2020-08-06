@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ssafy.webblog.controller.comment.RestCommentController;
+import com.ssafy.webblog.controller.handler.ResultHandler;
 import com.ssafy.webblog.model.dto.Article;
 import com.ssafy.webblog.model.dto.Tag;
 import com.ssafy.webblog.model.dto.Tagkind;
@@ -47,6 +49,10 @@ public class RestTagController {
 	@Autowired
 	TagkindService tkService;
 
+	@Autowired
+	ResultHandler resultHandler;
+	static final Class CLASSNAME = RestTagController.class;
+
 	@PostMapping("/regist")
 	@ApiOperation(value = "태그 등록")
 	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
@@ -65,12 +71,12 @@ public class RestTagController {
 				Tag temp = tService.insertTag(tmp);
 				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
 				tkService.insertTagkind(new Tagkind(tag, tagcount));
-				
+
 			}
 			String result = "success";
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result, CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e, CLASSNAME);
 		}
 		return entity;
 	}
@@ -119,9 +125,9 @@ public class RestTagController {
 				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
 				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
-			entity = handleSuccess("success");
+			entity = resultHandler.handleSuccess("success", CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e, CLASSNAME);
 		}
 		return entity;
 	}
@@ -144,64 +150,49 @@ public class RestTagController {
 		try {
 			List<Tag> result = tService.getTagListByArticleid(Integer.parseInt(articleid));
 			logger.info("Tag list that is registed " + articleid + " : " + result.size());
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result, CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e, CLASSNAME);
 		}
 		return entity;
 	}
 
 	@GetMapping("/tentaglist")
 	@ApiOperation(value = "전체 태그중 상위 5개")
-	public ResponseEntity<Map<String, Object>> getTagList()
-			throws JsonProcessingException, IOException {
+	public ResponseEntity<Map<String, Object>> getTagList() throws JsonProcessingException, IOException {
 		logger.debug("Searching Ten Tag List");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			List<Tagkind> result = tkService.getTagkind();
-			entity = handleSuccess(result);
+			entity = resultHandler.handleSuccess(result, CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e, CLASSNAME);
 		}
 		return entity;
 	}
 
 	@DeleteMapping("/delete")
 	@ApiOperation(value = "아티클이 지워지면 delete")
-	public ResponseEntity<Map<String, Object>> getTagList(@RequestBody String articleid) throws JsonProcessingException, IOException {
+	public ResponseEntity<Map<String, Object>> getTagList(@RequestBody String articleid)
+			throws JsonProcessingException, IOException {
 		logger.debug("delete article - > tag delete : " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			List<Tag> deleteTargets = tService.getTagListByArticleid(Integer.parseInt(articleid));
-			for(Tag tag : deleteTargets) {
+			for (Tag tag : deleteTargets) {
 				logger.info("Tag delete - > " + tag.toString());
 				tService.deleteTag(tag.getTagid());
 				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				if(list.size() <= 0) tkService.delete(tag.getTagname());
-				else tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
+				if (list.size() <= 0)
+					tkService.delete(tag.getTagname());
+				else
+					tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
-			entity = handleSuccess("success");
+			entity = resultHandler.handleSuccess("success", CLASSNAME);
 		} catch (RuntimeException e) {
-			entity = handleException(e);
+			entity = resultHandler.handleException(e, CLASSNAME);
 		}
 		return entity;
-	}
-
-	// ------------------------------------------
-
-	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", true);
-		resultMap.put("data", data);
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-	}
-
-	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-		logger.error("예외 발생 : ", e);
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", false);
-		resultMap.put("data", e.getMessage());
-		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

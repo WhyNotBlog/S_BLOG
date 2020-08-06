@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     searchTag(tag) {
-      this.$router.push("/search/" + tag);
+      this.$router.push("/search/tag/" + tag);
     },
     changeLiked() {
       this.article.isLiked = !this.article.isLiked;

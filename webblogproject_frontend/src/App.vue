@@ -61,4 +61,8 @@ export default {
 .v-subheader {
   height: 34px;
 }
+
+.layout {
+  flex-wrap: wrap;
+}
 </style>

@@ -39,6 +39,8 @@ public class RestCommentController {
 	@Autowired
 	ResultHandler resultHandler;
 	static final Class CLASSNAME = RestCommentController.class;
+	
+	
 	//삽입 삭제 업데이트
 	@PostMapping("/regist")
 	@ApiOperation(value = "게시글에 댓글 등록")
