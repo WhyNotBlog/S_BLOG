@@ -204,6 +204,7 @@ export default {
       })
       .then(res => {
         let data = res.data.data;
+        let postedArticleId = data.articleid;
         this.article = data;
         this.setCurrentArticle(this.article);
 
@@ -215,7 +216,7 @@ export default {
           axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
         { data: { articletempid: this.articleid } })
         .then(() => {
-          this.$router.push({name : 'Article', params : { articleId : this.articleid }});
+          this.$router.push({name : 'Article', params : { articleId : postedArticleId }});
         })
         })
     })},
