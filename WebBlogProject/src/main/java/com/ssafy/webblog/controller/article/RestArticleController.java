@@ -92,7 +92,7 @@ public class RestArticleController {
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
 				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				if(list.size() <= 1) tkService.delete(tag.getTagname());
+				if(list.size() <= 0) tkService.delete(tag.getTagname());
 				else tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
 			}
 			entity = handleSuccess("success");

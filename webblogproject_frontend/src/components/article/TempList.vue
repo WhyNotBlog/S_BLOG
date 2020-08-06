@@ -33,6 +33,7 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   name : 'TempList',
@@ -94,8 +95,13 @@ export default {
     },
   },
   methods: {
-      moveToTempArticle() {
-
+    ...mapActions(["setCurrentTempArticle"]),
+      moveToTempArticle(tempArticle) {
+         this.setCurrentTempArticle(tempArticle);
+      this.$router.push({
+        name: "TempArticle",
+        params: { articleId: tempArticle.articleid },
+      });
       }
   },
 };

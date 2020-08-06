@@ -66,7 +66,7 @@ const routes = [
     component: TempList,
   },
   {
-    path: "/article/temp/:writerId",
+    path: "/article/temp/:articleId",
     name: "TempArticle",
     component: TempArticle,
   },
