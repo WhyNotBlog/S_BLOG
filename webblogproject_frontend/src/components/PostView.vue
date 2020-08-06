@@ -43,7 +43,7 @@
               v-if="checkLiked(article.articleid)"
               @click="changeLiked(article.articleid)"
             >
-              <v-icon middle color="red accent-4" icon @click="changeLiked(article.articleid)">mdi-heart</v-icon>
+              <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
             </v-btn>
             <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
