@@ -13,7 +13,7 @@
                 <br />
                 <div class="logo">
                   <img src="@/assets/logo.png" width="200px" />
-                  <h3 style="color:white">팔로워</h3>
+                  <h3 style="color:white">{{type}}</h3>
                 </div>
                 <br />
               </div>
@@ -23,11 +23,11 @@
               <v-list>
                 <v-list-item v-for="item in person" :key="item.id">
                   <v-list-item-content>
-                    <v-list-item-title v-html="item.text">{{item.nickname}}</v-list-item-title>
+                    <v-list-item-title>{{item.nickname}}</v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-icon>{{item.icon}}</v-icon>
+                    <v-icon>person</v-icon>
                   </v-list-item-action>
                 </v-list-item>
               </v-list>
@@ -42,7 +42,7 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["key", "id"],
+  props: ["type", "id"],
   methods: {
     closeModal() {
       this.$emit("close-modal");
@@ -50,32 +50,36 @@ export default {
   },
   data() {
     return {
-      person: [],
+      follower: new Array(),
+      following: new Array(),
+      person: new Array(),
     };
   },
 
   created() {
-    if (this.key == "follower") {
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.id)
-        .then((res) => {
-          //console.log(res);
-          this.person = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.id)
-        .then((res) => {
-          //console.log(res);
-          this.person = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    axios
+      .get(process.env.VUE_APP_FOLLOW + "followList/" + this.id)
+      .then((res) => {
+        this.follower = res.data.data;
+        if (this.type == "Follower") {
+          this.person = this.follower;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.id)
+      .then((res) => {
+        this.following = res.data.data;
+        if (this.type == "Following") {
+          this.person = this.following;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

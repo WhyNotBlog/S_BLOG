@@ -42,13 +42,18 @@
             <template #activator="{ on: dialog, attrs}">
               <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{follower}}</div>
             </template>
-
-            <Follow @close-modal="closeModal" :key="follower" :id="this.fileName"></Follow>
+            <Follow @close-modal="closeModal" type="Follower" :id="this.fileName"></Follow>
           </v-dialog>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <div>{{following}}</div>
+          <v-dialog v-model="followingModal" persistent width="600px">
+            <template #activator="{ on: dialog, attrs}">
+              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{following}}</div>
+            </template>
+
+            <Follow @close-modal="closeModal2" type="Following" :id="this.fileName"></Follow>
+          </v-dialog>
         </v-flex>
       </v-layout>
       <br />
@@ -173,6 +178,9 @@ export default {
     closeModal() {
       this.followerModal = false;
     },
+    closeModal2() {
+      this.followingModal = false;
+    },
   },
 
   data() {
@@ -191,6 +199,7 @@ export default {
       following: 0,
       follower: 0,
       followerModal: false,
+      followingModal: false,
     };
   },
 };
