@@ -221,7 +221,7 @@ export default {
         writerid : this.user.id
       }).then((res) => {
         console.log(res);
-        alert('임시저장 테스트')
+        alert('임시저장에 성공했습니다.')
       })
       // .then((res) => {
       //   console.log(res);

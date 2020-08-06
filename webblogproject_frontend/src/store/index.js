@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
     currentArticle: new Object(),
+    currentTempArticle: new Object(),
     categories: [
       "알고리즘/Basic",
       "알고리즘/기출 문제",
@@ -47,6 +48,9 @@ const store = new Vuex.Store({
     setCurrentArticle: (state, payload) => {
       state.currentArticle = payload;
     },
+    setCurrentTempArticle: (state, payload) => {
+      state.currentTempArticle = payload;
+    },
   },
   getters: {
     jwtAuthToken(state) {
@@ -68,6 +72,9 @@ const store = new Vuex.Store({
     currentArticle: (state) => {
       return state.currentArticle;
     },
+    currentTempArticle: (state) => {
+      return state.currentTempArticle;
+    },
   },
   actions: {
     setJwtAuthToken({ commit }, payload) {
@@ -88,6 +95,9 @@ const store = new Vuex.Store({
     },
     setCurrentArticle: ({ commit }, payload) => {
       commit("setCurrentArticle", payload);
+    },
+    setCurrentTempArticle: ({ commit }, payload) => {
+      commit("setCurrentTempArticle", payload);
     },
   },
 });

@@ -76,7 +76,7 @@ export default {
         axios
           .get(process.env.VUE_APP_ARTICLE + "searchBy/title/" + this.search)
           .then((res) => {
-            //console.log(res);
+            // console.log(res);
             this.isSearch = true;
             this.count = res.data.data.length;
             this.articles = res.data.data;
@@ -88,7 +88,7 @@ export default {
         axios
           .get(process.env.VUE_APP_ARTICLE + "searchBy/nickname/" + this.search)
           .then((res) => {
-            //console.log(res);
+            // console.log(res);
             this.isSearch = true;
             this.count = res.data.data.length;
             this.articles = res.data.data;
