@@ -206,8 +206,7 @@ export default {
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : data.articleid,
           tags : String(this.tags),
-        }).then((res) => {
-          console.log(res.status);
+        }).then(() => {
           this.$router.push({name : 'Article', params : { articleId : this.article.articleid }})
         })
     })},
@@ -224,8 +223,7 @@ export default {
         axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
           articletempid : data.articleid,
           tagtemps : String(this.tags),
-        }).then((res) => {
-          console.log(res);
+        }).then(() => {
           alert('임시저장에 성공했습니다.');
           this.$router.push({ name : 'TempList'})
         })
