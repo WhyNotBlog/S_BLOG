@@ -48,6 +48,7 @@
             <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
             </v-btn>
+            {{ likeArticleCount[article.articleid] }} 명이 좋아합니다.
           </v-card-actions>
         </v-card>
       </div>
@@ -61,13 +62,14 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      articleList : null,
+      likeArticleCount : new Object(),
       user : new Object(),
       userLike : null,
       userLiked : new Array(),
     }
   },
   created() {
+    this.updateTotalLike();
     if (this.loggedIn !== null) {
       axios
         .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -87,6 +89,9 @@ export default {
   },
   props: { data: Array },
   computed: {
+    articleIdList() {
+      return this.data.map(article => article.articleid)
+    },
     jwtAuthToken: {
       get() {
         return this.$store.getters.jwtAuthToken;
@@ -120,6 +125,16 @@ export default {
     },
   },
   methods: {
+    updateTotalLike() {
+      this.articleIdList.forEach(articleId => {
+      axios.post(process.env.VUE_APP_LIKE + 'articlelist', {
+        articleid : String(articleId)
+      })
+      .then((res) => {
+        this.likeArticleCount[articleId] = res.data.data[articleId];
+      }
+      )})
+    },
     copyLink(article) {
       const copyURL = document.createElement("input");
       copyURL.value = document.URL + `article/detail/${article.articleid}`;
@@ -153,14 +168,20 @@ export default {
               articleid : id
             }).then(() => {
               axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-            .then(res => this.userLiked = res.data.data)
+            .then(res => {
+              this.userLiked = res.data.data;
+              this.updateTotalLike();
+              })
             })
         } else {
           axios.delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
             data : { userid : this.user.id, articleid : id }
           }).then(() => {
             axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-            .then(res => this.userLiked = res.data.data)
+            .then(res => {
+              this.userLiked = res.data.data;
+              this.updateTotalLike();
+            })
           })
         }
       } else {
