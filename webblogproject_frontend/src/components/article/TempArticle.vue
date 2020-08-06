@@ -207,7 +207,6 @@ export default {
         this.article = data;
         this.setCurrentArticle(this.article);
 
-        // axios.delete(process.env.VUE_APP_TAGTEMP + "delete")
 
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : data.articleid,
@@ -215,15 +214,20 @@ export default {
         }).then((res) => {
           console.log(res.status);
           axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
-        { data: { articleid: this.articleid } })
+        { data: { articletempid: this.articleid } })
         .then((res) => {
           console.log(res);
+          axios.delete(process.env.VUE_APP_TAGTEMP + `delete/${this.articleid}`,
+        { data : { articletempid : this.articleid }})
+        .then(() => {
           this.$router.push({name : 'Article', params : { articleId : this.articleid }});
+        })
         })
         })
     })},
     saveTempArticle() {
       axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
+        articleid : this.articleid,
         title: this.title,
         content: this.editorMarkdown,
         editornickname: this.loggedIn,
@@ -231,25 +235,25 @@ export default {
         modify: this.modify,
         writerid : this.user.id
       }).then((res) => {
-        console.log(res);
-        alert('임시저장에 성공했습니다.')
+        let data = res.data.data;
+        axios.put(process.env.VUE_APP_TAGTEMP + "update", {
+          articletempid : data.articleid,
+          tagtemps : String(this.tags),
+        })
+        .then(() =>
+        {
+          alert('임시저장에 성공했습니다.');
+          this.$router.push({ name : 'TempList'})
+        })
       })
-      // .then((res) => {
-      //   console.log(res);
-      //   axios.post(process.env.VUE_APP_TAGTEMP + "regist", {
-      //     writerid : 0,
-      //     tags : String(this.tags),
-      //   })
-      // })
     },
     deleteTempArticle() {
       axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
       { data : { articleid : this.articleid } })
-      .then((res) => {
-        console.log(res);
-        alert('임시글을 삭제했습니다.')
-        this.$router.push({ name : 'TempList' });
-      })
+      .then(() => {
+          alert('임시글을 삭제했습니다.')
+          this.$router.push({ name : 'TempList' });
+        })
     },
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
@@ -293,14 +297,14 @@ export default {
             }
             })
     
-    // axios.get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
-    //     .then((res) => {
-    //       let tagData = res.data.data;
-    //       tagData.forEach(obj => {
-    //         this.tags.push(obj.tagname)
-    //         this.tagsSelected.push(true);
-    //         })
-    //     });
+    axios.get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
+        .then((res) => {
+          let tagData = res.data.data;
+          tagData.forEach(obj => {
+            this.tags.push(obj.tagname)
+            this.tagsSelected.push(true);
+            })
+        });
   },
   computed: {
     jwtAuthToken: {
