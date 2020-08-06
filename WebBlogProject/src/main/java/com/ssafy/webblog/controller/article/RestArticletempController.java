@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Articletemp;
-import com.ssafy.webblog.model.service.ArticleService;
+import com.ssafy.webblog.model.dto.Tagtemp;
 import com.ssafy.webblog.model.service.ArticletempService;
-import com.ssafy.webblog.model.service.TagService;
+import com.ssafy.webblog.model.service.TagtempService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -41,7 +41,7 @@ public class RestArticletempController {
 	ArticletempService artiTempService;
 
 	@Autowired
-	TagService tService;
+	TagtempService ttService;
 	
 	@GetMapping("/{articleid}")
 	@ApiOperation(value = "임시 게시글 조회")
@@ -82,7 +82,14 @@ public class RestArticletempController {
 		logger.debug("delete articletemp by articleid: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
+			//임시 게시글 지우고
 			artiTempService.deleteArticletemp(articleid);
+			//임시게시글에 등록된 태그 전부 삭제
+			List<Tagtemp> deleteTagtempList = ttService.getTagtempListByArticleid(Integer.parseInt(articleid));
+			for(Tagtemp tagtemp : deleteTagtempList) {
+				ttService.deleteTagtemp(tagtemp.getTagid());
+			}
+			//성공 반환
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
