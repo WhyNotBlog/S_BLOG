@@ -92,7 +92,6 @@ export default {
         let tagData = res.data.data;
         this.tags = tagData;
       })
-      .catch((e) => console.log(e));
   },
   mounted() {},
   computed: {
@@ -135,7 +134,6 @@ export default {
             this.$router.push({ name: "Home" });
           }
         })
-        .catch((e) => console.log(e));
     },
   },
   filters: {

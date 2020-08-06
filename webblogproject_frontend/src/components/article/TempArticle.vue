@@ -211,17 +211,11 @@ export default {
         axios.post(process.env.VUE_APP_TAG + "regist", {
           articleid : data.articleid,
           tags : String(this.tags),
-        }).then((res) => {
-          console.log(res.status);
+        }).then(() => {
           axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
         { data: { articletempid: this.articleid } })
-        .then((res) => {
-          console.log(res);
-          axios.delete(process.env.VUE_APP_TAGTEMP + `delete/${this.articleid}`,
-        { data : { articletempid : this.articleid }})
         .then(() => {
           this.$router.push({name : 'Article', params : { articleId : this.articleid }});
-        })
         })
         })
     })},

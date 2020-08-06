@@ -67,30 +67,24 @@ export default {
                 commentcontent : this.comment,
                 commentornickname : this.loggedIn,
             })
-            .then((res) => {
+            .then(() => {
                 axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticle.articleid)
                 .then((res) => {
                 this.comments = res.data.data;
+                this.comment = '';
                 })
-                .catch((e) => console.log(e));
-                this.comment = '',
-                console.log(res.status);
                 })
-            .catch((e) => console.log(e))
             }
         },
         deleteComment(currentComment) {
             axios.delete(process.env.VUE_APP_COMMENT + 'delete/' + currentComment.commentid)
-            .then((res) => {
+            .then(() => {
                 alert('댓글 삭제에 성공했습니다.');
                 axios.get(process.env.VUE_APP_COMMENT + 'article/' + this.$store.state.currentArticle.articleid)
                 .then((res) => {
                 this.comments = res.data.data;
                 })
-                .catch((e) => console.log(e));
-                console.log(res.status);
             })
-            .catch(e => console.log(e))
         },
         // updateComment(currentComment) {
         //     this.willUpdatedCommentCopy = currentComment;

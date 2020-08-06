@@ -51,14 +51,12 @@ export default {
                 },
       })
       .then((res) => {
-        console.log(res);
         if (res.status) {
             let data = res.data.data;
             this.user = data;
             axios
             .get(process.env.VUE_APP_ARTICLETEMP + "user/" + this.user.id)
             .then((res) => {
-                console.log(res);
                 this.tempArticles = res.data.data
             })
         }

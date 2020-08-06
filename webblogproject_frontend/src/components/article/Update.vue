@@ -202,8 +202,7 @@ export default {
         axios.put(process.env.VUE_APP_TAG + "update", {
           articleid : data.articleid,
           tags : String(this.tags),
-        }).then((res) => {
-          console.log(res.status);
+        }).then(() => {
           this.$router.push({name : 'Article', params : { articleId : this.article.articleid }});
         })
     })},
@@ -243,31 +242,6 @@ export default {
             this.tagsSelected.push(true);
             })
         });
-
-        // axios.get(process.env.VUE_APP_ARTICLE + this.$store.state.currentArticle)
-        // .then((res) => {
-        // if (res.status) {
-        // let data = res.data.data;
-        // this.articleid = data.articleid;
-        // this.title = data.title;
-        // this.content = data.content;
-        // this.editornickname = data.editornickname;
-        // this.categoryInt = data.category;
-        // this.editdate = data.editdate;
-        // this.modify = data.modify;
-        // this.category = this.categories[this.categoryInt]
-        // }
-
-        // axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
-        // .then((res) => {
-        //   let tagData = res.data.data;
-        //   tagData.forEach(obj => {
-        //     this.tags.push(obj.tagname)
-        //     this.tagsSelected.push(true);
-        //     });
-        // })
-        // .catch((e) => console.log(e))
-        // });
     },
     computed : {
       jwtAuthToken: {
