@@ -2,6 +2,7 @@ package com.ssafy.webblog.controller.article;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -97,6 +98,21 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			int result = lService.getArticleLikeCountByArticleid(Integer.parseInt(articleid));
+			entity = handleSuccess(result);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	@GetMapping("/userlike/{userid}")
+	@ApiOperation(value = "유저가 좋아요 누른 아티클 번호리스트")
+	public ResponseEntity<Map<String, Object>> articleListByUserLike(@PathVariable String userid)
+			throws IOException {
+		logger.debug("user likes article : " + userid);
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Integer> result = lService.getAllArticleByUserid(Integer.parseInt(userid));
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
