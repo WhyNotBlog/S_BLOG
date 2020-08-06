@@ -1,6 +1,7 @@
 package com.ssafy.webblog.controller.account.Follow;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +39,9 @@ public class RestFollowController {
 	@Autowired
 	FollowService fService;
 
-	@Autowired 
+	@Autowired
 	UserAccountService uSerivce;
-	
+
 	@PostMapping("/regist")
 	@ApiOperation(value = "팔로우 관계 하나 등록")
 	public ResponseEntity<Map<String, Object>> followRegist(HttpServletResponse res, @RequestBody Follow follow)
@@ -72,7 +73,7 @@ public class RestFollowController {
 		}
 		return entity;
 	}
-	
+
 	@GetMapping("/count/{userid}")
 	@ApiOperation(value = "유저id로 팔로워수, 팔로잉 수")
 	public ResponseEntity<Map<String, Object>> followCount(HttpServletResponse res, @PathVariable String userid)
@@ -80,7 +81,7 @@ public class RestFollowController {
 		logger.debug("user follpw count : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			Map<String,Integer> result = new HashMap<String, Integer>();
+			Map<String, Integer> result = new HashMap<String, Integer>();
 			result.put("following", fService.getFollowCount(Integer.parseInt(userid)));
 			result.put("follower", fService.getFollowerCount(Integer.parseInt(userid)));
 			entity = handleSuccess(result);
@@ -89,7 +90,7 @@ public class RestFollowController {
 		}
 		return entity;
 	}
-	
+
 	@GetMapping("/followingList/{userid}")
 	@ApiOperation(value = "내가 팔로우하는 user의  id,nickname 리스트 반환")
 	public ResponseEntity<Map<String, Object>> followingUserList(HttpServletResponse res, @PathVariable String userid)
@@ -97,11 +98,14 @@ public class RestFollowController {
 		logger.debug("user following list : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Integer> followingUseridList= fService.getFollowList(Integer.parseInt(userid));
-			Map<Integer, String> result = new HashMap<Integer, String>();
-			for(Integer id : followingUseridList) {
+			List<Integer> followingUseridList = fService.getFollowList(Integer.parseInt(userid));
+			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+			for (Integer id : followingUseridList) {
 				User user = uSerivce.getUserById(id);
-				result.put(id, user.getNickname());
+				Map<String, Object> tempUserInfo = new HashMap<String, Object>();
+				tempUserInfo.put("id", id);
+				tempUserInfo.put("nickname", user.getNickname());
+				result.add(tempUserInfo);
 			}
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
@@ -109,7 +113,7 @@ public class RestFollowController {
 		}
 		return entity;
 	}
-	
+
 	@GetMapping("/followList/{userid}")
 	@ApiOperation(value = "나를 팔로우하는 user id 리스트")
 	public ResponseEntity<Map<String, Object>> followerUserList(HttpServletResponse res, @PathVariable String userid)
@@ -117,22 +121,25 @@ public class RestFollowController {
 		logger.debug("user follower list : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Integer> followUseridList= fService.getFollowList(Integer.parseInt(userid));
-			Map<Integer, String> result = new HashMap<Integer, String>();
-			for(Integer id : followUseridList) {
+			// logic ----
+			List<Integer> followUseridList = fService.getFollowingList(Integer.parseInt(userid));
+			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+			for (Integer id : followUseridList) {
 				User user = uSerivce.getUserById(id);
-				result.put(id, user.getNickname());
+				Map<String, Object> tempUserInfo = new HashMap<String, Object>();
+				tempUserInfo.put("id", id);
+				tempUserInfo.put("nickname", user.getNickname());
+				result.add(tempUserInfo);
 			}
+			// logic end ----
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
 		return entity;
 	}
-	
 
 	// ----
-
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
