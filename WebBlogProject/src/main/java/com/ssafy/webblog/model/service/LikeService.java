@@ -20,7 +20,7 @@ public class LikeService {
 
 	//내가 좋아요 누른 게시글id의 목록
 	public List<Integer> getAllArticleByUserid(int userid){
-		List<Likearticle> likes= lDao.getLikeByUserid(userid);
+		List<Likearticle> likes= lDao.getDistinctLikeByUserid(userid);
 		List<Integer> result = new ArrayList<Integer>();
 		for(Likearticle like : likes) {
 			result.add(like.getArticleid());
@@ -30,7 +30,7 @@ public class LikeService {
 	
 	//게시글하나에 달린 좋아요 수
 	public int getArticleLikeCountByArticleid(int articleid) {
-		List<Likearticle> result = lDao.getLikeByArticleid(articleid);
+		List<Likearticle> result = lDao.getDistinctLikeByArticleid(articleid);
 		return result.size();
 	}
 	public Likearticle registLike(Likearticle like) {
@@ -43,7 +43,7 @@ public class LikeService {
 	}
 	
 	public int getLikekeyByUseridAndArticleid(int userid, int articleid) {
-		Likearticle result = lDao.getLikeByUseridAndArticleid(userid, articleid);
+		Likearticle result = lDao.getDistinctLikeByUseridAndArticleid(userid, articleid);
 		return result.getLikekey();
 	}
 
