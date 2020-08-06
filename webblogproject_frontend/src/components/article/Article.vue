@@ -74,6 +74,7 @@ export default {
     viewer: Viewer,
   },
   created() {
+    if (this.loggedIn !== null) {
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
         headers: {
@@ -85,8 +86,13 @@ export default {
           let data = res.data.data;
           this.user = data;
         }
-      });
+      })}
     this.article = this.$store.state.currentArticle;
+    
+    if (this.article.articleid !== this.$route.params.articleId) {
+      this.$router.push({ name : 'CheatArticle', props : { articleId : this.$route.params.articleid } })
+    }
+
     this.article.hits += 1
     axios.put(process.env.VUE_APP_ARTICLE + "update/", {
       articleid : this.article.articleid,
