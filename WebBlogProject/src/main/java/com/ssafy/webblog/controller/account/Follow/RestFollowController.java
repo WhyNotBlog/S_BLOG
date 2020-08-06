@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.webblog.model.dto.Follow;
+import com.ssafy.webblog.model.dto.User;
 import com.ssafy.webblog.model.service.FollowService;
+import com.ssafy.webblog.model.service.UserAccountService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -36,6 +38,9 @@ public class RestFollowController {
 	@Autowired
 	FollowService fService;
 
+	@Autowired 
+	UserAccountService uSerivce;
+	
 	@PostMapping("/regist")
 	@ApiOperation(value = "팔로우 관계 하나 등록")
 	public ResponseEntity<Map<String, Object>> followRegist(HttpServletResponse res, @RequestBody Follow follow)
@@ -86,13 +91,18 @@ public class RestFollowController {
 	}
 	
 	@GetMapping("/followingList/{userid}")
-	@ApiOperation(value = "내가 팔로우하는 user id 리스트")
+	@ApiOperation(value = "내가 팔로우하는 user의  id,nickname 리스트 반환")
 	public ResponseEntity<Map<String, Object>> followingUserList(HttpServletResponse res, @PathVariable String userid)
 			throws IOException {
 		logger.debug("user following list : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Integer> result = fService.getFollowList(Integer.parseInt(userid));
+			List<Integer> followingUseridList= fService.getFollowList(Integer.parseInt(userid));
+			Map<Integer, String> result = new HashMap<Integer, String>();
+			for(Integer id : followingUseridList) {
+				User user = uSerivce.getUserById(id);
+				result.put(id, user.getNickname());
+			}
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -107,7 +117,12 @@ public class RestFollowController {
 		logger.debug("user follower list : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Integer> result = fService.getFollowingList(Integer.parseInt(userid));
+			List<Integer> followUseridList= fService.getFollowList(Integer.parseInt(userid));
+			Map<Integer, String> result = new HashMap<Integer, String>();
+			for(Integer id : followUseridList) {
+				User user = uSerivce.getUserById(id);
+				result.put(id, user.getNickname());
+			}
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
