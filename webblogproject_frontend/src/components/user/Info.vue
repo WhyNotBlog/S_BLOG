@@ -38,21 +38,31 @@
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
 
-          <v-dialog v-model="followerModal" persistent width="600px">
+          <v-dialog v-model="followerModal" persistent width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{follower}}</div>
             </template>
-            <Follow @close-modal="closeModal" type="Follower" :id="this.fileName"></Follow>
+            <Follow
+              @update-follow="getCount"
+              @close-modal="closeModal"
+              type="Follower"
+              :id="this.fileName"
+            ></Follow>
           </v-dialog>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <v-dialog v-model="followingModal" persistent width="600px">
+          <v-dialog v-model="followingModal" persistent width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{following}}</div>
             </template>
 
-            <Follow @close-modal="closeModal2" type="Following" :id="this.fileName"></Follow>
+            <Follow
+              @update-follow="getCount"
+              @close-modal="closeModal2"
+              type="Following"
+              :id="this.fileName"
+            ></Follow>
           </v-dialog>
         </v-flex>
       </v-layout>
@@ -153,22 +163,25 @@ export default {
               console.log(err);
             });
 
-          axios
-            .get(process.env.VUE_APP_FOLLOW + "count/" + data.id)
-            .then((res) => {
-              //console.log(res);
-              this.follower = res.data.data.follower;
-              this.following = res.data.data.following;
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          this.getCount();
         }
       })
       .catch(() => {});
   },
 
   methods: {
+    getCount() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "count/" + this.fileName)
+        .then((res) => {
+          //console.log(res);
+          this.follower = res.data.data.follower;
+          this.following = res.data.data.following;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     moveUpdate() {
       this.$router.push("/user/update");
     },
