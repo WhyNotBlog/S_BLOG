@@ -206,7 +206,7 @@ export default {
 </script>
 
 <style scoped>
-.v-avatar[data-v-2d7fd89c] {
+.v-avatar {
   width: 150px !important;
   height: 150px !important;
   min-width: 170px;
