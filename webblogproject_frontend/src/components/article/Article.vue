@@ -9,6 +9,7 @@
       <div class="font-weight-bold text-center">
         작성자 : {{ article.editornickname }} |
         작성일 : {{ article.editdate | dateToString }} |
+        조회수 : {{ article.hits }} |
         <v-btn color="red accent-4" icon v-if="article.isLiked" @click="changeLiked()">
           <v-icon middle color="red accent-4">mdi-heart</v-icon>
         </v-btn>
@@ -86,12 +87,23 @@ export default {
         }
       });
     this.article = this.$store.state.currentArticle;
+    this.article.hits += 1
+    axios.put(process.env.VUE_APP_ARTICLE + "update/", {
+      articleid : this.article.articleid,
+      title: this.article.title,
+      content: this.article.content,
+      editornickname: this.article.editornickname,
+      category: this.article.category,
+      modify: this.article.modify,
+      writerid : this.article.writerid,
+      hits : this.article.hits,
+    });
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
       .then((res) => {
         let tagData = res.data.data;
         this.tags = tagData;
-      })
+      });
   },
   mounted() {},
   computed: {
