@@ -7,6 +7,7 @@ import TempArticle from "@/components/article/TempArticle";
 import TempList from "@/components/article/TempList";
 import Post from "@/components/article/Post";
 import Update from "@/components/article/Update";
+import CheatArticle from "@/components/article/CheatArticle";
 import MDEditor from "@/components/article/MDEditor";
 import CKEditor from "@/components/article/CKEditor";
 import SNSLogin from "@/components/user/SNSLogin";
@@ -58,6 +59,12 @@ const routes = [
     path: "/article/detail/:articleId",
     name: "Article",
     component: Article,
+    props: true,
+  },
+  {
+    path: "/article/cheat/:articleId",
+    name: "CheatArticle",
+    component: CheatArticle,
     props: true,
   },
   {

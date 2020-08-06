@@ -34,7 +34,7 @@
           </v-footer>
 
           <v-card-actions class="justify-space-around">
-            <v-btn color="orange" icon @click="copyLink(article.articleid)">
+            <v-btn color="orange" icon @click="copyLink(article)">
               <v-icon middle color>mdi-share</v-icon>
             </v-btn>
             <v-btn
@@ -43,7 +43,7 @@
               v-if="article.isLiked"
               @click="changeLiked(article.articleid)"
             >
-              <v-icon middle color="red accent-4">mdi-heart</v-icon>
+              <v-icon middle color="red accent-4" icon v-if="checkLiked(article.articleid)" @click="changeLiked(article.articleid)">mdi-heart</v-icon>
             </v-btn>
             <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
@@ -63,6 +63,7 @@ export default {
     return {
       articleList : null,
       user : new Object(),
+      userLike : null,
       userLiked : new Array(),
     }
   },
@@ -80,7 +81,6 @@ export default {
             this.user = data;
             axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
             .then(res => this.userLiked = res.data.data)
-            .catch(e => console.log(e))
             }
             })
     }
@@ -120,9 +120,9 @@ export default {
     },
   },
   methods: {
-    copyLink(id) {
+    copyLink(article) {
       const copyURL = document.createElement("input");
-      copyURL.value = document.URL + `article/detail/${id}`;
+      copyURL.value = document.URL + `article/detail/${article.articleid}`;
       document.body.appendChild(copyURL);
       copyURL.select();
       document.execCommand("copy");
@@ -140,8 +140,32 @@ export default {
         });
     },
 
+    checkLiked(id) {
+      if (this.loggedIn !== null) return this.userLiked.includes(id)
+      else return false
+    },
+
     changeLiked(id) {
-      console.log(id)
+      if (this.loggedIn !== null) {
+        if (!this.checkLiked(id)) {
+            axios.post(process.env.VUE_APP_LIKE + 'regist', {
+              userid : this.user.id,
+              articleid : id
+            }).then(() => {
+              axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+            .then(res => this.userLiked = res.data.data)
+            })
+        } else {
+          axios.delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
+            data : { userid : this.user.id, articleid : id }
+          }).then(() => {
+            axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+            .then(res => this.userLiked = res.data.data)
+          })
+        }
+      } else {
+        alert('좋아요 기능을 사용하려면 로그인을 해야합니다.');
+      }
     },
   },
 };
