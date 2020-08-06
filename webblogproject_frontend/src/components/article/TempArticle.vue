@@ -39,6 +39,7 @@
               :html="editorHtml"
               :visible="editorVisible"
               previewStyle="vertical"
+              :initialValue="this.content"
               initialEditType="wysiwyg"
               :plugins="editorPlugin"
               ref="tuiEditor"
@@ -80,6 +81,7 @@
               <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
               <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
               <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+              <v-btn style="background-color:red; color:white;" class="mr-4" @click="deleteTempArticle">Delete</v-btn>
             </div>
         </v-col>
       </v-row>
@@ -117,11 +119,15 @@ export default {
       tags: new Array(),
       tagsSelected: new Array(),
       tagsRules: [
-        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
+        () => {
+          let regExp = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gi;
+          return !regExp.test(this.tag) || "태그에는 특수문자가 포함될 수 없습니다."
+        },
         () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.",
         () =>
           (this.tags && this.tags.length <= 5) ||
           "태그는 최대 5개까지만 추가가 가능합니다.",
+        () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
       ],
       title: "",
       content: "",
@@ -156,7 +162,8 @@ export default {
       return this.tags.indexOf(tag);
     },
     addTag() {
-      if (this.tag) {
+      let regExp = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gi;
+      if (this.tag && !regExp.test(this.tag)) {
         if (!this.tags.includes(this.tag)) {
           if (this.tags.length < 5) {
             this.tagsSelected.push(true);
@@ -184,49 +191,39 @@ export default {
       this.tagsSelected.splice(tagIndex, 1);
     }
   },
+  ...mapActions(["setCurrentArticle"]),
   postArticle() {
     axios
-      .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle")
-      .then(res => {
-        let lastArticleId = 0;
-        if (res.data.data.length !== 0) {
-          lastArticleId = res.data.data[res.data.data.length-1].articleid;
-        }
-        axios
       .post(process.env.VUE_APP_ARTICLE + "regist", {
         title: this.title,
         content: this.editorMarkdown,
         editornickname: this.loggedIn,
         category: this.categoryInt,
         modify: this.modify,
+        writerid : this.user.id,
       })
       .then(res => {
-        console.log(res);
+        let data = res.data.data;
+        this.article = data;
+        this.setCurrentArticle(this.article);
+
+        // axios.delete(process.env.VUE_APP_TAGTEMP + "delete")
+
         axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : lastArticleId+1,
+          articleid : data.articleid,
           tags : String(this.tags),
-        })
+        }).then((res) => {
+          console.log(res.status);
+          axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+        { data: { articleid: this.articleid } })
         .then((res) => {
-            console.log(res);
-          this.article = {
-            articleid : lastArticleId+1,
-            title: this.title,
-            content: this.editorMarkdown,
-            editornickname: this.loggedIn,
-            category: this.categoryInt,
-            modify: this.modify,
-          };
-          this.setCurrentArticle(this.article);
-          this.$router.push({name : 'Article', params : { articleId : lastArticleId+1 }})
+          console.log(res);
+          this.$router.push({name : 'Article', params : { articleId : this.articleid }});
         })
-        .catch((e) => console.log(e))
         })
-      .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e));
-    },
+    })},
     saveTempArticle() {
-      axios.post(process.env.VUE_APP_ARTICLETEMP + "regist", {
+      axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
         title: this.title,
         content: this.editorMarkdown,
         editornickname: this.loggedIn,
@@ -235,7 +232,7 @@ export default {
         writerid : this.user.id
       }).then((res) => {
         console.log(res);
-        alert('임시저장 테스트')
+        alert('임시저장에 성공했습니다.')
       })
       // .then((res) => {
       //   console.log(res);
@@ -245,7 +242,15 @@ export default {
       //   })
       // })
     },
-    ...mapActions(["setCurrentArticle"]),
+    deleteTempArticle() {
+      axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+      { data : { articleid : this.articleid } })
+      .then((res) => {
+        console.log(res);
+        alert('임시글을 삭제했습니다.')
+        this.$router.push({ name : 'TempList' });
+      })
+    },
     mdChange() {
       let html = this.$refs.tuiEditor.invoke('getHtml');
       let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
@@ -262,6 +267,19 @@ export default {
   created() {
     this.categories = this.$store.state.categories;
     this.category = this.categories[0];
+
+    this.article = this.$store.state.currentTempArticle;
+
+    this.articleid = this.article.articleid;
+    this.title = this.article.title;
+    this.content = this.article.content;
+    this.editornickname = this.article.editornickname;
+    this.categoryInt = this.article.category;
+    this.editdate = this.article.editdate;
+    this.modify = this.article.modify;
+    this.category = this.categories[this.categoryInt]
+    this.writerid = this.article.writerid;
+
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
           headers: {
@@ -274,6 +292,15 @@ export default {
             this.user = data;
             }
             })
+    
+    // axios.get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
+    //     .then((res) => {
+    //       let tagData = res.data.data;
+    //       tagData.forEach(obj => {
+    //         this.tags.push(obj.tagname)
+    //         this.tagsSelected.push(true);
+    //         })
+    //     });
   },
   computed: {
     jwtAuthToken: {
