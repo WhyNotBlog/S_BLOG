@@ -13,7 +13,7 @@
           color="black"
           placeholder="검색어를 입력하세요"
           v-model="search"
-          @change="searchRoute"
+          @keyup.enter="searchRoute"
           solo
           clearable
           single-line
@@ -29,9 +29,11 @@
     <PostView :data="this.articles" />
 
     <infinite-loading
+      ref="infiniteLoading"
       @infinite="infiniteHandler"
       spinner="waveDots"
       v-show="infinite"
+      :identifier="[word2, type2]"
     >
       <div slot="no-more">마지막 글입니다.</div>
       <div slot="no-results">
@@ -54,8 +56,22 @@ import InfiniteLoading from "vue-infinite-loading";
 const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
+  watch: {
+    $route() {
+      this.infinite = true;
+      this.isSearch = false;
+      this.articles = new Array();
+      this.page = 0;
+      //this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
+      //console.log(this.$route.params);
+      this.type2 = this.$route.params.type;
+      this.word2 = this.$route.params.word;
+    },
+  },
   data() {
     return {
+      type2: "",
+      word2: "",
       infinite: true,
       search: "",
       articles: new Array(),
@@ -79,15 +95,11 @@ export default {
     if (this.word == "blank") this.search = "";
     else {
       this.search = this.word;
-      //console.log(this.search);
-      if (this.typeBox == "제목") {
-        this.order = "searchBy/title/";
-      } else if (this.typeBox == "닉네임") {
-        this.order = "searchBy/nickname/";
-      } else {
-        this.order = "searchby/tag/";
-      }
     }
+  },
+  mounted() {
+    this.type2 = this.type;
+    this.word2 = this.word;
   },
   components: { PostView, InfiniteLoading },
   props: ["type", "word"],
@@ -114,8 +126,10 @@ export default {
         axios
           .get(
             process.env.VUE_APP_ARTICLE +
-              this.order +
-              this.search +
+              "searchBy/" +
+              this.type2 +
+              "/" +
+              this.word2 +
               "/" +
               this.page
           )
@@ -125,14 +139,13 @@ export default {
             if (!res.data.data.empty) {
               this.page += 1;
               this.isSearch = true;
-
               this.articles.push(...res.data.data.content);
               $state.loaded();
             } else {
               $state.complete();
             }
           });
-      }, 100);
+      }, 200);
     },
   },
 };
