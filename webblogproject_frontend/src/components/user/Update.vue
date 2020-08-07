@@ -331,6 +331,7 @@ export default {
     },
     fileUpload(file) {
       this.selectedFile = file;
+      //this.profile = URL.createObjectURL(file);
     },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터

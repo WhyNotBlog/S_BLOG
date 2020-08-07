@@ -12,8 +12,8 @@
               <br />
 
               <div class="logo">
-                <img src="@/assets/logo.png" width="200px" />
-                <h3 style="color:white">{{title}}</h3>
+                <img src="@/assets/logo.png" />
+                <h3 style="color:white;">{{title}}</h3>
               </div>
               <br />
             </v-flex>
@@ -150,6 +150,10 @@ export default {
   float: right;
 }
 
+img {
+  width: 200px;
+}
+
 .list {
   max-width: 100%;
   height: 0px;
@@ -158,5 +162,23 @@ export default {
   border-color: rgba(0, 0, 0, 0.12);
   border-width: 0 0 thin 0;
   transition: inherit;
+}
+@media screen and (max-width: 570px) {
+  h3 {
+    font-size: 14px;
+  }
+  img {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  h3 {
+    font-size: 12px;
+  }
+
+  img {
+    width: 110px;
+  }
 }
 </style>

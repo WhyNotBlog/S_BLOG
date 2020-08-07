@@ -1,5 +1,8 @@
 <template>
-  <h1>Loading</h1>
+  <div class="main">
+    <br />
+    <img src="@/assets/loading.svg" width="200px" />
+  </div>
 </template>
 
 <script>
@@ -70,4 +73,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.main {
+  text-align: center;
+}
+</style>
