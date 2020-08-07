@@ -21,11 +21,19 @@
       <div v-if="loggedIn != null">
         <v-tooltip bottom color="secondary">
           <template #activator="{ on}">
-            <v-btn class="icon2" text fab slot="activator" @click="moveInfo" min-width="56px">
-              <v-icon v-on="on">account_circle</v-icon>
-            </v-btn>
+            <v-avatar
+              style="border:1px solid"
+              class="icon2"
+              slot="activator"
+              @click="moveInfo"
+              width="35px"
+              height="35px"
+              min-width="35px"
+            >
+              <img v-on="on" :src="profile" @error="imgError" width="35px" />
+            </v-avatar>
           </template>
-          <span>회원정보</span>
+          <span>내 정보</span>
         </v-tooltip>
 
         <v-tooltip bottom color="secondary">
@@ -83,7 +91,7 @@
       <v-list>
         <v-list style="text-align:center; color:white">
           <div v-if="loggedIn">
-            <v-avatar>
+            <v-avatar class="hImg">
               <img :src="profile" @error="imgError" />
             </v-avatar>
             <br />
@@ -100,6 +108,8 @@
             <br />
           </div>
         </v-list>
+
+        <v-divider></v-divider>
 
         <br />
 
@@ -283,7 +293,7 @@ export default {
   padding: 0;
 }
 
-.v-avatar {
+.hImg {
   width: 100px !important;
   height: 100px !important;
 }

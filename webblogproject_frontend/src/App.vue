@@ -52,7 +52,7 @@ export default {
   margin-right: 10px;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 960px) {
   .sidebar2 {
     display: none;
   }
