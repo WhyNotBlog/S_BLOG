@@ -11,15 +11,15 @@ import com.ssafy.webblog.model.dto.Article;
 
 public interface ArticleDao extends JpaRepository<Article, String> {
 	//검색을 위한 select
-	List<Article> getArticleByEditornicknameContaining(String editornickname);
+	Page<Article> getArticleByEditornicknameContaining(Pageable pageable, String editornickname);
 	
 	//List<Article> getArticleByTitle(String title);
 	
-	List<Article> getArticleByTitleContaining(String title);
+	Page<Article> getArticleByTitleContaining(Pageable pageable, String title);
 	
-	List<Article> getArticleByCategory(int editornickname);
+	Page<Article> getArticleByCategory(Pageable pageable, int editornickname);
 
-	List<Article> getArticleByWriterid(int writerid);
+	Page<Article> getArticleByWriterid(Pageable pageable, int writerid);
 	
 	//article id로 조회
 	
