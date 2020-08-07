@@ -1,10 +1,25 @@
 <template>
   <v-layout row justify-start style="margin:auto">
-    <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
+    <v-flex
+      v-for="article in articles"
+      :key="article.articleid"
+      xl3
+      lg4
+      md6
+      sm6
+      xs12
+    >
       <div class="content">
         <v-card class="d-inline-block my-3" :min-width="moblieWidth">
-          <v-img class="white--text align-end" height="168px" src="@/assets/basic.jpg"></v-img>
-          <v-card-title @click="moveToArticle(article)" class="card-title justify-center">
+          <v-img
+            class="white--text align-end"
+            height="168px"
+            src="@/assets/basic.jpg"
+          ></v-img>
+          <v-card-title
+            @click="moveToArticle(article)"
+            class="card-title justify-center"
+          >
             {{ article.title.slice(0, 10)
             }}{{ article.title.length > 10 ? "..." : "" }}
           </v-card-title>
@@ -45,7 +60,12 @@
             >
               <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
             </v-btn>
-            <v-btn color="red accent-4" icon v-else @click="changeLiked(article.articleid)">
+            <v-btn
+              color="red accent-4"
+              icon
+              v-else
+              @click="changeLiked(article.articleid)"
+            >
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
             </v-btn>
             {{ likeArticleCount[article.articleid] }} 명이 좋아합니다.
@@ -62,11 +82,11 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      likeArticleCount : new Object(),
-      user : new Object(),
-      userLike : null,
-      userLiked : new Array(),
-    }
+      likeArticleCount: new Object(),
+      user: new Object(),
+      userLike: null,
+      userLiked: new Array(),
+    };
   },
   created() {
     this.updateTotalLike();
@@ -81,16 +101,17 @@ export default {
           if (res.status) {
             let data = res.data.data;
             this.user = data;
-            axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-            .then(res => this.userLiked = res.data.data)
-            }
-            })
+            axios
+              .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+              .then((res) => (this.userLiked = res.data.data));
+          }
+        });
     }
   },
   props: { data: Array },
   computed: {
     articleIdList() {
-      return this.data.map(article => article.articleid)
+      return this.data.map((article) => article.articleid);
     },
     jwtAuthToken: {
       get() {
@@ -126,14 +147,15 @@ export default {
   },
   methods: {
     updateTotalLike() {
-      this.articleIdList.forEach(articleId => {
-      axios.post(process.env.VUE_APP_LIKE + 'articlelist', {
-        articleid : String(articleId)
-      })
-      .then((res) => {
-        this.likeArticleCount[articleId] = res.data.data[articleId];
-      }
-      )})
+      this.articleIdList.forEach((articleId) => {
+        axios
+          .post(process.env.VUE_APP_LIKE + "articlelist", {
+            articleid: String(articleId),
+          })
+          .then((res) => {
+            this.likeArticleCount[articleId] = res.data.data[articleId];
+          });
+      });
     },
     copyLink(article) {
       const copyURL = document.createElement("input");
@@ -148,44 +170,50 @@ export default {
     ...mapActions(["setCurrentArticle"]),
 
     moveToArticle(article) {
-        this.setCurrentArticle(article);
-        this.$router.push({
-          name: "Article",
-          params: { articleId : article.articleid },
-        });
+      this.setCurrentArticle(article);
+      this.$router.push({
+        name: "Article",
+        params: { articleId: article.articleid },
+      });
     },
 
     checkLiked(id) {
-      if (this.loggedIn !== null) return this.userLiked.includes(id)
-      else return false
+      if (this.loggedIn !== null) return this.userLiked.includes(id);
+      else return false;
     },
 
     changeLiked(id) {
       if (this.loggedIn !== null) {
-          if (!this.checkLiked(id)) {
-            axios.post(process.env.VUE_APP_LIKE + 'regist', {
-              userid : this.user.id,
-              articleid : id
-            }).then(() => {
-              axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-            .then(res => {
-              this.userLiked = res.data.data;
-              this.updateTotalLike();
-              })
+        if (!this.checkLiked(id)) {
+          axios
+            .post(process.env.VUE_APP_LIKE + "regist", {
+              userid: this.user.id,
+              articleid: id,
             })
+            .then(() => {
+              axios
+                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+                .then((res) => {
+                  this.userLiked = res.data.data;
+                  this.updateTotalLike();
+                });
+            });
         } else {
-          axios.delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
-            data : { userid : this.user.id, articleid : id }
-          }).then(() => {
-            axios.get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-            .then(res => {
-              this.userLiked = res.data.data;
-              this.updateTotalLike();
+          axios
+            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
+              data: { userid: this.user.id, articleid: id },
             })
-          })
+            .then(() => {
+              axios
+                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+                .then((res) => {
+                  this.userLiked = res.data.data;
+                  this.updateTotalLike();
+                });
+            });
         }
       } else {
-        alert('좋아요 기능을 사용하려면 로그인을 해야합니다.');
+        alert("좋아요 기능을 사용하려면 로그인을 해야합니다.");
       }
     },
   },
@@ -196,6 +224,7 @@ export default {
 .content {
   width: calc(100% - 2rem);
   transition-duration: 0.6s;
+  margin: auto;
 }
 
 .content:hover {

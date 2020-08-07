@@ -99,10 +99,9 @@
     <div class="post">
       <PostView :data="this.articles" />
       <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
-        <div slot="no-more">마지막 글입니다.</div>
+        <div slot="no-more"></div>
         <div slot="no-results">
           <div class="no_result">
-            <div class="icon_img"></div>
             <span>조회 결과가 없습니다.</span>
           </div>
         </div>

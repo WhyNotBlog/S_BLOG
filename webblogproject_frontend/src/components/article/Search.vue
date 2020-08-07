@@ -33,9 +33,8 @@
       @infinite="infiniteHandler"
       spinner="waveDots"
       v-show="infinite"
-      :identifier="[word2, type2]"
     >
-      <div slot="no-more">마지막 글입니다.</div>
+      <div slot="no-more"></div>
       <div slot="no-results">
         <div class="no_result">
           <span>조회 결과가 없습니다.</span>
@@ -61,7 +60,7 @@ export default {
       this.isSearch = false;
       this.articles = new Array();
       this.page = 0;
-      //this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
+      this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
       //console.log(this.$route.params);
       this.type2 = this.$route.params.type;
       this.word2 = this.$route.params.word;
@@ -142,7 +141,7 @@ export default {
           )
           .then((res) => {
             this.count = res.data.data.totalElements;
-            console.log(res.data.data);
+            //console.log(res.data.data);
             if (res.data.data.content == null || res.data.data.empty) {
               $state.complete();
               return;

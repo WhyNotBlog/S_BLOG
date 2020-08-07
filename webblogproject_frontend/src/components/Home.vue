@@ -3,7 +3,7 @@
     <PostView :data="this.articles" />
 
     <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
-      <div slot="no-more">마지막 글입니다.</div>
+      <div slot="no-more"></div>
       <div slot="no-results">
         <div class="no_result">
           <span>조회 결과가 없습니다.</span>
@@ -52,7 +52,7 @@ export default {
         axios
           .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
           .then((res) => {
-            console.log(res.data.data);
+            //console.log(res.data.data);
             if (!res.data.data.empty) {
               this.page += 1;
               this.articles.push(...res.data.data.content);
