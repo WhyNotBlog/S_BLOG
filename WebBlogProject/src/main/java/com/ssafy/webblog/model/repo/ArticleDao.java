@@ -16,6 +16,7 @@ public interface ArticleDao extends JpaRepository<Article, String> {
 	//List<Article> getArticleByTitle(String title);
 	
 	Page<Article> getArticleByTitleContaining(Pageable pageable, String title);
+	int countByTitleContaining(String title);
 	
 	Page<Article> getArticleByCategory(Pageable pageable, int editornickname);
 
