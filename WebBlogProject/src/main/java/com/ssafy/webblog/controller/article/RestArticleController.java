@@ -207,7 +207,7 @@ public class RestArticleController {
 		logger.debug("Articletemp select by user id: " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			Page<Article> result = artiService.getArticleListByWriterid(page, Integer.parseInt(userid));
+			Page<Article> result = artiService.getArticleListByWriterid(Integer.parseInt(userid), page);
 			logger.debug(result.toString());
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
