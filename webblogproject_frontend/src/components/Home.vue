@@ -3,7 +3,7 @@
     <PostView :data="this.articles" />
 
     <infinite-loading @infinite="infiniteHandler">
-      <div slot="no-more">마지막 라인입니다.</div>
+      <div slot="no-more">마지막 글입니다.</div>
       <div slot="no-results">
         <div class="no_result">
           <div class="icon_img"></div>
@@ -50,17 +50,20 @@ export default {
 
   methods: {
     infiniteHandler($state) {
-      axios
-        .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
-        .then((res) => {
-          if (res.data.data.content.length) {
-            this.page += 1;
-            this.articles.push(...res.data.data.content);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
+      setTimeout(() => {
+        axios
+          .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
+          .then((res) => {
+            console.log(res.data.data.content);
+            if (res.data.data.content.length) {
+              this.page += 1;
+              this.articles.push(...res.data.data.content);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+      }, 500);
     },
   },
 };
