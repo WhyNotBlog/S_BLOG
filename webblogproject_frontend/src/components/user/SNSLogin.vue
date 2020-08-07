@@ -34,6 +34,15 @@ export default {
         this.$store.dispatch("setLoginModal", value);
       },
     },
+
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
     profile: {
       get() {
         return this.$store.getters.profile;
@@ -57,6 +66,8 @@ export default {
             },
           })
           .then((res) => {
+            //console.log(res.data.data.id);
+            this.userId = res.data.data.id;
             this.profile =
               process.env.VUE_APP_ACCOUNT +
               "downloadFile/" +
