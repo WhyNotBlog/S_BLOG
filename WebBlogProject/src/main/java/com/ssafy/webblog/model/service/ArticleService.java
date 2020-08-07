@@ -67,14 +67,9 @@ public class ArticleService {
 		return result;
 	}
 
-//	public List<Article> searchAll() {
-//		List<Article> result = null;
-//		result = artiDao.findAll();
-//		return result;
-//	}
 	public Page<Article> searchAll(int page) {
 		Page<Article> result = null;
-		result = artiDao.findAll(PageRequest.of(page, 10, Sort.Direction.DESC, "articleid"));
+		result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"));
 		return result;
 	}
 	
