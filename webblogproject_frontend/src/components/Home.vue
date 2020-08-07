@@ -6,7 +6,6 @@
       <div slot="no-more">마지막 글입니다.</div>
       <div slot="no-results">
         <div class="no_result">
-          <div class="icon_img"></div>
           <span>조회 결과가 없습니다.</span>
         </div>
       </div>
@@ -53,8 +52,8 @@ export default {
         axios
           .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
           .then((res) => {
-            //console.log(res.data.data.content);
-            if (res.data.data.content.length) {
+            console.log(res.data.data);
+            if (!res.data.data.empty) {
               this.page += 1;
               this.articles.push(...res.data.data.content);
               $state.loaded();

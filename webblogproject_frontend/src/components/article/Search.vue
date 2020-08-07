@@ -143,14 +143,15 @@ export default {
           .then((res) => {
             this.count = res.data.data.totalElements;
             console.log(res.data.data);
-            if (res.data.data.content != null) {
-              this.page += 1;
-              this.isSearch = true;
-              this.articles.push(...res.data.data.content);
-              $state.loaded();
-            } else {
+            if (res.data.data.content == null || res.data.data.empty) {
               $state.complete();
+              return;
             }
+
+            this.page += 1;
+            this.isSearch = true;
+            this.articles.push(...res.data.data.content);
+            $state.loaded();
           });
       }, 200);
     },
