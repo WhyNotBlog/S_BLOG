@@ -38,7 +38,6 @@
       <div slot="no-more">마지막 글입니다.</div>
       <div slot="no-results">
         <div class="no_result">
-          <div class="icon_img"></div>
           <span>조회 결과가 없습니다.</span>
         </div>
       </div>
@@ -66,6 +65,14 @@ export default {
       //console.log(this.$route.params);
       this.type2 = this.$route.params.type;
       this.word2 = this.$route.params.word;
+      this.search = this.$route.params.word;
+      if (this.type == "title") {
+        this.typeBox = "제목";
+      } else if (this.type == "nickname") {
+        this.typeBox = "닉네임";
+      } else {
+        this.typeBox = "태그";
+      }
     },
   },
   data() {
@@ -135,8 +142,8 @@ export default {
           )
           .then((res) => {
             this.count = res.data.data.totalElements;
-            // console.log(res.data.data);
-            if (!res.data.data.empty) {
+            console.log(res.data.data);
+            if (res.data.data.content != null) {
               this.page += 1;
               this.isSearch = true;
               this.articles.push(...res.data.data.content);

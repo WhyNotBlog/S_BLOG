@@ -92,9 +92,9 @@ public class RestArticleController {
 			List<Tag> deleteTagTarget = tService.getTagListByArticleid(Integer.parseInt(articleid));
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
-				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				if(list.size() <= 0) tkService.delete(tag.getTagname());
-				else tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
+				int size = tService.countByTagname(tag.getTagname());
+				if(size <= 0) tkService.delete(tag.getTagname());
+				else tkService.insertTagkind(new Tagkind(tag.getTagname(), size));
 			}
 			entity = handleSuccess("success");
 		} catch (RuntimeException e) {
@@ -163,16 +163,19 @@ public class RestArticleController {
 		return entity;
 	}
 
-	@GetMapping("/searchby/tag/{tagname}")
+	@GetMapping("/searchBy/tag/{tagname}/{page}")
 	@ApiOperation(value = "태그로 아티클검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname)
+	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching article by tagname : " + tagname);
+		Map<String, Object> resultMap = new HashMap<>();
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = tService.getArticleListByTagname(tagname);
-			logger.info("article size : " + result.size());
-			entity = handleSuccess(result);
+			List<Article> result = tService.getArticleListByTagname(tagname, page);	
+			int size = tService.countByTagname(tagname);
+			resultMap.put("content", result);
+			resultMap.put("totalElements", size);
+			entity = handleSuccess(resultMap);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
