@@ -33,14 +33,22 @@
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
-          <div>{{contentCnt}}</div>
+          <div>{{ contentCnt }}</div>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
 
           <v-dialog v-model="followerModal" persistent width="650px">
             <template #activator="{ on: dialog, attrs}">
-              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{follower}}</div>
+              <div
+                text
+                fab
+                slot="activator"
+                v-bind="attrs"
+                v-on="{ ...dialog }"
+              >
+                {{ follower }}
+              </div>
             </template>
             <Follow
               @update-follow="getCount"
@@ -54,7 +62,15 @@
           <h4>팔로잉</h4>
           <v-dialog v-model="followingModal" persistent width="650px">
             <template #activator="{ on: dialog, attrs}">
-              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog}">{{following}}</div>
+              <div
+                text
+                fab
+                slot="activator"
+                v-bind="attrs"
+                v-on="{ ...dialog }"
+              >
+                {{ following }}
+              </div>
             </template>
 
             <Follow
@@ -74,25 +90,39 @@
           dark
           @click="moveUpdate"
           style="margin-right:10px"
-        >프로필 편집</v-btn>
+          >프로필 편집</v-btn
+        >
       </div>
     </div>
     <br />
     <br />
     <div class="post">
       <PostView :data="this.articles" />
+      <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
+        <div slot="no-more">마지막 글입니다.</div>
+        <div slot="no-results">
+          <div class="no_result">
+            <div class="icon_img"></div>
+            <span>조회 결과가 없습니다.</span>
+          </div>
+        </div>
+      </infinite-loading>
     </div>
   </div>
 </template>
+<script src="https://unpkg.com/vue-infinite-loading@2.4.4/dist/vue-infinite-loading.js"></script>
 
 <script>
 import axios from "axios";
 import PostView from "@/components/PostView";
 import Follow from "@/components/user/FollowList";
+import InfiniteLoading from "vue-infinite-loading";
+
+const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
   name: "info",
-  components: { PostView, Follow },
+  components: { PostView, Follow, InfiniteLoading },
   computed: {
     jwtAuthToken: {
       get() {
@@ -120,6 +150,14 @@ export default {
     },
     mobileView() {
       return window.innerWidth <= 500;
+    },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
     },
 
     profile: {
@@ -154,17 +192,6 @@ export default {
           this.loggedIn = data.nickname;
           this.fileName = data.id;
 
-          axios
-            .get(process.env.VUE_APP_ARTICLE + "user/" + data.id)
-            .then((res) => {
-              //console.log(res);
-              this.contentCnt = res.data.data.length;
-              this.articles = res.data.data;
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-
           this.getCount();
         }
       })
@@ -172,9 +199,33 @@ export default {
   },
 
   methods: {
+    infiniteHandler($state) {
+      setTimeout(() => {
+        axios
+          .get(
+            process.env.VUE_APP_ARTICLE +
+              "user/" +
+              this.userId +
+              "/" +
+              this.page
+          )
+          .then((res) => {
+            this.contentCnt = res.data.data.totalElements;
+            //console.log(res.data.data);
+            if (!res.data.data.empty) {
+              this.page += 1;
+              this.isSearch = true;
+              this.articles.push(...res.data.data.content);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+      }, 100);
+    },
     getCount() {
       axios
-        .get(process.env.VUE_APP_FOLLOW + "count/" + this.fileName)
+        .get(process.env.VUE_APP_FOLLOW + "count/" + this.userId)
         .then((res) => {
           //console.log(res);
           this.follower = res.data.data.follower;
@@ -215,6 +266,7 @@ export default {
       follower: 0,
       followerModal: false,
       followingModal: false,
+      page: 0,
     };
   },
 };

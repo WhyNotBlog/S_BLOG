@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     registModal: false,
     loginModal: false,
     loggedIn: null,
+    userId: null,
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
     currentArticle: new Object(),
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
     },
     setProfile(state, payload) {
       state.profile = payload;
+    },
+    setUserId(state, payload) {
+      state.userId = payload;
     },
 
     setRegistModal(state, payload) {
@@ -62,6 +66,9 @@ const store = new Vuex.Store({
     profile(state) {
       return state.profile;
     },
+    userId(state) {
+      return state.userId;
+    },
 
     registModal(state) {
       return state.registModal;
@@ -85,6 +92,9 @@ const store = new Vuex.Store({
     },
     setProfile({ commit }, payload) {
       commit("setProfile", payload);
+    },
+    setUserId({ commit }, payload) {
+      commit("setUserId", payload);
     },
 
     setRegistModal({ commit }, payload) {

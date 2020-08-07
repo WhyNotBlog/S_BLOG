@@ -23,43 +23,73 @@
 
     <span v-show="isSearch">
       총
-      <strong>{{count}}</strong>개의 게시물이 있습니다!
+      <strong>{{ count }}</strong
+      >개의 게시물이 있습니다!
     </span>
     <PostView :data="this.articles" />
+
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+      v-show="infinite"
+    >
+      <div slot="no-more">마지막 글입니다.</div>
+      <div slot="no-results">
+        <div class="no_result">
+          <div class="icon_img"></div>
+          <span>조회 결과가 없습니다.</span>
+        </div>
+      </div>
+    </infinite-loading>
   </div>
 </template>
+
+<script src="https://unpkg.com/vue-infinite-loading@2.4.4/dist/vue-infinite-loading.js"></script>
 
 <script>
 import axios from "axios";
 import PostView from "@/components/PostView";
+import InfiniteLoading from "vue-infinite-loading";
+
+const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
-  created() {
-    this.searchDefault();
-  },
-
-  watch: {
-    word() {
-      this.searchDefault();
-    },
-    type() {
-      this.searchDefault();
-    },
-  },
-
   data() {
     return {
+      infinite: true,
       search: "",
       articles: new Array(),
       count: 0,
       isSearch: false,
       typeBox: "제목",
       typeEn: "",
+      page: 0,
+      order: "",
       types: ["제목", "닉네임", "태그"],
     };
   },
-
-  components: { PostView },
+  created() {
+    if (this.type == "title") {
+      this.typeBox = "제목";
+    } else if (this.type == "nickname") {
+      this.typeBox = "닉네임";
+    } else {
+      this.typeBox = "태그";
+    }
+    if (this.word == "blank") this.search = "";
+    else {
+      this.search = this.word;
+      //console.log(this.search);
+      if (this.typeBox == "제목") {
+        this.order = "searchBy/title/";
+      } else if (this.typeBox == "닉네임") {
+        this.order = "searchBy/nickname/";
+      } else {
+        this.order = "searchby/tag/";
+      }
+    }
+  },
+  components: { PostView, InfiniteLoading },
   props: ["type", "word"],
   methods: {
     searchRoute() {
@@ -75,60 +105,34 @@ export default {
       this.$router.push("/search/" + this.typeEn + "/" + this.search);
     },
 
-    searchDefault() {
-      if (this.type == "title") {
-        this.typeBox = "제목";
-      } else if (this.type == "nickname") {
-        this.typeBox = "닉네임";
-      } else {
-        this.typeBox = "태그";
+    infiniteHandler($state) {
+      if (this.search == "") {
+        this.infinite = false;
+        return;
       }
-      if (this.word == "blank") this.search = "";
-      else {
-        this.search = this.word;
-        this.searchContent();
-      }
-    },
+      setTimeout(() => {
+        axios
+          .get(
+            process.env.VUE_APP_ARTICLE +
+              this.order +
+              this.search +
+              "/" +
+              this.page
+          )
+          .then((res) => {
+            this.count = res.data.data.totalElements;
+            // console.log(res.data.data);
+            if (!res.data.data.empty) {
+              this.page += 1;
+              this.isSearch = true;
 
-    searchContent() {
-      //console.log(this.search);
-      if (this.typeBox == "제목") {
-        axios
-          .get(process.env.VUE_APP_ARTICLE + "searchBy/title/" + this.search)
-          .then((res) => {
-            // console.log(res);
-            this.isSearch = true;
-            this.count = res.data.data.length;
-            this.articles = res.data.data;
-          })
-          .catch((err) => {
-            console.log(err);
+              this.articles.push(...res.data.data.content);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
           });
-      } else if (this.typeBox == "닉네임") {
-        axios
-          .get(process.env.VUE_APP_ARTICLE + "searchBy/nickname/" + this.search)
-          .then((res) => {
-            // console.log(res);
-            this.isSearch = true;
-            this.count = res.data.data.length;
-            this.articles = res.data.data;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axios
-          .get(process.env.VUE_APP_ARTICLE + "searchby/tag/" + this.search)
-          .then((res) => {
-            //console.log(res);
-            this.isSearch = true;
-            this.count = res.data.data.length;
-            this.articles = res.data.data;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      }, 100);
     },
   },
 };
