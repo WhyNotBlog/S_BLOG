@@ -168,11 +168,14 @@ public class RestArticleController {
 	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname, int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching article by tagname : " + tagname);
+		Map<String, Object> resultMap = new HashMap<>();
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = tService.getArticleListByTagname(tagname, page);
-			logger.info("article size : " + result.size());
-			entity = handleSuccess(result);
+			List<Article> result = tService.getArticleListByTagname(tagname, page);	
+			int size = tService.countByTagname(tagname);
+			resultMap.put("data", result);
+			resultMap.put("totalElements", size);
+			entity = handleSuccess(resultMap);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
