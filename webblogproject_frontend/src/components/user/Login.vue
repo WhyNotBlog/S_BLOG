@@ -46,7 +46,9 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-            <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
+            <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler"
+              >로그인</v-btn
+            >
           </v-card-actions>
           <br />
         </v-card>
@@ -74,6 +76,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setLoggedIn", value);
+      },
+    },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
       },
     },
 
@@ -134,9 +144,11 @@ export default {
               "downloadFile/" +
               res.data.data.id +
               ".jpg";
+            this.userId = res.data.data.id;
+            //console.log(this.userId);
             this.jwtAuthToken = res.headers["jwt-auth-token"];
             this.$emit("login-success");
-            console.log(this.profile);
+            //console.log(this.profile);
             this.$router.push("/");
           }
         })

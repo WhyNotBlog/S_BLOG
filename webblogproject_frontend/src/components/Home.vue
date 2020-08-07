@@ -2,7 +2,7 @@
   <div>
     <PostView :data="this.articles" />
 
-    <infinite-loading @infinite="infiniteHandler">
+    <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
       <div slot="no-more">마지막 글입니다.</div>
       <div slot="no-results">
         <div class="no_result">
@@ -46,7 +46,6 @@ export default {
   //   .catch(e => console.log(e));
   // },
   //},
-  created() {},
 
   methods: {
     infiniteHandler($state) {
@@ -54,7 +53,7 @@ export default {
         axios
           .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
           .then((res) => {
-            console.log(res.data.data.content);
+            //console.log(res.data.data.content);
             if (res.data.data.content.length) {
               this.page += 1;
               this.articles.push(...res.data.data.content);
