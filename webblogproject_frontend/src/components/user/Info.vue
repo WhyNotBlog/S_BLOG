@@ -79,7 +79,9 @@
     </div>
     <br />
     <br />
-    <PostView :data="this.articles" />
+    <div class="post">
+      <PostView :data="this.articles" />
+    </div>
   </div>
 </template>
 
@@ -247,5 +249,9 @@ export default {
 
 .infoBox {
   color: black;
+}
+
+.post {
+  margin-left: 30px;
 }
 </style>
