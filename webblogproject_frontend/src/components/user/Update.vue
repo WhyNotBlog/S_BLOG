@@ -12,7 +12,11 @@
           <br />
           <div class="file">
             <form enctype="multipart/form-data">
-              <v-file-input class="fileInput" label="File" @change="fileUpload($event)"></v-file-input>
+              <v-file-input
+                class="fileInput"
+                label="File"
+                @change="fileUpload($event)"
+              ></v-file-input>
             </form>
             <v-btn text color="595959" v-on:click="addItem">등록하기</v-btn>
           </div>
@@ -88,9 +92,13 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
+          <v-btn text color="black" @click="dropHandler"
+            >계정 탈퇴를 원하시나요?</v-btn
+          >
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
+            >수정하기</v-btn
+          >
         </div>
       </div>
     </div>
@@ -107,7 +115,10 @@
           <div class="file">
             <div class="fileData">
               <form enctype="multipart/form-data">
-                <v-file-input label="Profile Image" @change="fileUpload($event)"></v-file-input>
+                <v-file-input
+                  label="Profile Image"
+                  @change="fileUpload($event)"
+                ></v-file-input>
               </form>
             </div>
             <v-btn color="595959" text v-on:click="addItem">등록하기</v-btn>
@@ -186,9 +197,13 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
+          <v-btn text color="black" @click="dropHandler"
+            >계정 탈퇴를 원하시나요?</v-btn
+          >
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
+            >수정하기</v-btn
+          >
         </div>
       </v-flex>
     </v-layout>
@@ -452,6 +467,7 @@ export default {
 
 .v-file-input {
   width: 200px !important;
+  margin: auto;
 }
 
 .v-text-field {
