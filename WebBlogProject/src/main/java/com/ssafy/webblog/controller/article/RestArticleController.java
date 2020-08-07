@@ -120,42 +120,42 @@ public class RestArticleController {
 	}
 
 
-	@GetMapping("/searchBy/nickname/{nickname}")
+	@GetMapping("/searchBy/nickname/{nickname}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 닉네임으로 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByNickname(HttpServletResponse res, @PathVariable String nickname)
+	public ResponseEntity<Map<String, Object>> getArticleListByNickname(HttpServletResponse res, @PathVariable String nickname, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by nickname : " + nickname);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = artiService.searchBy(nickname, 1);
+			Page<Article> result = artiService.searchBy(nickname, 1, page);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
 		return entity;
 	}
-	@GetMapping("/searchBy/category/{category}")
+	@GetMapping("/searchBy/category/{category}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 카테고리별로 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByCategory(HttpServletResponse res, @PathVariable String category)
+	public ResponseEntity<Map<String, Object>> getArticleListByCategory(HttpServletResponse res, @PathVariable String category, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by nickname : " + category);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = artiService.searchBy(category, 2);
+			Page<Article> result = artiService.searchBy(category, 2, page);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
 		return entity;
 	}
-	@GetMapping("/searchBy/title/{title}")
+	@GetMapping("/searchBy/title/{title}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 타이틀 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByTitle(HttpServletResponse res, @PathVariable String title)
+	public ResponseEntity<Map<String, Object>> getArticleListByTitle(HttpServletResponse res, @PathVariable String title, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by title: " + title);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = artiService.searchBy(title, 0);
+			Page<Article> result = artiService.searchBy(title, 0, page);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -197,14 +197,14 @@ public class RestArticleController {
 	}
 	
 	
-	@GetMapping("/user/{userid}")
+	@GetMapping("/user/{userid}/{page}")
 	@ApiOperation(value = "유저가 작성한 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletResponse res, @PathVariable String userid)
+	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletResponse res, @PathVariable String userid, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Articletemp select by user id: " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = artiService.getArticleListByWriterid(Integer.parseInt(userid));
+			Page<Article> result = artiService.getArticleListByWriterid(page, Integer.parseInt(userid));
 			logger.debug(result.toString());
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {

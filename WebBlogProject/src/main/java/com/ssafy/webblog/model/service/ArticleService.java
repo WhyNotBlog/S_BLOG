@@ -52,17 +52,17 @@ public class ArticleService {
 	}
 
 	// 목록 조회
-	public List<Article> searchBy(String input, int By) {
-		List<Article> result = null;
+	public Page<Article> searchBy(String input, int By, int page) {
+		Page<Article> result = null;
 		/*
 		 * 0 : default search => title 1 : nickname검색 2 : 카테고리별 검색
 		 */
 		if (By == 1) {
-			result = artiDao.getArticleByEditornicknameContaining(input);
+			result = artiDao.getArticleByEditornicknameContaining(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), input);
 		} else if (By == 2) {
-			result = artiDao.getArticleByCategory(Integer.parseInt(input));
+			result = artiDao.getArticleByCategory(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), Integer.parseInt(input));
 		} else {
-			result = artiDao.getArticleByTitleContaining(input);
+			result = artiDao.getArticleByTitleContaining(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), input);
 		}
 		return result;
 	}
@@ -73,8 +73,8 @@ public class ArticleService {
 		return result;
 	}
 	
-	public List<Article> getArticleListByWriterid(int writerid){
-		List<Article> result = artiDao.getArticleByWriterid(writerid);
+	public Page<Article> getArticleListByWriterid(int writerid, int page){
+		Page<Article> result = artiDao.getArticleByWriterid(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), writerid);
 		return result;
 	}
 
