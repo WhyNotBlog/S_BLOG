@@ -163,9 +163,9 @@ public class RestArticleController {
 		return entity;
 	}
 
-	@GetMapping("/searchby/tag/{tagname}/{page}")
+	@GetMapping("/searchBy/tag/{tagname}/{page}")
 	@ApiOperation(value = "태그로 아티클검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname, int page)
+	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching article by tagname : " + tagname);
 		Map<String, Object> resultMap = new HashMap<>();
@@ -173,7 +173,7 @@ public class RestArticleController {
 		try {
 			List<Article> result = tService.getArticleListByTagname(tagname, page);	
 			int size = tService.countByTagname(tagname);
-			resultMap.put("data", result);
+			resultMap.put("content", result);
 			resultMap.put("totalElements", size);
 			entity = handleSuccess(resultMap);
 		} catch (RuntimeException e) {
