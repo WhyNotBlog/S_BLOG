@@ -3,6 +3,8 @@ package com.ssafy.webblog.model.repo;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ssafy.webblog.model.dto.Article;
@@ -25,6 +27,7 @@ public interface ArticleDao extends JpaRepository<Article, String> {
 	//article 전체 객체 반환
 	Optional<Article> findArticleByArticleid(int articleid);
 	
+	Page<Article> findAll(Pageable pageable);
 	
 
 }
