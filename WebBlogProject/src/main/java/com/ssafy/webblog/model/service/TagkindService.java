@@ -29,4 +29,8 @@ public class TagkindService {
 	public void delete(String tagname) {
 		tDao.deleteTagkindByTagname(tagname);		
 	}
+	
+	public Tagkind getTagkindByTagname(String tagname){
+		return tDao.findTagkindByTagname(tagname);
+	}
 }

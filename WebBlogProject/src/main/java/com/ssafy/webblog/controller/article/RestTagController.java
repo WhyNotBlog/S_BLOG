@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -69,7 +71,7 @@ public class RestTagController {
 				tmp.setArticleid(articleid);
 				tmp.setTagname(tag);
 				Tag temp = tService.insertTag(tmp);
-				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
+				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), temp.getTagname()).getSize();
 				tkService.insertTagkind(new Tagkind(tag, tagcount));
 
 			}
@@ -115,14 +117,14 @@ public class RestTagController {
 			for (Tag tag : currentTagList) {
 				System.out.println("삭제 : " + tag.toString());
 				tService.deleteTag(tag.getTagid());
-				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
+				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), tag.getTagname()).getSize();
 				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			System.out.println();
 			for (Tag tag : inputTagList) {
 				System.out.println("삽입 : " + tag.toString());
 				tService.insertTag(tag);
-				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
+				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), tag.getTagname()).getSize();
 				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			entity = resultHandler.handleSuccess("success", CLASSNAME);
@@ -182,11 +184,11 @@ public class RestTagController {
 			for (Tag tag : deleteTargets) {
 				logger.info("Tag delete - > " + tag.toString());
 				tService.deleteTag(tag.getTagid());
-				List<Tag> list = tService.getTagByTagname(tag.getTagname());
-				if (list.size() <= 0)
+				Tagkind tagkind = tkService.getTagkindByTagname(tag.getTagname());
+				if (tagkind.getTagcount() <= 0)
 					tkService.delete(tag.getTagname());
 				else
-					tkService.insertTagkind(new Tagkind(tag.getTagname(), list.size()));
+					tkService.insertTagkind(new Tagkind(tag.getTagname(), tagkind.getTagcount()));
 			}
 			entity = resultHandler.handleSuccess("success", CLASSNAME);
 		} catch (RuntimeException e) {

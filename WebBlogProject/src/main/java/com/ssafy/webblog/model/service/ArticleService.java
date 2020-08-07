@@ -40,8 +40,7 @@ public class ArticleService {
 	
 	// 삭제
 	public void deleteArticle(String articleid) {
-		Article deleteArticle = artiDao.getArticleByArticleid(Integer.parseInt(articleid));
-		artiDao.delete(deleteArticle);
+		artiDao.deleteById(articleid);
 	}
 
 	// 업데이트
