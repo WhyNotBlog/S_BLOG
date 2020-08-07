@@ -62,7 +62,7 @@ export default {
               $state.complete();
             }
           });
-      }, 500);
+      }, 200);
     },
   },
 };
