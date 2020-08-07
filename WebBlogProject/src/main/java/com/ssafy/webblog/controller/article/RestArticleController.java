@@ -154,12 +154,9 @@ public class RestArticleController {
 			throws IOException {
 		logger.debug("Searching article by title: " + title);
 		ResponseEntity<Map<String, Object>> entity = null;
-		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			Page<Article> result = artiService.searchBy(title, 0, page);
-			resultMap.put("data", result);
-			resultMap.put("size", artiService.countBytitle(title));
-			entity = handleSuccess(resultMap);
+			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}

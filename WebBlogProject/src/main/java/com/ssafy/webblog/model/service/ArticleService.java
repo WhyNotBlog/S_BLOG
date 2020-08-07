@@ -77,9 +77,5 @@ public class ArticleService {
 		Page<Article> result = artiDao.getArticleByWriterid(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), writerid);
 		return result;
 	}
-	
-	public int countBytitle(String input) {
-		return artiDao.countByTitleContaining(input);
-	}
 
 }
