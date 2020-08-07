@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -180,14 +181,14 @@ public class RestArticleController {
 
 
 	
-	@GetMapping("/searchBy/allarticle")
+	@GetMapping("/searchBy/allarticle/{page}")
 	@ApiOperation(value = "전체 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletResponse res)
+	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletResponse res, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching all article ");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			List<Article> result = artiService.searchAll();
+			Page<Article> result = artiService.searchAll(page);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
