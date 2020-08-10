@@ -249,7 +249,7 @@ export default {
   position: fixed;
   z-index: 100;
   top: 75px;
-  right: 0;
+  right: 5px;
   bottom: 40px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -258,9 +258,10 @@ export default {
 
 @media screen and (max-width: 960px) {
   .side {
-    width: 100%;
+    width: 98%;
     position: inherit;
     top: 10px;
+    left: 5px;
     z-index: 100;
     overflow-x: hidden;
     overflow-y: auto;
