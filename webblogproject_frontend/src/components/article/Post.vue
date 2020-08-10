@@ -8,7 +8,7 @@
               <v-text-field
                 class="mx-3"
                 color="secondary"
-                style="width:60%;"
+                style="width:70%;"
                 v-model="title"
                 :rules="titleRules"
                 :counter="30"
@@ -20,17 +20,40 @@
 
               <v-select
               class="d-inline-block mx-3"
-              id="selectedCategory"
-              :items="categories"
+              id="selectedBigCategory"
+              :items="bigCategories"
               item-text="name"
-              item-value="value"
-              label="Category"
+              label="BigCategory"
               color="secondary"
               outlined
-              v-model="category"
-              @change="changeCategory"
+              v-model="bigCategory"
+              @change="changeBigCategory"
+            ></v-select>
+
+            <v-select
+              class="d-inline-block mx-3"
+              id="selectedSmallCategory"
+              :items="smallCategories"
+              item-text="name"
+              item-value="value"
+              label="SmallCategory"
+              color="secondary"
+              outlined
+              v-model="smallCategory"
+              @change="changeSmallCategory"
             ></v-select>
             </div>
+
+            <div id="thumbnail">
+              <v-file-input
+                label="Thumbnail"
+                filled
+                prepend-icon="mdi-camera"
+                v-model="thumbnail"
+                @change="changeFile"
+              ></v-file-input>
+            </div>
+
 
             <div id="content">
               <editor 
@@ -128,10 +151,13 @@ export default {
         () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
       ],
       title: "",
+      thumbnail:new Object(),
       content: "",
       editornickname: "",
-      categories : new Array(),
-      category: new String(),
+      bigCategories : new Array(),
+      smallCategories : new Array(),
+      bigCategory: new String(),
+      smallCategory: new String(),
       categoryInt : 0,
       modify: 0,
 
@@ -236,16 +262,29 @@ export default {
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
-    changeCategory() {
-        this.categoryInt = this.categories.indexOf(this.category);
+    changeBigCategory() {
+        let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
+        this.smallCategories = this.$store.state.smallCategories[categoryIndex];
+        this.smallCategory = this.smallCategories[0].value;
+        this.categoryInt = this.smallCategory;
+        console.log(this.categoryInt);
     },
+    changeSmallCategory() {
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeFile() {
+      console.log(this.thumbnail)
+    }
   },
   components: {
     editor : Editor,
   },
   created() {
-    this.categories = this.$store.state.categories;
-    this.category = this.categories[0];
+    this.bigCategories = this.$store.state.bigCategories;
+    this.bigCategory = this.bigCategories[0]
+    this.smallCategories = this.$store.state.smallCategories[0];
+    this.smallCategory = this.smallCategories[0];
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
           headers: {
