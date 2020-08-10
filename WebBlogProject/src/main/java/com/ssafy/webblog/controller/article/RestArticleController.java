@@ -97,13 +97,13 @@ public class RestArticleController {
 
 	@DeleteMapping("/delete/{articleid}")
 	@ApiOperation(value = "게시글 삭제")
-	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable String articleid)
+	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable int articleid)
 			throws IOException {
 		logger.debug("delete article by articleId: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			artiService.deleteArticle(articleid);
-			List<Tag> deleteTagTarget = tService.getTagListByArticleid(Integer.parseInt(articleid));
+			List<Tag> deleteTagTarget = tService.getTagListByArticleid(articleid);
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
 				int size = tService.countByTagname(tag.getTagname());
