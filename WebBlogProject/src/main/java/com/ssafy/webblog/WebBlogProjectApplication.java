@@ -11,11 +11,13 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.ssafy.webblog.controller.account.normal.FileUploadProperties;
 import com.ssafy.webblog.interceptor.JwtInterceptor;
+import com.ssafy.webblog.model.service.FileUploadProperties;
+import com.ssafy.webblog.model.service.ThumbnailUploadProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
+    ThumbnailUploadProperties.class,
     FileUploadProperties.class
 })
 
