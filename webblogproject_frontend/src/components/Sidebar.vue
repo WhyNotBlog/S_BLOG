@@ -10,7 +10,7 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-icon>{{item.icon}}</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -20,20 +20,32 @@
         <v-divider></v-divider>
         <v-list-group v-for="item in category" :key="item.text">
           <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
           </template>
 
-          <v-list-item v-for="subItem in item.items" :key="subItem.title" :to="subItem.route">
-            <v-list-item-content>
-              <v-list-item-title>{{ subItem.title }}</v-list-item-title>
-            </v-list-item-content>
+          <v-list-group
+            no-action
+            sub-group
+            v-for="subItem in item.items"
+            :key="subItem.title"
+            :to="subItem.route"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
 
-            <v-list-item-action>
-              <v-icon>{{ subItem.icon }}</v-icon>
-            </v-list-item-action>
-          </v-list-item>
+            <v-list-item
+              v-for="subItem2 in subItem.items"
+              :key="subItem2.title"
+              :to="subItem2.route"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ subItem2.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
         </v-list-group>
       </v-list>
 
@@ -46,7 +58,8 @@
             dark
             color="#9FA9D8"
             @click="tagSearch(item.tagname)"
-          >#{{item.tagname}}</v-btn>
+            >#{{ item.tagname }}</v-btn
+          >
         </span>
       </v-list>
       <br />
@@ -80,8 +93,33 @@ export default {
           icon: "format_shapes",
           text: "알고리즘",
           items: [
-            { title: "Basic", icon: "mdi-login", route: "/search" },
-            { title: "기출 문제", icon: "mdi-shape-plus", route: "/search" },
+            {
+              title: "기본 문제",
+              icon: "mdi-login",
+              route: "/search",
+            },
+            {
+              title: "기출 문제",
+              icon: "mdi-shape-plus",
+              route: "/search",
+              items: [
+                {
+                  title: "삼성",
+                  icon: "mdi-shape-plus",
+                  route: "/search",
+                },
+                {
+                  title: "카카오",
+                  icon: "mdi-shape-plus",
+                  route: "/search",
+                },
+                {
+                  title: "기타",
+                  icon: "mdi-shape-plus",
+                  route: "/search",
+                },
+              ],
+            },
           ],
         },
         {
@@ -92,11 +130,69 @@ export default {
               title: "FrontEnd",
               icon: "mdi-television-guide",
               route: "/search",
+              items: [
+                {
+                  title: "Vue",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+
+                {
+                  title: "React",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+                {
+                  title: "Angular",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+
+                {
+                  title: "HTML",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+
+                {
+                  title: "CSS",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+
+                {
+                  title: "JavaScript",
+                  icon: "mdi-television-guide",
+                  route: "/search",
+                },
+              ],
             },
             {
               title: "BackEnd",
               icon: "mdi-image-filter-drama",
               route: "/search",
+              items: [
+                {
+                  title: "Spring",
+                  icon: "mdi-image-filter-drama",
+                  route: "/search",
+                },
+                {
+                  title: "Django",
+                  icon: "mdi-image-filter-drama",
+                  route: "/search",
+                },
+                {
+                  title: "Node js",
+                  icon: "mdi-image-filter-drama",
+                  route: "/search",
+                },
+                {
+                  title: "Flask",
+                  icon: "mdi-image-filter-drama",
+                  route: "/search",
+                },
+              ],
             },
           ],
         },
@@ -104,8 +200,35 @@ export default {
           icon: "apps",
           text: "어플",
           items: [
-            { title: "Android", icon: "android", route: "/search" },
-            { title: "iOS", icon: "mdi-apple", route: "/search" },
+            {
+              title: "Android",
+              icon: "android",
+              route: "/search",
+              items: [
+                {
+                  title: "Java",
+                  icon: "android",
+                  route: "/search",
+                },
+                {
+                  title: "Kotlin",
+                  icon: "android",
+                  route: "/search",
+                },
+              ],
+            },
+            {
+              title: "iOS",
+              icon: "mdi-apple",
+              route: "/search",
+              items: [
+                {
+                  title: "Swift",
+                  icon: "mdi-apple",
+                  route: "/search",
+                },
+              ],
+            },
           ],
         },
       ],
@@ -122,7 +245,28 @@ export default {
 
 <style scoped>
 .side {
-  float: right;
+  width: 220px;
+  position: fixed;
+  z-index: 100;
+  top: 75px;
+  right: 5px;
+  bottom: 40px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #f1f3f5;
+}
+
+@media screen and (max-width: 960px) {
+  .side {
+    width: 98%;
+    position: inherit;
+    top: 10px;
+    left: 5px;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f1f3f5;
+  }
 }
 .theme--light.v-list {
   background-color: #f1f3f5;
