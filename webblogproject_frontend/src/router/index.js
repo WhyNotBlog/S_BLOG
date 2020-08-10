@@ -18,6 +18,7 @@ import Email from "@/components/user/Email";
 import SNSRegist from "@/components/user/SNSRegist";
 import SNSCombine from "@/components/user/SNSCombine";
 import Test from "@/components/article/test";
+import Card from "@/components/article/Card";
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -32,6 +33,12 @@ const routes = [
     name: "Test",
     component: Test,
   },
+  {
+    path: "/card",
+    name: "Card",
+    component: Card,
+  },
+
   {
     path: "/",
     name: "Home",

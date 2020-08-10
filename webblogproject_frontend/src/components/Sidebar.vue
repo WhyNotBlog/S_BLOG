@@ -262,7 +262,7 @@ export default {
     position: inherit;
     top: 10px;
     left: 5px;
-    z-index: 100;
+    z-index: 1;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #f1f3f5;
