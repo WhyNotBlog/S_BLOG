@@ -1,6 +1,6 @@
 <template>
   <v-app style="background-color:#f1f3f5; height:100%">
-    <Header />
+    <Header style="z-index:100" />
     <Sidebar class="sidebar" />
     <div class="main">
       <router-view />
@@ -11,7 +11,7 @@
     <v-footer
       absolute
       class="font-weight-medium"
-      style="background-color:#595959;color:white;z-index:200"
+      style="background-color:#595959;color:white;z-index:2"
     >
       <v-col class="text-center" cols="12">
         {{ new Date().getFullYear() }},
