@@ -96,11 +96,11 @@
     </div>
     <br />
     <br />
-    <div @click="getCard">
+    <div @click="getCard" style="margin-left:10px">
       <strong>{{ description }}</strong>
     </div>
 
-    <div class="post">
+    <div class="post" style="margin-left:10px; margin-right:10px">
       <Card :data="this.articles" v-if="isCard" />
     </div>
   </div>

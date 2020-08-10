@@ -311,7 +311,7 @@ export default {
     },
 
     imgError() {
-      console.log("err");
+      //console.log("err");
       this.profile = `${require("@/assets/profile.svg")}`;
     },
     update() {

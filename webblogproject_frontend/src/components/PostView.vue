@@ -10,12 +10,18 @@
       xs12
     >
       <div class="content">
-        <v-card class="d-inline-block my-3" :min-width="moblieWidth">
+        <v-card
+          class="d-inline-block my-3"
+          :width="moblieWidth"
+          min-width="270px"
+        >
           <v-img
             class="white--text align-end"
             height="168px"
-            src="@/assets/basic.jpg"
+            :src="imgSrc(article.articleid)"
+            v-on:error="imgErr"
           ></v-img>
+
           <v-card-title
             @click="moveToArticle(article)"
             class="card-title justify-center"
@@ -86,6 +92,7 @@ export default {
       user: new Object(),
       userLike: null,
       userLiked: new Array(),
+      failImg: new Array(),
     };
   },
   created() {
@@ -136,10 +143,11 @@ export default {
       },
     },
     articles() {
+      console.log(this.data);
       return this.data;
     },
     moblieWidth() {
-      return window.innerWidth <= 500 ? "220px" : "270px";
+      return window.innerWidth <= 500 ? "220px" : "280px";
     },
   },
   filters: {
@@ -147,11 +155,19 @@ export default {
       try {
         return date.slice(0, 10);
       } catch (e) {
-        console.log("");
+        //console.log("");
       }
     },
   },
   methods: {
+    imgSrc(id) {
+      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg";
+    },
+
+    imgErr() {
+      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
+    },
+
     updateTotalLike() {
       this.articleIdList.forEach((articleId) => {
         axios
@@ -231,6 +247,8 @@ export default {
   width: calc(100% - 2rem);
   transition-duration: 0.6s;
   margin: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .content:hover {
