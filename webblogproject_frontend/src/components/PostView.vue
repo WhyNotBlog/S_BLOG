@@ -108,6 +108,12 @@ export default {
         });
     }
   },
+  beforeMount() {
+    this.updateTotalLike();
+  },
+  updated() {
+    this.updateTotalLike();
+  },
   props: { data: Array },
   computed: {
     articleIdList() {

@@ -20,14 +20,16 @@ const store = new Vuex.Store({
     jwtAuthToken: null,
     currentArticle: new Object(),
     currentTempArticle: new Object(),
-    categories: [
-      "알고리즘/Basic",
-      "알고리즘/기출 문제",
-      "웹/Frontend",
-      "웹/Backend",
-      "어플/Andriod",
-      "어플/IOS",
+    bigCategories: [
+      "알고리즘",
+      "웹",
+      "어플",
     ],
+    smallCategories: [
+      [{name : "Basic", value : 1}, {name : "기출문제", value : 2},],
+      [{name : "Frontend", value : 3}, {name : "Backend", value : 4}],
+      [{name : "Android", value : 5}, {name : "IOS", value : 6}],
+    ]
   },
   mutations: {
     setJwtAuthToken(state, payload) {
