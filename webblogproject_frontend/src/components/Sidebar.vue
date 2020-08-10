@@ -247,7 +247,7 @@ export default {
 .side {
   width: 220px;
   position: fixed;
-  z-index: 100;
+  z-index: 1;
   top: 75px;
   right: 5px;
   bottom: 40px;
