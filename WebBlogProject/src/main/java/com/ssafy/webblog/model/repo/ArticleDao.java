@@ -28,6 +28,8 @@ public interface ArticleDao extends JpaRepository<Article, String> {
 	Optional<Article> findArticleByArticleid(int articleid);
 	
 	Page<Article> findAll(Pageable pageable);
+
+	void deleteArticleByArticleid(int articleid);
 	
 
 }
