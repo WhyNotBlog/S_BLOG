@@ -42,14 +42,16 @@ export default {
 }
 
 .main2 {
-  margin-top: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   margin-right: 230px;
 }
 
 @media screen and (max-width: 960px) {
   .main2 {
-    margin-top: 30px;
+    margin-top: 10px;
     margin-right: 0;
+    margin-bottom: 10px;
   }
 }
 
