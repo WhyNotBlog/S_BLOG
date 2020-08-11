@@ -198,7 +198,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.userId,
-          thumbnail: this.thumbnail,
+          thumbnail: this.thumbnailB,
         })
         .then((res) => {
           let data = res.data.data;
@@ -266,7 +266,7 @@ export default {
     this.editdate = this.article.editdate;
     this.modify = this.article.modify;
     this.category = this.categories[this.categoryInt];
-    this.thumbnail = this.article.thumbnail;
+    this.thumbnailB = this.article.thumbnail;
 
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
