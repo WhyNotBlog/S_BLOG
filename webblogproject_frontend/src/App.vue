@@ -2,7 +2,7 @@
   <v-app style="background-color:#f1f3f5; height:100%">
     <Header style="z-index:100" />
     <Sidebar class="sidebar" />
-    <div class="main">
+    <div class="main2">
       <router-view />
     </div>
     <br />
@@ -35,19 +35,19 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 * {
   font-family: "Noto Sans KR", sans-serif;
 }
 
-.main {
+.main2 {
   margin-top: 30px;
   margin-right: 230px;
 }
 
 @media screen and (max-width: 960px) {
-  .main {
+  .main2 {
     margin-top: 30px;
     margin-right: 0;
   }

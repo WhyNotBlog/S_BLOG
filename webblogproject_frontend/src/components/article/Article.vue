@@ -102,7 +102,7 @@ export default {
         });
     }
     this.article = this.$store.state.currentArticle;
-    console.log(this.article);
+    //console.log(this.article);
 
     if (this.article.articleid !== this.$route.params.articleId) {
       this.$router.push({
