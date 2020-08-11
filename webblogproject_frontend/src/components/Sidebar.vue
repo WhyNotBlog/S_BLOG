@@ -126,17 +126,17 @@ export default {
                 {
                   title: "삼성",
                   icon: "mdi-shape-plus",
-                  route: "/category/112",
+                  route: "/category/121",
                 },
                 {
                   title: "카카오",
                   icon: "mdi-shape-plus",
-                  route: "/category/113",
+                  route: "/category/122",
                 },
                 {
                   title: "기타",
                   icon: "mdi-shape-plus",
-                  route: "/category/114",
+                  route: "/category/123",
                 },
               ],
             },
