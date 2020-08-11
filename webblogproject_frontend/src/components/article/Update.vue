@@ -66,7 +66,7 @@
                 label="Thumbnail"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnailB"
+                v-model="thumbnail"
               ></v-file-input>
             </div>
 
@@ -189,7 +189,7 @@ export default {
       editorVisible: true,
       editorPlugin: [],
       viewerText: "",
-      thumbnail: "",
+      thumbnail: new Object(),
     };
   },
   methods: {
@@ -250,10 +250,9 @@ export default {
         .then((res) => {
           let data = res.data.data;
           this.article = data;
-          if (this.thumbnail.name != null) {
-            this.addItem();
-          }
+
           this.setCurrentArticle(this.article);
+          if (this.thumbnail.name != null) this.addItem();
 
           axios
             .put(process.env.VUE_APP_TAG + "update", {

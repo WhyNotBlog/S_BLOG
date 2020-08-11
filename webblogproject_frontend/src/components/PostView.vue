@@ -153,7 +153,7 @@ export default {
       try {
         return date.slice(0, 10);
       } catch (e) {
-        //console.log("");
+        console.log("");
       }
     },
   },

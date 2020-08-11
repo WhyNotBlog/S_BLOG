@@ -66,7 +66,6 @@
                 label="Thumbnail"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnail"
               ></v-file-input>
             </div>
 
@@ -308,17 +307,25 @@ export default {
     },
     changeBigCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategories = this.$store.state.middleCategories[
+        categoryIndexBig
+      ];
       this.middleCategory = this.middleCategories[0];
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      let categoryIndexMiddle = this.middleCategories.indexOf(
+        this.middleCategory
+      );
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
@@ -355,9 +362,9 @@ export default {
   created() {
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[0];
-    this.middleCategories = this.$store.state.middleCategories[0]
-    this.middleCategory = this.middleCategories[0],
-    this.smallCategories = this.$store.state.smallCategories[0][0];
+    this.middleCategories = this.$store.state.middleCategories[0];
+    (this.middleCategory = this.middleCategories[0]),
+      (this.smallCategories = this.$store.state.smallCategories[0][0]);
     this.smallCategory = this.smallCategories[0];
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
