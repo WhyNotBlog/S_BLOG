@@ -19,17 +19,29 @@
               ></v-text-field>
 
               <v-select
-              class="d-inline-block mx-3"
-              id="selectedCategory"
-              :items="categories"
-              item-text="name"
-              item-value="value"
-              label="Category"
-              color="secondary"
-              outlined
-              v-model="category"
-              @change="changeCategory"
-            ></v-select>
+                class="d-inline-block mx-3"
+                id="selectedBigCategory"
+                :items="bigCategories"
+                item-text="name"
+                label="BigCategory"
+                color="secondary"
+                outlined
+                v-model="bigCategory"
+                @change="changeBigCategory"
+              ></v-select>
+
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedSmallCategory"
+                :items="smallCategories"
+                item-text="name"
+                item-value="value"
+                label="SmallCategory"
+                color="secondary"
+                outlined
+                v-model="smallCategory"
+                @change="changeSmallCategory"
+              ></v-select>
             </div>
 
             <div id="content">
@@ -126,9 +138,11 @@ export default {
       title: "",
       content: "",
       editornickname: "",
-      categories : new Array(),
-      category: new String(),
-      categoryInt : 0,
+      bigCategories: new Array(),
+      smallCategories: new Array(),
+      bigCategory: new String(),
+      smallCategory: new String(),
+      categoryInt: 0,
       modify: 0,
 
       editorText: '',
@@ -213,8 +227,16 @@ export default {
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
-    changeCategory() {
-        this.categoryInt = this.categories.indexOf(this.category);
+    changeBigCategory() {
+      let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
+      this.smallCategories = this.$store.state.smallCategories[categoryIndex];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeSmallCategory() {
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
   },
   components: {
@@ -223,6 +245,10 @@ export default {
     created() {
       this.categories = this.$store.state.categories;
       this.article = this.$store.state.currentArticle;
+      this.bigCategories = this.$store.state.bigCategories;
+      this.bigCategory = this.bigCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[0];
+      this.smallCategory = this.smallCategories[0];
 
       this.articleid = this.article.articleid;
       this.title = this.article.title;
@@ -231,7 +257,7 @@ export default {
       this.categoryInt = this.article.category;
       this.editdate = this.article.editdate;
       this.modify = this.article.modify;
-      this.category = this.categories[this.categoryInt]
+      this.category = this.article.categoryInt;
       this.writerid = this.article.writerid;
 
       axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
