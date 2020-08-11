@@ -15,13 +15,15 @@
           :width="moblieWidth"
           min-width="270px"
         >
-          <v-img
-            contain
-            class="white--text align-end"
-            height="168px"
-            :src="imgSrc(article.articleid, article.thumbnail)"
-          ></v-img>
-
+          <div style="background-color:white">
+            <v-img
+              contain
+              class="white--text align-end"
+              height="168px"
+              style="margin-top:16px;"
+              :src="imgSrc(article.articleid, article.thumbnail)"
+            ></v-img>
+          </div>
           <v-card-title
             @click="moveToArticle(article)"
             class="card-title justify-center"
