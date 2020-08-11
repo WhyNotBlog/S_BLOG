@@ -2,7 +2,7 @@
   <div>
     <PostView :data="this.articles" />
     <infinite-loading
-      ref="InfiniteLoading"
+      ref="infiniteLoading"
       @infinite="infiniteHandler"
       spinner="waveDots"
     >
@@ -30,7 +30,7 @@ export default {
       this.articles = new Array();
       this.page = 0;
       this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
-      this.categoryNum = this.$route.params.category;
+      this.category2 = this.$route.params.category;
     },
   },
   components: { PostView, InfiniteLoading },
@@ -38,14 +38,15 @@ export default {
     return {
       page: 0,
       articles: new Array(),
+      category2: 0,
     };
   },
   props: ["category"],
-  computed: {
-    categoryNum() {
-      return this.category;
-    },
+
+  mounted() {
+    this.category2 = this.category;
   },
+
   methods: {
     infiniteHandler($state) {
       setTimeout(() => {
@@ -53,7 +54,7 @@ export default {
           .get(
             process.env.VUE_APP_ARTICLE +
               "searchBy/category/" +
-              this.categoryNum +
+              this.category2 +
               "/" +
               this.page
           )
