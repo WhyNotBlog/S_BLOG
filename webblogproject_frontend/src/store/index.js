@@ -12,6 +12,8 @@ const store = new Vuex.Store({
     }),
   ],
   state: {
+    followingList: new Array(),
+    followerList: new Array(),
     registModal: false,
     loginModal: false,
     loggedIn: null,
@@ -63,6 +65,12 @@ const store = new Vuex.Store({
     ],
   },
   mutations: {
+    setFollowingList(state, payload) {
+      state.followingList = payload;
+    },
+    setFollowerList(state, payload) {
+      state.followerList = payload;
+    },
     setJwtAuthToken(state, payload) {
       state.jwtAuthToken = payload;
     },
@@ -90,6 +98,12 @@ const store = new Vuex.Store({
     },
   },
   getters: {
+    followerList(state) {
+      return state.followerList;
+    },
+    followingList(state) {
+      return state.followingList;
+    },
     jwtAuthToken(state) {
       return state.jwtAuthToken;
     },
@@ -117,6 +131,12 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    setFollowerList({ commit }, payload) {
+      commit("setFollowerList", payload);
+    },
+    setFollowingList({ commit }, payload) {
+      commit("setFollowingList", payload);
+    },
     setJwtAuthToken({ commit }, payload) {
       commit("setJwtAuthToken", payload);
     },

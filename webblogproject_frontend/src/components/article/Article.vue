@@ -10,7 +10,11 @@
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
-        작성자 : {{ article.editornickname }} | 작성일 :
+        작성자 : {{ article.editornickname }}
+        <v-btn text @click="checkFollow" v-if="user.id != article.writerid"
+          ><v-icon>{{ followOrUnfollow }}</v-icon></v-btn
+        >
+        | 작성일 :
         {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
         <v-btn
           color="red accent-4"
@@ -81,8 +85,10 @@ export default {
       tags: new Array(),
       viewerText: "",
       userLike: null,
-      articleLiked : null,
+      articleLiked: null,
       userLiked: new Array(),
+      followOrUnfollow: "mdi-account-plus",
+      index: 0,
     };
   },
   components: {
@@ -105,7 +111,14 @@ export default {
         });
     }
     this.article = this.$store.state.currentArticle;
-    //console.log(this.article);
+    //console.log(this.followingList);
+
+    this.followingList.forEach((element, index) => {
+      if (element.id == this.article.writerid) {
+        this.followOrUnfollow = "mdi-account-remove";
+        this.index = index;
+      }
+    });
 
     if (this.article.articleid !== this.$route.params.articleId) {
       this.$router.push({
@@ -151,8 +164,62 @@ export default {
         this.$store.dispatch("setLoggedIn", value);
       },
     },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
+    followingList: {
+      get() {
+        return this.$store.getters.followingList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowingList", value);
+      },
+    },
   },
   methods: {
+    checkFollow() {
+      if (this.followOrUnfollow == "mdi-account-remove") {
+        this.unFollow();
+        this.followOrUnfollow = "mdi-account-plus";
+      } else {
+        this.follow();
+        this.followOrUnfollow = "mdi-account-remove";
+      }
+    },
+    follow() {
+      axios
+        .post(process.env.VUE_APP_FOLLOW + "regist", {
+          targetid: this.article.writerid,
+          userid: this.userId,
+        })
+        .then((res) => {
+          this.followingList.push({
+            id: res.data.data.id,
+            nickname: res.data.data.nickname,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    unFollow() {
+      axios
+        .delete(
+          process.env.VUE_APP_FOLLOW +
+            "delete/" +
+            this.userId +
+            "/" +
+            this.article.writerid
+        )
+        .then(() => {
+          this.followingList.splice(this.index, 1);
+        });
+    },
     searchTag(tag) {
       this.$router.push("/search/tag/" + tag);
     },
@@ -187,7 +254,9 @@ export default {
             })
             .then(() => {
               axios
-                .get(process.env.VUE_APP_LIKE + `article/${this.article.articleid}`)
+                .get(
+                  process.env.VUE_APP_LIKE + `article/${this.article.articleid}`
+                )
                 .then((res) => {
                   this.articleLiked = res.data.data;
                 });
@@ -199,7 +268,9 @@ export default {
             })
             .then(() => {
               axios
-                .get(process.env.VUE_APP_LIKE + `article/${this.article.articleid}`)
+                .get(
+                  process.env.VUE_APP_LIKE + `article/${this.article.articleid}`
+                )
                 .then((res) => {
                   this.articleLiked = res.data.data;
                 });
@@ -215,7 +286,7 @@ export default {
       try {
         return date.slice(0, 10);
       } catch (e) {
-        console.log("");
+        console.log(e);
       }
     },
   },
