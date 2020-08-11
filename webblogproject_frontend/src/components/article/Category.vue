@@ -1,7 +1,11 @@
 <template>
   <div>
     <PostView :data="this.articles" />
-    <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
+    <infinite-loading
+      ref="InfiniteLoading"
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+    >
       <div slot="no-more"></div>
       <div slot="no-results">
         <div class="no_result">
@@ -21,6 +25,14 @@ import InfiniteLoading from "vue-infinite-loading";
 const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
+  watch: {
+    $route() {
+      this.articles = new Array();
+      this.page = 0;
+      this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
+      this.categoryNum = this.$route.params.category;
+    },
+  },
   components: { PostView, InfiniteLoading },
   data() {
     return {
@@ -29,7 +41,11 @@ export default {
     };
   },
   props: ["category"],
-
+  computed: {
+    categoryNum() {
+      return this.category;
+    },
+  },
   methods: {
     infiniteHandler($state) {
       setTimeout(() => {
@@ -37,7 +53,7 @@ export default {
           .get(
             process.env.VUE_APP_ARTICLE +
               "searchBy/category/" +
-              this.category +
+              this.categoryNum +
               "/" +
               this.page
           )
