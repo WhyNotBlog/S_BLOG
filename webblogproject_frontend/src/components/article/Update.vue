@@ -22,18 +22,42 @@
                 required
                 autofocus
               ></v-text-field>
+            </div>
+
+            <div class="d-flex" id="category">
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedBigCategory"
+                :items="bigCategories"
+                label="BigCategory"
+                color="secondary"
+                outlined
+                v-model="bigCategory"
+                @change="changeBigCategory"
+              ></v-select>
 
               <v-select
                 class="d-inline-block mx-3"
-                id="selectedCategory"
-                :items="categories"
-                item-text="name"
-                item-value="value"
-                label="Category"
+                id="selectedMiddleCategory"
+                :items="middleCategories"
+                label="MiddleCategory"
                 color="secondary"
                 outlined
-                v-model="category"
-                @change="changeCategory"
+                v-model="middleCategory"
+                @change="changeMiddleCategory"
+              ></v-select>
+
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedSmallCategory"
+                :items="smallCategories"
+                item-text="name"
+                item-value="value"
+                label="SmallCategory"
+                color="secondary"
+                outlined
+                v-model="smallCategory"
+                @change="changeSmallCategory"
               ></v-select>
             </div>
 
@@ -42,7 +66,7 @@
                 label="Thumbnail"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnail"
+                v-model="thumbnailB"
               ></v-file-input>
             </div>
 
@@ -147,8 +171,12 @@ export default {
       title: "",
       content: "",
       editornickname: "",
-      categories: new Array(),
-      category: new String(),
+      bigCategories: new Array(),
+      middleCategories: new Array(),
+      smallCategories: new Array(),
+      bigCategory: new String(),
+      middleCategory: new String(),
+      smallCategory: new Object(),
       categoryInt: 0,
       modify: 0,
 
@@ -244,10 +272,27 @@ export default {
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
-    changeCategory() {
-      this.categoryInt = this.categories.indexOf(this.category);
+    changeBigCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategory = this.middleCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
-
+    changeMiddleCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeSmallCategory() {
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnail; // 선택된 파일객체
@@ -273,7 +318,6 @@ export default {
     editor: Editor,
   },
   created() {
-    this.categories = this.$store.state.categories;
     this.article = this.$store.state.currentArticle;
 
     this.articleid = this.article.articleid;
@@ -283,8 +327,19 @@ export default {
     this.categoryInt = this.article.category;
     this.editdate = this.article.editdate;
     this.modify = this.article.modify;
-    this.category = this.categories[this.categoryInt];
+    this.category = this.article.category
     this.thumbnailB = this.article.thumbnail;
+
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2])-1;
+
+    this.bigCategories = this.$store.state.bigCategories;
+    this.bigCategory = this.bigCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    this.middleCategory = this.middleCategories[middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
