@@ -20,15 +20,38 @@ const store = new Vuex.Store({
     jwtAuthToken: null,
     currentArticle: new Object(),
     currentTempArticle: new Object(),
-    bigCategories: [
-      "알고리즘",
-      "웹",
-      "어플",
+    bigCategories : [
+      '알고리즘',
+      '웹 개발자',
+      '어플 개발자'
     ],
-    smallCategories: [
-      [{name : "Basic", value : 1}, {name : "기출문제", value : 2},],
-      [{name : "Frontend", value : 3}, {name : "Backend", value : 4}],
-      [{name : "Android", value : 5}, {name : "IOS", value : 6}],
+    middleCategories: [
+      ["기본 레퍼런스",
+      "삼성 코딩테스트 기출",
+      "카카오 코딩테스트 기출",
+      "기타 코딩테스트 기출"],
+      ["프론트엔드",
+      "백엔드",],
+      ["안드로이드",
+      "IOS",],
+    ],
+    smallCategories: [[
+      [{name : "", value : 11},],
+      [{name : "", value : 12},],
+      [{name : "", value : 13},],
+      [{name : "", value : 14},],
+    ],
+    [
+      [{name : "Vue", value : 21}, {name : "React", value : 22}, {name : "Angular", value : 23},
+      {name : "Html", value : 24}, {name : "CSS", value : 25}, {name : "Javascript", value : 26},
+      {name : "JQuery", value : 27}, {name : "JSP", value : 28},],
+      [{name : "Spring", value : 31}, {name : "Django", value : 32}, {name : "Node", value : 33},
+      {name : "Flask", value : 34},],
+    ],
+    [
+      [{name : "Java", value : 41}, {name : "Kotlin", value : 42},],
+      [{name : "Swift", value : 43},],
+    ],
     ]
   },
   mutations: {

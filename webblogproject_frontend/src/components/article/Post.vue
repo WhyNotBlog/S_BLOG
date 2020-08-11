@@ -22,17 +22,29 @@
                 required
                 autofocus
               ></v-text-field>
+            </div>
 
+            <div class="d-flex" id="category">
               <v-select
                 class="d-inline-block mx-3"
                 id="selectedBigCategory"
                 :items="bigCategories"
-                item-text="name"
                 label="BigCategory"
                 color="secondary"
                 outlined
                 v-model="bigCategory"
                 @change="changeBigCategory"
+              ></v-select>
+
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedMiddleCategory"
+                :items="middleCategories"
+                label="MiddleCategory"
+                color="secondary"
+                outlined
+                v-model="middleCategory"
+                @change="changeMiddleCategory"
               ></v-select>
 
               <v-select
@@ -170,9 +182,11 @@ export default {
       editornickname: "",
       articleid: "",
       bigCategories: new Array(),
+      middleCategories: new Array(),
       smallCategories: new Array(),
       bigCategory: new String(),
-      smallCategory: new String(),
+      middleCategory: new String(),
+      smallCategory: new Object(),
       categoryInt: 0,
       modify: 0,
 
@@ -293,8 +307,17 @@ export default {
       this.editorMarkdown = markdown;
     },
     changeBigCategory() {
-      let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndex];
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategory = this.middleCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategory = this.smallCategories[0].value;
+      console.log(this.categoryInt);
+    },
+    changeMiddleCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
@@ -331,7 +354,9 @@ export default {
   created() {
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[0];
-    this.smallCategories = this.$store.state.smallCategories[0];
+    this.middleCategories = this.$store.state.middleCategories[0]
+    this.middleCategory = this.middleCategories[0],
+    this.smallCategories = this.$store.state.smallCategories[0][0];
     this.smallCategory = this.smallCategories[0];
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {

@@ -80,6 +80,9 @@ export default {
       article: new Object(),
       tags: new Array(),
       viewerText: "",
+      userLike: null,
+      articleLiked : null,
+      userLiked: new Array(),
     };
   },
   components: {
@@ -153,9 +156,6 @@ export default {
     searchTag(tag) {
       this.$router.push("/search/tag/" + tag);
     },
-    changeLiked() {
-      this.article.isLiked = !this.article.isLiked;
-    },
     updateArticle() {
       this.$router.push({ name: "Update" });
     },
@@ -171,6 +171,43 @@ export default {
             this.$router.push({ name: "Home" });
           }
         });
+    },
+    checkLiked(id) {
+      if (this.loggedIn !== null) return this.userLiked.includes(id);
+      else return false;
+    },
+
+    changeLiked(id) {
+      if (this.loggedIn !== null) {
+        if (!this.checkLiked(id)) {
+          axios
+            .post(process.env.VUE_APP_LIKE + "regist", {
+              userid: this.user.id,
+              articleid: id,
+            })
+            .then(() => {
+              axios
+                .get(process.env.VUE_APP_LIKE + `article/${this.article.articleid}`)
+                .then((res) => {
+                  this.articleLiked = res.data.data;
+                });
+            });
+        } else {
+          axios
+            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
+              data: { userid: this.user.id, articleid: id },
+            })
+            .then(() => {
+              axios
+                .get(process.env.VUE_APP_LIKE + `article/${this.article.articleid}`)
+                .then((res) => {
+                  this.articleLiked = res.data.data;
+                });
+            });
+        }
+      } else {
+        alert("좋아요 기능을 사용하려면 로그인을 해야합니다.");
+      }
     },
   },
   filters: {
