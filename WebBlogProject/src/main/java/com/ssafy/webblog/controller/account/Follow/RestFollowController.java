@@ -54,8 +54,8 @@ public class RestFollowController {
 			int targetid = result.getTargetid();
 			User user = uSerivce.getUserById(targetid);
 			targetUserInfo.put("data", result);
-			targetUserInfo.put("targetId", user.getId());			
-			targetUserInfo.put("targetNickname", user.getNickname());			
+			targetUserInfo.put("id", user.getId());			
+			targetUserInfo.put("nickname", user.getNickname());			
 			entity = handleSuccess(targetUserInfo);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
