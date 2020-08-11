@@ -35,7 +35,7 @@ const store = new Vuex.Store({
     ],
     smallCategories: [[
       [{name : "", value : 11},],
-      [{name : "삼성", value : 12},{name : "카카오", value : 12},{name : "기타", value : 14},],
+      [{name : "삼성", value : 12},{name : "카카오", value : 13},{name : "기타", value : 14},],
     ],
     [
       [{name : "Vue", value : 21}, {name : "React", value : 22}, {name : "Angular", value : 23},
