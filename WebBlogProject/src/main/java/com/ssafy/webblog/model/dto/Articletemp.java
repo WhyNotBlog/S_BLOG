@@ -39,5 +39,5 @@ public class Articletemp {
     private LocalDateTime editdate;
     
     private int writerid;
-  
+    private boolean thumbnail;
 }
