@@ -244,12 +244,15 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.userId,
-          thumbnail: this.thumbnailB,
+          thumbnail:
+            this.thumbnail.name != null || this.thumbnailB ? true : false,
         })
         .then((res) => {
           let data = res.data.data;
           this.article = data;
-          if (this.thumbnail.name != null) this.addItem();
+          if (this.thumbnail.name != null) {
+            this.addItem();
+          }
           this.setCurrentArticle(this.article);
 
           axios
@@ -274,17 +277,25 @@ export default {
     },
     changeBigCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategories = this.$store.state.middleCategories[
+        categoryIndexBig
+      ];
       this.middleCategory = this.middleCategories[0];
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      let categoryIndexMiddle = this.middleCategories.indexOf(
+        this.middleCategory
+      );
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
@@ -303,7 +314,7 @@ export default {
         .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
           headers: {
             "Content-Type": "multipart/form-data",
-            articleNum: this.articleid,
+            articleNum: this.article.articleid,
           },
         })
         .then((res) => {
@@ -327,19 +338,23 @@ export default {
     this.categoryInt = this.article.category;
     this.editdate = this.article.editdate;
     this.modify = this.article.modify;
-    this.category = this.article.category
+    this.category = this.article.category;
     this.thumbnailB = this.article.thumbnail;
     console.log(this.article);
 
-    let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
-    let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;
-    let smallCategoryIndex = parseInt(String(this.categoryInt)[2])-1;
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[bigCategoryIndex];
-    this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[
+      bigCategoryIndex
+    ];
     this.middleCategory = this.middleCategories[middleCategoryIndex];
-    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
+      middleCategoryIndex
+    ];
     this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
