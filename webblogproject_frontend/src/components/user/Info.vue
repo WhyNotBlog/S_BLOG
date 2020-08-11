@@ -202,25 +202,7 @@ export default {
           this.getCount();
         }
       });
-
-    axios
-      .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
-      .then((res) => {
-        this.followerList.push(...res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    axios
-      .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
-      .then((res) => {
-        this.followingList.push(...res.data.data);
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getList();
   },
 
   methods: {
@@ -252,6 +234,27 @@ export default {
       if (this.description == "상세보기") this.description = "접어두기";
       else this.description = "상세보기";
       this.isCard = !this.isCard;
+    },
+
+    getList() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
+        .then((res) => {
+          this.followerList.push(...res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList.push(...res.data.data);
+        })
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 

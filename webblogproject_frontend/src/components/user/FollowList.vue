@@ -70,9 +70,14 @@ export default {
           userid: this.id,
         })
         .then((res) => {
-          console.log(res);
+          //console.log(res.data.data);
+          //console.log(this.followingListC);
+          this.followingListC.push({
+            id: res.data.data.id,
+            nickname: res.data.data.nickname,
+          });
+          //console.log(this.followingListC);
           this.$emit("update-follow");
-          //this.follwerListC.push()
         })
         .catch((err) => {
           console.log(err);
@@ -80,18 +85,33 @@ export default {
     },
 
     unFollow(item, i) {
-      axios
-        .delete(
-          process.env.VUE_APP_FOLLOW + "delete/" + this.id + "/" + item.id
-        )
-        .then((res) => {
-          console.log(res);
-          this.followingListC.splice(i);
-          this.$emit("update-follow");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (this.type == "Follower") {
+        axios
+          .delete(
+            process.env.VUE_APP_FOLLOW + "delete/" + item.id + "/" + this.id
+          )
+          .then(() => {
+            //console.log(res);
+            this.followerListC.splice(i, i + 1);
+            this.$emit("update-follow");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios
+          .delete(
+            process.env.VUE_APP_FOLLOW + "delete/" + this.id + "/" + item.id
+          )
+          .then(() => {
+            //console.log(res);
+            this.followingListC.splice(i, i + 1);
+            this.$emit("update-follow");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
   data() {
@@ -118,7 +138,7 @@ export default {
       return this.followingList;
     },
 
-    follwerListC() {
+    followerListC() {
       return this.followerList;
     },
   },
