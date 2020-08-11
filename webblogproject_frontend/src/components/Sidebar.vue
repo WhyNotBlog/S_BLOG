@@ -111,27 +111,32 @@ export default {
             {
               title: "기본 문제",
               icon: "mdi-login",
-              route: "/search",
+              items: [
+                {
+                  title: "기본",
+                  icon: "mdi-shape-plus",
+                  route: "/category/11",
+                },
+              ],
             },
             {
               title: "기출 문제",
               icon: "mdi-shape-plus",
-              route: "/search",
               items: [
                 {
                   title: "삼성",
                   icon: "mdi-shape-plus",
-                  route: "/search",
+                  route: "/category/12",
                 },
                 {
                   title: "카카오",
                   icon: "mdi-shape-plus",
-                  route: "/search",
+                  route: "/category/13",
                 },
                 {
                   title: "기타",
                   icon: "mdi-shape-plus",
-                  route: "/search",
+                  route: "/category/14",
                 },
               ],
             },
@@ -144,68 +149,80 @@ export default {
             {
               title: "FrontEnd",
               icon: "mdi-television-guide",
-              route: "/search",
+
               items: [
                 {
                   title: "Vue",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/21",
                 },
 
                 {
                   title: "React",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/22",
                 },
                 {
                   title: "Angular",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/23",
                 },
 
                 {
                   title: "HTML",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/24",
                 },
 
                 {
                   title: "CSS",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/25",
                 },
 
                 {
                   title: "JavaScript",
                   icon: "mdi-television-guide",
-                  route: "/search",
+                  route: "/category/26",
+                },
+
+                {
+                  title: "JQuery",
+                  icon: "mdi-television-guide",
+                  route: "/category/27",
+                },
+
+                {
+                  title: "Jsp",
+                  icon: "mdi-television-guide",
+                  route: "/category/28",
                 },
               ],
             },
             {
               title: "BackEnd",
               icon: "mdi-image-filter-drama",
-              route: "/search",
+
               items: [
                 {
                   title: "Spring",
                   icon: "mdi-image-filter-drama",
-                  route: "/search",
+                  route: "/category/31",
                 },
                 {
                   title: "Django",
                   icon: "mdi-image-filter-drama",
-                  route: "/search",
+                  route: "/category/32",
                 },
                 {
                   title: "Node js",
                   icon: "mdi-image-filter-drama",
-                  route: "/search",
+                  route: "/category/33",
                 },
                 {
                   title: "Flask",
                   icon: "mdi-image-filter-drama",
-                  route: "/search",
+                  route: "/category/34",
                 },
               ],
             },
@@ -218,29 +235,29 @@ export default {
             {
               title: "Android",
               icon: "android",
-              route: "/search",
+
               items: [
                 {
                   title: "Java",
                   icon: "android",
-                  route: "/search",
+                  route: "/category/41",
                 },
                 {
                   title: "Kotlin",
                   icon: "android",
-                  route: "/search",
+                  route: "/category/42",
                 },
               ],
             },
             {
               title: "iOS",
               icon: "mdi-apple",
-              route: "/search",
+
               items: [
                 {
                   title: "Swift",
                   icon: "mdi-apple",
-                  route: "/search",
+                  route: "/category/51",
                 },
               ],
             },

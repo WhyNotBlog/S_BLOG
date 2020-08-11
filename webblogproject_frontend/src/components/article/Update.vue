@@ -3,7 +3,12 @@
     <v-container fluid>
       <v-row>
         <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
+          <v-form
+            class="mx-10 full-width"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
             <div class="d-flex" id="title">
               <v-text-field
                 class="mx-3"
@@ -20,44 +25,41 @@
 
               <v-select
                 class="d-inline-block mx-3"
-                id="selectedBigCategory"
-                :items="bigCategories"
-                item-text="name"
-                label="BigCategory"
-                color="secondary"
-                outlined
-                v-model="bigCategory"
-                @change="changeBigCategory"
-              ></v-select>
-
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedSmallCategory"
-                :items="smallCategories"
+                id="selectedCategory"
+                :items="categories"
                 item-text="name"
                 item-value="value"
-                label="SmallCategory"
+                label="Category"
                 color="secondary"
                 outlined
-                v-model="smallCategory"
-                @change="changeSmallCategory"
+                v-model="category"
+                @change="changeCategory"
               ></v-select>
             </div>
 
+            <div id="thumbnail">
+              <v-file-input
+                label="Thumbnail"
+                filled
+                prepend-icon="mdi-camera"
+                v-model="thumbnail"
+              ></v-file-input>
+            </div>
+
             <div id="content">
-              <editor 
-              :value="editorText"
-              :options="editorOptions"
-              :html="editorHtml"
-              :visible="editorVisible"
-              previewStyle="vertical"
-              :initialValue="this.content"
-              initialEditType="wysiwyg"
-              :plugins="editorPlugin"
-              ref="tuiEditor"
-              height="500px"
-              mode="wysiwyg"
-              @change="mdChange"
+              <editor
+                :value="editorText"
+                :options="editorOptions"
+                :html="editorHtml"
+                :visible="editorVisible"
+                previewStyle="vertical"
+                :initialValue="this.content"
+                initialEditType="wysiwyg"
+                :plugins="editorPlugin"
+                ref="tuiEditor"
+                height="500px"
+                mode="wysiwyg"
+                @change="mdChange"
               />
             </div>
 
@@ -70,7 +72,8 @@
                 v-show="tagsSelected[selectIndex(tag)]"
                 close
                 @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
+                >#{{ tag }}</v-chip
+              >
             </div>
 
             <div class="text-center" id="tag">
@@ -84,15 +87,21 @@
                 color="secondary"
                 style="width:50%; height:5%;"
               ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+              <v-btn
+                color="secondary"
+                class="d-inline-block mx-2 mr-4"
+                @click="addTag"
+                >태그 추가</v-btn
+              >
             </div>
-
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
-              <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
-            </div>
+            <v-btn color="success" class="mr-4" @click="validateSubmit"
+              >Submit</v-btn
+            >
+            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -100,9 +109,9 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/vue-editor';
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -111,10 +120,10 @@ export default {
   name: "Post",
   data() {
     return {
-      user : new Object(),
-      dialog : false,
+      user: new Object(),
+      dialog: false,
       valid: true,
-      article : new Object(),
+      article: new Object(),
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
         (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
@@ -138,28 +147,27 @@ export default {
       title: "",
       content: "",
       editornickname: "",
-      bigCategories: new Array(),
-      smallCategories: new Array(),
-      bigCategory: new String(),
-      smallCategory: new String(),
+      categories: new Array(),
+      category: new String(),
       categoryInt: 0,
       modify: 0,
 
-      editorText: '',
+      editorText: "",
       editorOptions: {
-          hideModeSwitch: true
+        hideModeSwitch: true,
       },
-      editorHtml: '',
-      editorMarkdown: '',
+      editorHtml: "",
+      editorMarkdown: "",
       editorVisible: true,
-      editorPlugin : [],
-      viewerText : '',
+      editorPlugin: [],
+      viewerText: "",
+      thumbnail: "",
     };
   },
   methods: {
     validateSubmit() {
-      if(this.$refs.form.validate()) {
-      this.postArticle();
+      if (this.$refs.form.validate()) {
+        this.postArticle();
       }
     },
     reset() {
@@ -192,92 +200,112 @@ export default {
         }
       }
     },
-  closeTag(tagIndex) {
-    if (this.tags) {
-      this.tags.splice(tagIndex, 1);
-      this.tagsSelected.splice(tagIndex, 1);
-    }
-  },
-  postArticle() {
-    axios
-      .put(process.env.VUE_APP_ARTICLE + "update", {
-        articleid : this.article.articleid,
-        title: this.title,
-        content: this.editorMarkdown,
-        editornickname: this.loggedIn,
-        category: this.categoryInt,
-        modify: this.modify,
-        writerid : this.writerid,
-      })
-      .then(res => {
-        let data = res.data.data;
-        this.article = data;
-        this.setCurrentArticle(this.article);
-        axios.put(process.env.VUE_APP_TAG + "update", {
-          articleid : data.articleid,
-          tags : String(this.tags),
-        }).then(() => {
-          this.$router.push({name : 'Article', params : { articleId : this.article.articleid }});
+    closeTag(tagIndex) {
+      if (this.tags) {
+        this.tags.splice(tagIndex, 1);
+        this.tagsSelected.splice(tagIndex, 1);
+      }
+    },
+    postArticle() {
+      axios
+        .put(process.env.VUE_APP_ARTICLE + "update", {
+          articleid: this.article.articleid,
+          title: this.title,
+          content: this.editorMarkdown,
+          editornickname: this.loggedIn,
+          category: this.categoryInt,
+          modify: this.modify,
+          writerid: this.userId,
+          thumbnail: this.thumbnailB,
         })
-    })},
+        .then((res) => {
+          let data = res.data.data;
+          this.article = data;
+          if (this.thumbnail.name != null) this.addItem();
+          this.setCurrentArticle(this.article);
+
+          axios
+            .put(process.env.VUE_APP_TAG + "update", {
+              articleid: data.articleid,
+              tags: String(this.tags),
+            })
+            .then(() => {
+              this.$router.push({
+                name: "Article",
+                params: { articleId: this.article.articleid },
+              });
+            });
+        });
+    },
     ...mapActions(["setCurrentArticle"]),
     mdChange() {
-      let html = this.$refs.tuiEditor.invoke('getHtml');
-      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      let html = this.$refs.tuiEditor.invoke("getHtml");
+      let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
-    changeBigCategory() {
-      let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndex];
-      this.smallCategory = this.smallCategories[0].value;
-      this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+    changeCategory() {
+      this.categoryInt = this.categories.indexOf(this.category);
     },
-    changeSmallCategory() {
-      this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+
+    addItem() {
+      const data = new FormData(); // 서버로 전송할 폼데이터
+      const file = this.thumbnail; // 선택된 파일객체
+      data.append("file", file); // 폼데이터에 파일을 추가
+      console.log(data);
+      //   데이터를 서버로 전송하는 코드 추가
+      axios
+        .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            articleNum: this.articleid,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   components: {
-    editor : Editor,
+    editor: Editor,
   },
-    created() {
-      this.categories = this.$store.state.categories;
-      this.article = this.$store.state.currentArticle;
-      this.bigCategories = this.$store.state.bigCategories;
-      this.bigCategory = this.bigCategories[0];
-      this.smallCategories = this.$store.state.smallCategories[0];
-      this.smallCategory = this.smallCategories[0];
+  created() {
+    this.categories = this.$store.state.categories;
+    this.article = this.$store.state.currentArticle;
 
-      this.articleid = this.article.articleid;
-      this.title = this.article.title;
-      this.content = this.article.content;
-      this.editornickname = this.article.editornickname;
-      this.categoryInt = this.article.category;
-      this.editdate = this.article.editdate;
-      this.modify = this.article.modify;
-      this.category = this.article.categoryInt;
-      this.writerid = this.article.writerid;
+    this.articleid = this.article.articleid;
+    this.title = this.article.title;
+    this.content = this.article.content;
+    this.editornickname = this.article.editornickname;
+    this.categoryInt = this.article.category;
+    this.editdate = this.article.editdate;
+    this.modify = this.article.modify;
+    this.category = this.categories[this.categoryInt];
+    this.thumbnailB = this.article.thumbnail;
 
-      axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
-        .then((res) => {
-          let tagData = res.data.data;
-          tagData.forEach(obj => {
-            this.tags.push(obj.tagname)
-            this.tagsSelected.push(true);
-            })
+    axios
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
+      .then((res) => {
+        console.log(res.data.data);
+        let tagData = res.data.data;
+        tagData.forEach((obj) => {
+          this.tags.push(obj.tagname);
+          this.tagsSelected.push(true);
         });
-    },
-    computed : {
-      jwtAuthToken: {
-        get() {
+      });
+  },
+  computed: {
+    jwtAuthToken: {
+      get() {
         return this.$store.getters.jwtAuthToken;
-        },
-        set(value) {
-        this.$store.dispatch("setJwtAuthToken", value);
-        },
       },
+      set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+      },
+    },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
@@ -286,10 +314,17 @@ export default {
         this.$store.dispatch("setLoggedIn", value);
       },
     },
+
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
     },
-}
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

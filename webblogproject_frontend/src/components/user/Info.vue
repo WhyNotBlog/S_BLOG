@@ -51,10 +51,12 @@
               </div>
             </template>
             <Follow
+              :followerList="followerList"
+              :followingList="followingList"
               @update-follow="getCount"
               @close-modal="closeModal"
               type="Follower"
-              :id="this.fileName"
+              :id="this.userId"
             ></Follow>
           </v-dialog>
         </v-flex>
@@ -74,10 +76,12 @@
             </template>
 
             <Follow
+              :followerList="followerList"
+              :followingList="followingList"
               @update-follow="getCount"
               @close-modal="closeModal2"
               type="Following"
-              :id="this.fileName"
+              :id="this.userId"
             ></Follow>
           </v-dialog>
         </v-flex>
@@ -198,6 +202,7 @@ export default {
           this.getCount();
         }
       });
+    this.getList();
   },
 
   methods: {
@@ -230,6 +235,27 @@ export default {
       else this.description = "상세보기";
       this.isCard = !this.isCard;
     },
+
+    getList() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
+        .then((res) => {
+          this.followerList.push(...res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList.push(...res.data.data);
+        })
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 
   data() {
@@ -252,6 +278,8 @@ export default {
       followerModal: false,
       followingModal: false,
       page: 0,
+      followerList: new Array(),
+      followingList: new Array(),
     };
   },
 };
