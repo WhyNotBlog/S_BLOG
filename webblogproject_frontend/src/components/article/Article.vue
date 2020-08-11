@@ -111,7 +111,7 @@ export default {
         });
     }
     this.article = this.$store.state.currentArticle;
-    //console.log(this.followingList);
+    //console.log(this.article);
 
     this.followingList.forEach((element, index) => {
       if (element.id == this.article.writerid) {
@@ -183,6 +183,11 @@ export default {
   },
   methods: {
     checkFollow() {
+      if (this.loggedIn == null) {
+        alert("로그인시 팔로우 가능합니다!");
+        return;
+      }
+
       if (this.followOrUnfollow == "mdi-account-remove") {
         this.unFollow();
         this.followOrUnfollow = "mdi-account-plus";
