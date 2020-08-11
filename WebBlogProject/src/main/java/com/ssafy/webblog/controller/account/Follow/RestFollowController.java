@@ -48,9 +48,15 @@ public class RestFollowController {
 			throws IOException {
 		logger.info("follow regist : " + follow.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
+		Map<String, Object> targetUserInfo = new HashMap<String, Object>();
 		try {
 			Follow result = fService.insertFollow(follow);
-			entity = handleSuccess(result);
+			int targetid = result.getTargetid();
+			User user = uSerivce.getUserById(targetid);
+			targetUserInfo.put("data", result);
+			targetUserInfo.put("id", user.getId());			
+			targetUserInfo.put("nickname", user.getNickname());			
+			entity = handleSuccess(targetUserInfo);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
