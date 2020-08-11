@@ -9,27 +9,26 @@
             v-model="valid"
             lazy-validation
           >
-            <div class="d-flex" id="title">
+            <div id="title">
               <v-text-field
-                class="mx-3"
                 color="secondary"
-                style="width:70%;"
                 v-model="title"
                 :rules="titleRules"
                 :counter="30"
-                label="Title"
+                label="제목"
                 data-vv-name="title"
                 required
                 autofocus
               ></v-text-field>
             </div>
+            <br />
 
             <div class="d-flex" id="category">
               <v-select
                 class="d-inline-block mx-3"
                 id="selectedBigCategory"
                 :items="bigCategories"
-                label="BigCategory"
+                label="대분류"
                 color="secondary"
                 outlined
                 v-model="bigCategory"
@@ -40,7 +39,7 @@
                 class="d-inline-block mx-3"
                 id="selectedMiddleCategory"
                 :items="middleCategories"
-                label="MiddleCategory"
+                label="중분류"
                 color="secondary"
                 outlined
                 v-model="middleCategory"
@@ -53,7 +52,7 @@
                 :items="smallCategories"
                 item-text="name"
                 item-value="value"
-                label="SmallCategory"
+                label="소분류"
                 color="secondary"
                 outlined
                 v-model="smallCategory"
@@ -63,7 +62,7 @@
 
             <div id="thumbnail">
               <v-file-input
-                label="Thumbnail"
+                label="썸네일"
                 filled
                 prepend-icon="mdi-camera"
               ></v-file-input>
@@ -103,7 +102,6 @@
                 id="tagInput"
                 class="d-inline-block mx-2"
                 v-model="tag"
-                label="Tag"
                 :rules="tagsRules"
                 data-vv-name="tag"
                 color="secondary"
@@ -117,15 +115,16 @@
               >
             </div>
           </v-form>
+          <br />
 
           <div class="text-center" id="btn">
+            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
             <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
               >임시저장</v-btn
             >
             <v-btn color="success" class="mr-4" @click="validateSubmit"
               >글 쓰기</v-btn
             >
-            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
           </div>
         </v-col>
       </v-row>
