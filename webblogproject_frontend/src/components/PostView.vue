@@ -54,14 +54,14 @@
           </v-footer>
 
           <v-card-actions class="justify-space-around">
-            <v-btn color="orange" icon @click="copyLink(article)">
+            <v-btn color="orange" icon @click.stop="copyLink(article)">
               <v-icon middle color>mdi-share</v-icon>
             </v-btn>
             <v-btn
               color="red accent-4"
               icon
               v-if="checkLiked(article.articleid)"
-              @click="changeLiked(article.articleid)"
+              @click.stop="changeLiked(article.articleid)"
             >
               <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
             </v-btn>
@@ -69,7 +69,7 @@
               color="red accent-4"
               icon
               v-else
-              @click="changeLiked(article.articleid)"
+              @click.stop="changeLiked(article.articleid)"
             >
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
             </v-btn>

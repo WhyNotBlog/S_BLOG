@@ -113,7 +113,7 @@ export default {
               icon: "mdi-login",
               items: [
                 {
-                  title: "기본",
+                  title: "기초",
                   icon: "mdi-shape-plus",
                   route: "/category/111",
                 },
