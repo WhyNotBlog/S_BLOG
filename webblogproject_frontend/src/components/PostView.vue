@@ -18,7 +18,7 @@
           <v-img
             class="white--text align-end"
             height="168px"
-            :src="imgSrc(article.articleid, article.imgBoolean)"
+            :src="imgSrc(article.articleid, article.thumbnail)"
           ></v-img>
 
           <v-card-title
