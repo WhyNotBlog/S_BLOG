@@ -6,7 +6,7 @@
             <div>{{ comment.commentornickname }} | {{ comment.commentdate | dateToString }} 
               <div class="d-inline-block" v-if="(loggedIn != null && loggedIn === comment.commentornickname)">
                  | 
-                <v-btn color="black accent-4" icon>
+                <v-btn color="black accent-4" icon @click="updateComment(comment)">
                     <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
                 </v-btn>
                 <v-btn color="red accent-4" icon  @click="deleteComment(comment)">
@@ -86,17 +86,17 @@ export default {
                 })
             })
         },
-        // updateComment(currentComment) {
-        //     this.willUpdatedCommentCopy = currentComment;
-        //     let willChangedComment = document.querySelector(`#comment${currentComment.commentid}`);
-        //     willChangedComment.innerHTML = '';
-        //     const commentUpdateInput = document.createElement("input");
-        //     commentUpdateInput.setAttribute('v-model', 'willUpdatedComment')
-        //     const commentUpdateButton = document.createElement("button");
-        //     commentUpdateButton.innerText = '댓글 수정'
-        //     commentUpdateButton.setAttribute('type', 'submit')
-        //     willChangedComment.append(commentUpdateInput, commentUpdateButton);
-        // }
+        updateComment(currentComment) {
+            this.willUpdatedCommentCopy = currentComment;
+            let willChangedComment = document.querySelector(`#comment${currentComment.commentid}`);
+            willChangedComment.innerHTML = '';
+            const commentUpdateInput = document.createElement("input");
+            commentUpdateInput.setAttribute('v-model', 'willUpdatedComment')
+            const commentUpdateButton = document.createElement("button");
+            commentUpdateButton.innerText = '댓글 수정'
+            commentUpdateButton.setAttribute('type', 'submit')
+            willChangedComment.append(commentUpdateInput, commentUpdateButton);
+        }
     },
     component : {
 
