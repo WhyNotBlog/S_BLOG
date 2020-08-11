@@ -71,7 +71,7 @@ public class RestTagController {
 				tmp.setArticleid(articleid);
 				tmp.setTagname(tag);
 				Tag temp = tService.insertTag(tmp);
-				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), temp.getTagname()).getSize();
+				int tagcount = tService.getTagByTagname(temp.getTagname()).size();
 				tkService.insertTagkind(new Tagkind(tag, tagcount));
 
 			}
