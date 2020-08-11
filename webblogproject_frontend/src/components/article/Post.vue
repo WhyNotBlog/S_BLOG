@@ -231,7 +231,6 @@ export default {
       }
     },
     postArticle() {
-      console.log(this.thumbnail.data ? true : false);
       axios
         .post(process.env.VUE_APP_ARTICLE + "regist", {
           title: this.title,
@@ -240,7 +239,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.user.id,
-          thumbnail: this.thumbnail.data ? true : false,
+          thumbnail: this.thumbnail.name ? true : false,
         })
         .then((res) => {
           let data = res.data.data;
@@ -248,7 +247,7 @@ export default {
           this.setCurrentArticle(this.article);
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          if (this.thumbnail.data) this.addItem();
+          if (this.thumbnail.name) this.addItem();
           axios
             .post(process.env.VUE_APP_TAG + "regist", {
               articleid: data.articleid,

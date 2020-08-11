@@ -16,6 +16,7 @@
           min-width="270px"
         >
           <v-img
+            contain
             class="white--text align-end"
             height="168px"
             :src="imgSrc(article.articleid, article.thumbnail)"
