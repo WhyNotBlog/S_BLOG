@@ -48,7 +48,7 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["type", "id", "followingList", "followerList"],
+  props: ["type", "id"],
   methods: {
     closeModal() {
       this.$emit("close-modal");
@@ -56,7 +56,7 @@ export default {
 
     btnF(item) {
       let bool = false;
-      this.followingListC.forEach((element) => {
+      this.followingList.forEach((element) => {
         if (element.id == item.id) {
           bool = true;
         }
@@ -70,14 +70,10 @@ export default {
           userid: this.id,
         })
         .then((res) => {
-          //console.log(res.data.data);
-          //console.log(this.followingListC);
-          this.followingListC.push({
+          this.followingList.push({
             id: res.data.data.id,
             nickname: res.data.data.nickname,
           });
-          //console.log(this.followingListC);
-          this.$emit("update-follow");
         })
         .catch((err) => {
           console.log(err);
@@ -91,9 +87,9 @@ export default {
             process.env.VUE_APP_FOLLOW + "delete/" + item.id + "/" + this.id
           )
           .then(() => {
-            //console.log(res);
-            this.followerListC.splice(i, i);
-            this.$emit("update-follow");
+            this.followerList.splice(i, 1);
+            this.person = this.followerList;
+            this.followerList = this.person;
           })
           .catch((err) => {
             console.log(err);
@@ -104,9 +100,10 @@ export default {
             process.env.VUE_APP_FOLLOW + "delete/" + this.id + "/" + item.id
           )
           .then(() => {
-            //console.log(res);
-            this.followingListC.splice(i, i);
-            this.$emit("update-follow");
+            this.followingList.splice(i, 1);
+            this.person = this.followingList;
+            //console.log(this.followingList);
+            this.followingList = this.person;
           })
           .catch((err) => {
             console.log(err);
@@ -116,8 +113,6 @@ export default {
   },
   data() {
     return {
-      follower: new Array(),
-      following: new Array(),
       person: new Array(),
       title: "",
     };
@@ -131,15 +126,26 @@ export default {
       this.title = "내가 팔로우한 친구들";
       this.person = this.followingList;
     }
+
+    //console.log(this.followingList);
   },
 
   computed: {
-    followingListC() {
-      return this.followingList;
+    followingList: {
+      get() {
+        return this.$store.getters.followingList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowingList", value);
+      },
     },
-
-    followerListC() {
-      return this.followerList;
+    followerList: {
+      get() {
+        return this.$store.getters.followerList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowerList", value);
+      },
     },
   },
 };

@@ -9,7 +9,7 @@
       sm6
       xs12
     >
-      <div class="content">
+      <div class="content" @click="moveToArticle(article)">
         <v-card
           class="d-inline-block my-3"
           :width="moblieWidth"
@@ -24,10 +24,7 @@
               :src="imgSrc(article.articleid, article.thumbnail)"
             ></v-img>
           </div>
-          <v-card-title
-            @click="moveToArticle(article)"
-            class="card-title justify-center"
-          >
+          <v-card-title class="card-title justify-center">
             {{ article.title.slice(0, 10)
             }}{{ article.title.length > 10 ? "..." : "" }}
           </v-card-title>
@@ -255,5 +252,6 @@ export default {
 .content:hover {
   transform: translate3d(-4px, -4px, -4px);
   box-shadow: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
 }
 </style>
