@@ -245,7 +245,7 @@ export default {
       }
     },
     postArticle() {
-      console.log(this.thumbnail.name != null);
+      //console.log(this.thumbnail.name != null);
       axios
         .post(process.env.VUE_APP_ARTICLE + "regist", {
           title: this.title,

@@ -19,6 +19,7 @@ import SNSRegist from "@/components/user/SNSRegist";
 import SNSCombine from "@/components/user/SNSCombine";
 import Test from "@/components/article/test";
 import Card from "@/components/article/Card";
+import Category from "@/components/article/Category";
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -32,6 +33,12 @@ const routes = [
     path: "/test",
     name: "Test",
     component: Test,
+  },
+  {
+    path: "/category/:category",
+    name: "Category",
+    props: true,
+    component: Category,
   },
   {
     path: "/card",
