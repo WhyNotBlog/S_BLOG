@@ -96,9 +96,9 @@
     </div>
     <br />
     <br />
-    <div @click="getCard" style="margin-left:10px">
+    <v-btn text @click="getCard" style="margin-left:10px">
       <strong>{{ description }}</strong>
-    </div>
+    </v-btn>
 
     <div class="post" style="margin-left:10px; margin-right:10px">
       <Card :data="this.articles" v-if="isCard" />
