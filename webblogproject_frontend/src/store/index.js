@@ -26,10 +26,8 @@ const store = new Vuex.Store({
       '어플 개발자'
     ],
     middleCategories: [
-      ["기본 레퍼런스",
-      "삼성 코딩테스트 기출",
-      "카카오 코딩테스트 기출",
-      "기타 코딩테스트 기출"],
+      ["기본 문제",
+      "기출 문제"],
       ["프론트엔드",
       "백엔드",],
       ["안드로이드",
@@ -37,13 +35,11 @@ const store = new Vuex.Store({
     ],
     smallCategories: [[
       [{name : "", value : 11},],
-      [{name : "", value : 12},],
-      [{name : "", value : 13},],
-      [{name : "", value : 14},],
+      [{name : "삼성", value : 12},{name : "카카오", value : 12},{name : "기타", value : 14},],
     ],
     [
       [{name : "Vue", value : 21}, {name : "React", value : 22}, {name : "Angular", value : 23},
-      {name : "Html", value : 24}, {name : "CSS", value : 25}, {name : "Javascript", value : 26},
+      {name : "HTML", value : 24}, {name : "CSS", value : 25}, {name : "JavaScript", value : 26},
       {name : "JQuery", value : 27}, {name : "JSP", value : 28},],
       [{name : "Spring", value : 31}, {name : "Django", value : 32}, {name : "Node", value : 33},
       {name : "Flask", value : 34},],

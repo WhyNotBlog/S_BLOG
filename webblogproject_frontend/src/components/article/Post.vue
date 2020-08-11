@@ -312,6 +312,7 @@ export default {
       this.middleCategory = this.middleCategories[0];
       this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
       this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
     },
     changeMiddleCategory() {
