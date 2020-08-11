@@ -1,14 +1,9 @@
 <template>
   <div>
-    <v-container fluid>
+    <v-container>
       <v-row>
         <v-col>
-          <v-form
-            class="mx-10 full-width"
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
+          <v-form ref="form" v-model="valid" lazy-validation>
             <div id="title">
               <v-text-field
                 color="secondary"
@@ -23,43 +18,45 @@
             </div>
             <br />
 
-            <div class="d-flex" id="category">
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedBigCategory"
-                :items="bigCategories"
-                label="대분류"
-                color="secondary"
-                outlined
-                v-model="bigCategory"
-                @change="changeBigCategory"
-              ></v-select>
+            <v-layout justify-space-between id="category">
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedBigCategory"
+                  :items="bigCategories"
+                  label="대분류"
+                  color="secondary"
+                  outlined
+                  v-model="bigCategory"
+                  @change="changeBigCategory"
+                ></v-select>
+              </v-flex>
 
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedMiddleCategory"
-                :items="middleCategories"
-                label="중분류"
-                color="secondary"
-                outlined
-                v-model="middleCategory"
-                @change="changeMiddleCategory"
-              ></v-select>
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedMiddleCategory"
+                  :items="middleCategories"
+                  label="중분류"
+                  color="secondary"
+                  outlined
+                  v-model="middleCategory"
+                  @change="changeMiddleCategory"
+                ></v-select>
+              </v-flex>
 
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedSmallCategory"
-                :items="smallCategories"
-                item-text="name"
-                item-value="value"
-                label="소분류"
-                color="secondary"
-                outlined
-                v-model="smallCategory"
-                @change="changeSmallCategory"
-              ></v-select>
-            </div>
-
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedSmallCategory"
+                  :items="smallCategories"
+                  item-text="name"
+                  item-value="value"
+                  label="소분류"
+                  color="secondary"
+                  outlined
+                  v-model="smallCategory"
+                  @change="changeSmallCategory"
+                ></v-select>
+              </v-flex>
+            </v-layout>
             <div id="thumbnail">
               <v-file-input
                 label="썸네일"
@@ -399,4 +396,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-select,
+.v-text-field {
+  margin-left: 10px;
+}
+</style>
