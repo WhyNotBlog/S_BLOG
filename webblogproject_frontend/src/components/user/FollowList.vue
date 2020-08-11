@@ -2,8 +2,8 @@
   <v-card>
     <v-row align="center" justify="center" class="modal">
       <v-col class="modal">
-        <v-card class="elevation-12">
-          <v-layout style="height:280px">
+        <v-card class="elevation-12" style="background-color:#f1f3f5">
+          <v-layout style="height:280px; ">
             <v-flex sm5 xs5 md5 style="background-color:#595959;">
               <v-btn dark text :small="true" @click="closeModal">
                 <v-icon :small="true">close</v-icon>
@@ -92,7 +92,7 @@ export default {
           )
           .then(() => {
             //console.log(res);
-            this.followerListC.splice(i, i + 1);
+            this.followerListC.splice(i, i);
             this.$emit("update-follow");
           })
           .catch((err) => {
@@ -105,7 +105,7 @@ export default {
           )
           .then(() => {
             //console.log(res);
-            this.followingListC.splice(i, i + 1);
+            this.followingListC.splice(i, i);
             this.$emit("update-follow");
           })
           .catch((err) => {
@@ -157,6 +157,9 @@ export default {
   left: 21%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+.theme--light.v-list {
+  background: #f1f3f5;
 }
 
 .v-btn {

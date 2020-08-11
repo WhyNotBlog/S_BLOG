@@ -329,6 +329,7 @@ export default {
     this.modify = this.article.modify;
     this.category = this.article.category
     this.thumbnailB = this.article.thumbnail;
+    console.log(this.article);
 
     let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
     let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;

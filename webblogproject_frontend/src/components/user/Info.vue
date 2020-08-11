@@ -33,12 +33,14 @@
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
-          <div>{{ contentCnt }}</div>
+          <div>
+            <v-btn text @click="getCard">{{ contentCnt }}</v-btn>
+          </div>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
 
-          <v-dialog v-model="followerModal" persistent width="650px">
+          <v-dialog v-model="followerModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text
@@ -62,7 +64,7 @@
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <v-dialog v-model="followingModal" persistent width="650px">
+          <v-dialog v-model="followingModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text
@@ -100,9 +102,6 @@
     </div>
     <br />
     <br />
-    <v-btn text @click="getCard" style="margin-left:10px">
-      <strong>{{ description }}</strong>
-    </v-btn>
 
     <div class="post" style="margin-left:10px; margin-right:10px">
       <Card :data="this.articles" v-if="isCard" />
