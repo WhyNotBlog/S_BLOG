@@ -15,7 +15,7 @@
               contain
               class="white--text align-end"
               height="134px"
-              style="margin-top:16px;margin-left:16px;margin-right:16px; "
+              style="margin-left:16px;margin-right:16px; "
               :src="imgSrc(article.articleid, article.thumbnail)"
             ></v-img>
 
