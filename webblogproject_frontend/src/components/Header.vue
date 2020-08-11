@@ -187,8 +187,8 @@ export default {
           route: "/",
         },
         { icon: "find_in_page", text: "Search", route: "/search/title/blank" },
-        { icon: "account_circle", text: "Profile", route: "/user/info" },
-        { icon: "mdi-pencil", text: "Post", route: "/article/post" },
+        { icon: "account_circle", text: "MyPage", route: "/user/info" },
+        { icon: "mdi-pencil", text: "Write", route: "/article/post" },
       ],
     };
   },
