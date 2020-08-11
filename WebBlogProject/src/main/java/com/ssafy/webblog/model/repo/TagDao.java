@@ -18,4 +18,6 @@ public interface TagDao extends JpaRepository<Tag, String> {
 	Page<Tag> getTagByTagname(Pageable pageable, String tagname);
 
 	int countByTagname(String tagname);
+
+	List<Tag> getTagByTagname(String tagname);
 }

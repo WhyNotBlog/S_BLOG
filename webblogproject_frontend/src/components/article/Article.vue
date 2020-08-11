@@ -105,6 +105,7 @@ export default {
         });
     }
     this.article = this.$store.state.currentArticle;
+    //console.log(this.article);
 
     if (this.article.articleid !== this.$route.params.articleId) {
       this.$router.push({
@@ -123,6 +124,7 @@ export default {
       modify: this.article.modify,
       writerid: this.article.writerid,
       hits: this.article.hits,
+      thumbnail: this.article.thumbnail,
     });
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)

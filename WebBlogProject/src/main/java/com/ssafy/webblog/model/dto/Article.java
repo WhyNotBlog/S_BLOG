@@ -42,4 +42,5 @@ public class Article {
     private int hits;
     
     private int writerid;
+    private boolean thumbnail;
 }

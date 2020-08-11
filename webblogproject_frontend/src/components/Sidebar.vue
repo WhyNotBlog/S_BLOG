@@ -1,6 +1,6 @@
 <template>
   <div class="side">
-    <v-list>
+    <v-list v-show="side">
       <v-list subheader>
         <v-subheader>Guide</v-subheader>
         <v-divider></v-divider>
@@ -64,6 +64,10 @@
       </v-list>
       <br />
     </v-list>
+
+    <v-btn text style="float:right" @click="hide"
+      ><v-icon>{{ icon }}</v-icon></v-btn
+    >
   </div>
 </template>
 
@@ -73,6 +77,15 @@ export default {
   methods: {
     tagSearch(tag) {
       this.$router.push("/search/tag/" + tag);
+    },
+    hide() {
+      if (this.side) {
+        this.side = false;
+        this.icon = "keyboard_arrow_down";
+      } else {
+        this.side = true;
+        this.icon = "keyboard_arrow_up";
+      }
     },
   },
   created() {
@@ -88,6 +101,8 @@ export default {
   },
   data() {
     return {
+      icon: "keyboard_arrow_up",
+      side: true,
       category: [
         {
           icon: "format_shapes",

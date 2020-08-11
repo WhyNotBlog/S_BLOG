@@ -121,7 +121,6 @@
                 ></v-file-input>
               </form>
             </div>
-            <v-btn color="595959" text v-on:click="addItem">등록하기</v-btn>
           </div>
         </v-layout>
       </v-flex>
@@ -336,6 +335,7 @@ export default {
           if (res.status) {
             this.loggedIn = this.nickname;
             alert("회원정보 수정이 완료되었습니다.");
+            this.addItem();
             this.$router.push("/user/info");
           }
         })
@@ -346,7 +346,7 @@ export default {
     },
     fileUpload(file) {
       this.selectedFile = file;
-      //this.profile = URL.createObjectURL(file);
+      this.profile = URL.createObjectURL(file);
     },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터

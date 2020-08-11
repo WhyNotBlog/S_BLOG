@@ -16,10 +16,10 @@
           min-width="270px"
         >
           <v-img
+            contain
             class="white--text align-end"
             height="168px"
-            :src="imgSrc(article.articleid)"
-            v-on:error="imgErr"
+            :src="imgSrc(article.articleid, article.thumbnail)"
           ></v-img>
 
           <v-card-title
@@ -143,7 +143,6 @@ export default {
       },
     },
     articles() {
-      console.log(this.data);
       return this.data;
     },
     moblieWidth() {
@@ -160,12 +159,12 @@ export default {
     },
   },
   methods: {
-    imgSrc(id) {
-      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg";
-    },
+    imgSrc(id, flag) {
+      //console.log(flag);
 
-    imgErr() {
-      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
+      return flag
+        ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
+        : require("@/assets/basic.jpg");
     },
 
     updateTotalLike() {

@@ -91,6 +91,10 @@ public class TagService {
 		return result;
 	}
 	
+	public List<Tag> getTagByTagname(String tagname){
+		return tDao.getTagByTagname(tagname);
+	}
+	
 	public int countByTagname(String tagname) {
 		return tDao.countByTagname(tagname);
 	}
