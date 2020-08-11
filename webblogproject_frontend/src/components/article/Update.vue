@@ -3,7 +3,12 @@
     <v-container fluid>
       <v-row>
         <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
+          <v-form
+            class="mx-10 full-width"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
             <div class="d-flex" id="title">
               <v-text-field
                 class="mx-3"
@@ -33,7 +38,12 @@
             </div>
 
             <div id="thumbnail">
-              <v-file-input label="Thumbnail" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
+              <v-file-input
+                label="Thumbnail"
+                filled
+                prepend-icon="mdi-camera"
+                v-model="thumbnail"
+              ></v-file-input>
             </div>
 
             <div id="content">
@@ -62,7 +72,8 @@
                 v-show="tagsSelected[selectIndex(tag)]"
                 close
                 @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
+                >#{{ tag }}</v-chip
+              >
             </div>
 
             <div class="text-center" id="tag">
@@ -76,12 +87,19 @@
                 color="secondary"
                 style="width:50%; height:5%;"
               ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+              <v-btn
+                color="secondary"
+                class="d-inline-block mx-2 mr-4"
+                @click="addTag"
+                >태그 추가</v-btn
+              >
             </div>
           </v-form>
 
           <div class="text-center" id="btn">
-            <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
+            <v-btn color="success" class="mr-4" @click="validateSubmit"
+              >Submit</v-btn
+            >
             <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
           </div>
         </v-col>
@@ -267,6 +285,7 @@ export default {
     this.modify = this.article.modify;
     this.category = this.categories[this.categoryInt];
     this.thumbnailB = this.article.thumbnail;
+    console.log(this.article);
 
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)

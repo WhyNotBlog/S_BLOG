@@ -40,7 +40,7 @@
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
 
-          <v-dialog v-model="followerModal" persistent width="650px">
+          <v-dialog v-model="followerModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text
@@ -64,7 +64,7 @@
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <v-dialog v-model="followingModal" persistent width="650px">
+          <v-dialog v-model="followingModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text

@@ -20,35 +20,47 @@ const store = new Vuex.Store({
     jwtAuthToken: null,
     currentArticle: new Object(),
     currentTempArticle: new Object(),
-    bigCategories : [
-      '알고리즘',
-      '웹 개발자',
-      '어플 개발자'
-    ],
+    bigCategories: ["알고리즘", "웹 개발자", "어플 개발자"],
     middleCategories: [
-      ["기본 문제",
-      "기출 문제"],
-      ["프론트엔드",
-      "백엔드",],
-      ["안드로이드",
-      "IOS",],
+      ["기본 문제", "기출 문제"],
+      ["프론트엔드", "백엔드"],
+      ["안드로이드", "IOS"],
     ],
-    smallCategories: [[
-      [{name : "", value : 11},],
-      [{name : "삼성", value : 12},{name : "카카오", value : 13},{name : "기타", value : 14},],
+    smallCategories: [
+      [
+        [{ name: "기본", value: 11 }],
+        [
+          { name: "삼성", value: 12 },
+          { name: "카카오", value: 13 },
+          { name: "기타", value: 14 },
+        ],
+      ],
+      [
+        [
+          { name: "Vue", value: 21 },
+          { name: "React", value: 22 },
+          { name: "Angular", value: 23 },
+          { name: "HTML", value: 24 },
+          { name: "CSS", value: 25 },
+          { name: "JavaScript", value: 26 },
+          { name: "JQuery", value: 27 },
+          { name: "JSP", value: 28 },
+        ],
+        [
+          { name: "Spring", value: 31 },
+          { name: "Django", value: 32 },
+          { name: "Node", value: 33 },
+          { name: "Flask", value: 34 },
+        ],
+      ],
+      [
+        [
+          { name: "Java", value: 41 },
+          { name: "Kotlin", value: 42 },
+        ],
+        [{ name: "Swift", value: 43 }],
+      ],
     ],
-    [
-      [{name : "Vue", value : 21}, {name : "React", value : 22}, {name : "Angular", value : 23},
-      {name : "HTML", value : 24}, {name : "CSS", value : 25}, {name : "JavaScript", value : 26},
-      {name : "JQuery", value : 27}, {name : "JSP", value : 28},],
-      [{name : "Spring", value : 31}, {name : "Django", value : 32}, {name : "Node", value : 33},
-      {name : "Flask", value : 34},],
-    ],
-    [
-      [{name : "Java", value : 41}, {name : "Kotlin", value : 42},],
-      [{name : "Swift", value : 43},],
-    ],
-    ]
   },
   mutations: {
     setJwtAuthToken(state, payload) {
