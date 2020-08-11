@@ -163,7 +163,7 @@ export default {
 
       return flag
         ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
-        : process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
+        : require("@/assets/basic.jpg");
     },
 
     updateTotalLike() {
