@@ -115,7 +115,7 @@ export default {
                 {
                   title: "기본",
                   icon: "mdi-shape-plus",
-                  route: "/category/11",
+                  route: "/category/111",
                 },
               ],
             },
@@ -126,17 +126,17 @@ export default {
                 {
                   title: "삼성",
                   icon: "mdi-shape-plus",
-                  route: "/category/12",
+                  route: "/category/112",
                 },
                 {
                   title: "카카오",
                   icon: "mdi-shape-plus",
-                  route: "/category/13",
+                  route: "/category/113",
                 },
                 {
                   title: "기타",
                   icon: "mdi-shape-plus",
-                  route: "/category/14",
+                  route: "/category/114",
                 },
               ],
             },
@@ -154,48 +154,48 @@ export default {
                 {
                   title: "Vue",
                   icon: "mdi-television-guide",
-                  route: "/category/21",
+                  route: "/category/211",
                 },
 
                 {
                   title: "React",
                   icon: "mdi-television-guide",
-                  route: "/category/22",
+                  route: "/category/212",
                 },
                 {
                   title: "Angular",
                   icon: "mdi-television-guide",
-                  route: "/category/23",
+                  route: "/category/213",
                 },
 
                 {
                   title: "HTML",
                   icon: "mdi-television-guide",
-                  route: "/category/24",
+                  route: "/category/214",
                 },
 
                 {
                   title: "CSS",
                   icon: "mdi-television-guide",
-                  route: "/category/25",
+                  route: "/category/215",
                 },
 
                 {
                   title: "JavaScript",
                   icon: "mdi-television-guide",
-                  route: "/category/26",
+                  route: "/category/216",
                 },
 
                 {
                   title: "JQuery",
                   icon: "mdi-television-guide",
-                  route: "/category/27",
+                  route: "/category/217",
                 },
 
                 {
                   title: "Jsp",
                   icon: "mdi-television-guide",
-                  route: "/category/28",
+                  route: "/category/218",
                 },
               ],
             },
@@ -207,22 +207,22 @@ export default {
                 {
                   title: "Spring",
                   icon: "mdi-image-filter-drama",
-                  route: "/category/31",
+                  route: "/category/221",
                 },
                 {
                   title: "Django",
                   icon: "mdi-image-filter-drama",
-                  route: "/category/32",
+                  route: "/category/222",
                 },
                 {
                   title: "Node js",
                   icon: "mdi-image-filter-drama",
-                  route: "/category/33",
+                  route: "/category/223",
                 },
                 {
                   title: "Flask",
                   icon: "mdi-image-filter-drama",
-                  route: "/category/34",
+                  route: "/category/224",
                 },
               ],
             },
@@ -240,12 +240,12 @@ export default {
                 {
                   title: "Java",
                   icon: "android",
-                  route: "/category/41",
+                  route: "/category/311",
                 },
                 {
                   title: "Kotlin",
                   icon: "android",
-                  route: "/category/42",
+                  route: "/category/312",
                 },
               ],
             },
@@ -257,7 +257,7 @@ export default {
                 {
                   title: "Swift",
                   icon: "mdi-apple",
-                  route: "/category/51",
+                  route: "/category/321",
                 },
               ],
             },

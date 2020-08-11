@@ -92,7 +92,7 @@ export default {
           )
           .then(() => {
             //console.log(res);
-            this.followerListC.splice(i, i + 1);
+            this.followerListC.splice(i, i);
             this.$emit("update-follow");
           })
           .catch((err) => {
@@ -105,7 +105,7 @@ export default {
           )
           .then(() => {
             //console.log(res);
-            this.followingListC.splice(i, i + 1);
+            this.followingListC.splice(i, i);
             this.$emit("update-follow");
           })
           .catch((err) => {
