@@ -13,9 +13,10 @@
           <v-card>
             <v-img
               class="white--text align-end"
-              height="135px"
-              src="@/assets/basic.jpg"
+              height="134px"
+              :src="imgSrc(article.articleid, article.imgBoolean)"
             ></v-img>
+
             <v-card-title class="card-title justify-center">
               {{ article.title.slice(0, 10)
               }}{{ article.title.length > 10 ? "..." : "" }}
@@ -62,6 +63,14 @@ export default {
   computed: {
     articles() {
       return this.data;
+    },
+  },
+
+  methods: {
+    imgSrc(id, flag) {
+      return flag
+        ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
+        : process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
     },
   },
 };

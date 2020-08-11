@@ -18,8 +18,7 @@
           <v-img
             class="white--text align-end"
             height="168px"
-            :src="imgSrc(article.articleid)"
-            v-on:error="imgErr"
+            :src="imgSrc(article.articleid, article.imgBoolean)"
           ></v-img>
 
           <v-card-title
@@ -143,7 +142,6 @@ export default {
       },
     },
     articles() {
-      console.log(this.data);
       return this.data;
     },
     moblieWidth() {
@@ -160,12 +158,10 @@ export default {
     },
   },
   methods: {
-    imgSrc(id) {
-      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg";
-    },
-
-    imgErr() {
-      return process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
+    imgSrc(id, flag) {
+      return flag
+        ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
+        : process.env.VUE_APP_ARTICLE + "downloadThumbnail/basic.jpg";
     },
 
     updateTotalLike() {

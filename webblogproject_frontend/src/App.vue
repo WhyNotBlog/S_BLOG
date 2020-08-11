@@ -35,7 +35,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 * {
   font-family: "Noto Sans KR", sans-serif;
