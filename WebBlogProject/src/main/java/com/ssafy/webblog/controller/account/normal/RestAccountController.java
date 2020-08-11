@@ -44,6 +44,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.controller.account.kakao.HttpConnection;
 import com.ssafy.webblog.model.dto.SignupInformation;
 import com.ssafy.webblog.model.dto.User;
+import com.ssafy.webblog.model.service.FileUploadDownloadService;
 import com.ssafy.webblog.model.service.JwtDecoder;
 import com.ssafy.webblog.model.service.JwtService;
 import com.ssafy.webblog.model.service.SendEmailService;
@@ -273,46 +274,7 @@ public class RestAccountController {
 		return entity;
 	}
 	
-	@PostMapping("/setProfile")
-	@ApiOperation(value = "프로필 사진 업로드")
-	public ResponseEntity<Map<String, Object>> setProfile(HttpServletResponse res, HttpServletRequest req, @RequestParam("file") MultipartFile[] file)
-			throws JsonProcessingException, IOException {
-		logger.debug("프로필 사진 업로드");
-		ResponseEntity<Map<String, Object>> entity = null;		
-		try {
-			String filename = req.getHeader("filename");
-			String realPath = System.getProperty("user.dir") + "\\profile\\" + filename;
-			System.out.println(realPath);
-			User user = userAccountService.getUserById(Integer.parseInt(filename));
-			for (MultipartFile multipartFile : file) {			
-				multipartFile.transferTo(new File(realPath + ".jpg"));
-			}		
-			user.setPicture(realPath + ".jpg");
-			userAccountService.updateUser(user);
-			entity = handleSuccess("");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
-	
-	@PostMapping("/getProfile")
-	@ApiOperation(value = "프로필 사진 업로드")
-	public ResponseEntity<Map<String, Object>> getProfile(HttpServletResponse res, HttpServletRequest req, String email)
-			throws JsonProcessingException, IOException {
-		logger.debug("프로필 사진 가져오기");
-		ResponseEntity<Map<String, Object>> entity = null;		
-		try {
-			String realPath = System.getProperty("user.dir") + "\\profile\\";
-			File file = new File(realPath + email + ".jpg"); 
-			MultipartFile multipartFile = (MultipartFile) file;
-			multipartFile.transferTo(new File(realPath + "egawrgwag.jpg"));
-			entity = handleSuccess("");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
+
 
 	HttpConnection conn = HttpConnection.getInstance();
 

@@ -1,17 +1,25 @@
 package com.ssafy.webblog.controller.article;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,15 +29,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.model.dto.Article;
 import com.ssafy.webblog.model.dto.Tag;
 import com.ssafy.webblog.model.dto.Tagkind;
 import com.ssafy.webblog.model.service.ArticleService;
+import com.ssafy.webblog.model.service.FileUploadDownloadService;
+import com.ssafy.webblog.model.service.FileUploadResponse;
 import com.ssafy.webblog.model.service.TagService;
 import com.ssafy.webblog.model.service.TagkindService;
+import com.ssafy.webblog.model.service.ThumbnailUploadDownloadService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -47,7 +61,7 @@ public class RestArticleController {
 	TagService tService;
 	@Autowired
 	TagkindService tkService;
-	
+
 	@GetMapping("/{articleId}")
 	@ApiOperation(value = "게시글 조회")
 	public ResponseEntity<Map<String, Object>> getArticle(HttpServletResponse res, @PathVariable int articleId)
@@ -79,17 +93,17 @@ public class RestArticleController {
 		}
 		return entity;
 	}
-	
+
 
 	@DeleteMapping("/delete/{articleid}")
 	@ApiOperation(value = "게시글 삭제")
-	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable String articleid)
+	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable int articleid)
 			throws IOException {
 		logger.debug("delete article by articleId: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			artiService.deleteArticle(articleid);
-			List<Tag> deleteTagTarget = tService.getTagListByArticleid(Integer.parseInt(articleid));
+			List<Tag> deleteTagTarget = tService.getTagListByArticleid(articleid);
 			for(Tag tag : deleteTagTarget) {
 				tService.deleteTag(tag.getTagid());
 				int size = tService.countByTagname(tag.getTagname());
@@ -102,7 +116,7 @@ public class RestArticleController {
 		}
 		return entity;
 	}
-	
+
 	@PutMapping("/update")
 	@ApiOperation(value = "게시글 수정")
 	public ResponseEntity<Map<String, Object>> articleUpdate(HttpServletResponse res, @RequestBody Article article)
@@ -183,7 +197,7 @@ public class RestArticleController {
 	}
 
 
-	
+
 	@GetMapping("/searchBy/allarticle/{page}")
 	@ApiOperation(value = "전체 게시글 조회")
 	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletResponse res, @PathVariable int page)
@@ -198,8 +212,8 @@ public class RestArticleController {
 		}
 		return entity;
 	}
-	
-	
+
+
 	@GetMapping("/user/{userid}/{page}")
 	@ApiOperation(value = "유저가 작성한 게시글 조회")
 	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletResponse res, @PathVariable String userid, @PathVariable int page)
@@ -215,7 +229,63 @@ public class RestArticleController {
 		}
 		return entity;
 	}
-	
+
+	@Autowired
+	private ThumbnailUploadDownloadService service;
+
+	@PostMapping("/uploadThumbnail")
+	public FileUploadResponse uploadFile(HttpServletRequest req, @RequestParam("file") MultipartFile file) {
+		String fileName = "";
+		try {
+			String articleNum = req.getHeader("articleNum");
+			fileName = service.storeFile(file, articleNum);
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+				.path("/downloadFile/")
+				.path(fileName)
+				.toUriString();
+		
+		System.out.println(fileDownloadUri);
+
+		return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+	}
+
+//	@PostMapping("/uploadMultipleFiles")
+//	public List<FileUploadResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) throws FileUploadException{
+//		return Arrays.asList(files)
+//				.stream()
+//				.map(file -> uploadFile(file))
+//				.collect(Collectors.toList());
+//	}
+
+	@GetMapping("/downloadThumbnail/{fileName:.+}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException{
+		// Load file as Resource
+		Resource resource = service.loadFileAsResource(fileName);
+		// Try to determine file's content type
+		String contentType = null;
+		try {
+			System.out.println(resource.getFile().getAbsolutePath());
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			logger.info("Could not determine file type.");
+		}
+
+		// Fallback to the default content type if type could not be determined
+		if(contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", true);

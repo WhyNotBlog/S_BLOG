@@ -96,16 +96,12 @@
     </div>
     <br />
     <br />
-    <div class="post">
-      <PostView :data="this.articles" />
-      <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
-        <div slot="no-more"></div>
-        <div slot="no-results">
-          <div class="no_result">
-            <span>조회 결과가 없습니다.</span>
-          </div>
-        </div>
-      </infinite-loading>
+    <div @click="getCard" style="margin-left:10px">
+      <strong>{{ description }}</strong>
+    </div>
+
+    <div class="post" style="margin-left:10px; margin-right:10px">
+      <Card :data="this.articles" v-if="isCard" />
     </div>
   </div>
 </template>
@@ -116,12 +112,13 @@ import axios from "axios";
 import PostView from "@/components/PostView";
 import Follow from "@/components/user/FollowList";
 import InfiniteLoading from "vue-infinite-loading";
+import Card from "@/components/article/Card";
 
 const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
   name: "info",
-  components: { PostView, Follow, InfiniteLoading },
+  components: { PostView, Follow, InfiniteLoading, Card },
   computed: {
     jwtAuthToken: {
       get() {
@@ -176,6 +173,14 @@ export default {
     }
 
     axios
+      .get(process.env.VUE_APP_ARTICLE + "user/" + this.userId + "/0")
+      .then((res) => {
+        this.contentCnt = res.data.data.totalElements;
+        this.articles = res.data.data.content;
+        //console.log(this.articles);
+      });
+
+    axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
@@ -189,39 +194,13 @@ export default {
           this.gitUrl = data.giturl;
           this.introduce = data.introduce;
           this.loggedIn = data.nickname;
-          this.fileName = data.id;
 
           this.getCount();
         }
-      })
-      .catch(() => {});
+      });
   },
 
   methods: {
-    infiniteHandler($state) {
-      setTimeout(() => {
-        axios
-          .get(
-            process.env.VUE_APP_ARTICLE +
-              "user/" +
-              this.userId +
-              "/" +
-              this.page
-          )
-          .then((res) => {
-            this.contentCnt = res.data.data.totalElements;
-            //console.log(res.data.data);
-            if (!res.data.data.empty) {
-              this.page += 1;
-              this.isSearch = true;
-              this.articles.push(...res.data.data.content);
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          });
-      }, 100);
-    },
     getCount() {
       axios
         .get(process.env.VUE_APP_FOLLOW + "count/" + this.userId)
@@ -246,10 +225,17 @@ export default {
     closeModal2() {
       this.followingModal = false;
     },
+    getCard() {
+      if (this.description == "상세보기") this.description = "접어두기";
+      else this.description = "상세보기";
+      this.isCard = !this.isCard;
+    },
   },
 
   data() {
     return {
+      description: "상세보기",
+      isCard: false,
       imgSrc: "",
       fileName: "",
       selectedFile: "",
@@ -259,7 +245,7 @@ export default {
       email: "",
       gitUrl: "",
       introduce: "",
-      articles: Array(),
+      articles: new Array(),
       contentCnt: 0,
       following: 0,
       follower: 0,
@@ -300,9 +286,5 @@ export default {
 
 .infoBox {
   color: black;
-}
-
-.post {
-  margin-left: 30px;
 }
 </style>

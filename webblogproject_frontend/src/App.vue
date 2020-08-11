@@ -1,24 +1,18 @@
 <template>
   <v-app style="background-color:#f1f3f5; height:100%">
-    <header>
-      <Header />
-    </header>
-    <v-container fluid>
-      <v-layout justify-space-around>
-        <v-flex xs12 sm12 md8 lg8 xl9 style="margin:auto">
-          <router-view />
-        </v-flex>
-        <v-flex xs2 sm2 md2 lg2 xl2 class="sidebar2">
-          <div class="sidebar">
-            <Sidebar />
-          </div>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <Header style="z-index:100" />
+    <Sidebar class="sidebar" />
+    <div class="main">
+      <router-view />
+    </div>
     <br />
     <br />
     <br />
-    <v-footer absolute class="font-weight-medium" style="background-color:#595959;color:white">
+    <v-footer
+      absolute
+      class="font-weight-medium"
+      style="background-color:#595959;color:white;z-index:2"
+    >
       <v-col class="text-center" cols="12">
         {{ new Date().getFullYear() }},
         <v-icon color="white" size="16px">copyright</v-icon>
@@ -47,14 +41,15 @@ export default {
   font-family: "Noto Sans KR", sans-serif;
 }
 
-.sidebar {
-  position: fixed;
-  margin-right: 10px;
+.main {
+  margin-top: 30px;
+  margin-right: 230px;
 }
 
 @media screen and (max-width: 960px) {
-  .sidebar2 {
-    display: none;
+  .main {
+    margin-top: 30px;
+    margin-right: 0;
   }
 }
 

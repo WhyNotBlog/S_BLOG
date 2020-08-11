@@ -1,4 +1,4 @@
-package com.ssafy.webblog.controller.account.normal;
+package com.ssafy.webblog.model.service;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,11 +14,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FileUploadDownloadService {
+public class ThumbnailUploadDownloadService {
 	 private final Path fileLocation;
 	    
 	    @Autowired
-	    public FileUploadDownloadService(FileUploadProperties prop) throws FileUploadException {
+	    public ThumbnailUploadDownloadService(ThumbnailUploadProperties prop) throws FileUploadException {
 	        this.fileLocation = Paths.get(prop.getUploadDir())
 	                .toAbsolutePath().normalize();
 	        
@@ -28,9 +28,10 @@ public class FileUploadDownloadService {
 	            throw new FileUploadException("파일을 업로드할 디렉토리를 생성하지 못했습니다.", e);
 	        }
 	    }
-	    public String storeFile(MultipartFile file) throws FileUploadException {
-	        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-	        
+	    public String storeFile(MultipartFile file, String articleNum) throws FileUploadException {
+//	        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	        String fileName = articleNum + ".jpg";
+	        System.out.println(fileName);
 	        try {
 	            // 파일명에 부적합 문자가 있는지 확인한다.
 	            if(fileName.contains(".."))

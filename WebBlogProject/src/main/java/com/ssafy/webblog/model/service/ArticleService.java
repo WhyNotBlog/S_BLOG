@@ -39,8 +39,8 @@ public class ArticleService {
 	}
 	
 	// 삭제
-	public void deleteArticle(String articleid) {
-		artiDao.deleteById(articleid);
+	public void deleteArticle(int articleid) {
+		artiDao.deleteArticleByArticleid(articleid);
 	}
 
 	// 업데이트

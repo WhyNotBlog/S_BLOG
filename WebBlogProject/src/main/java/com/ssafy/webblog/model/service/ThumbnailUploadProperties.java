@@ -1,9 +1,9 @@
-package com.ssafy.webblog.controller.account.normal;
+package com.ssafy.webblog.model.service;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix="file")
-public class FileUploadProperties {
+@ConfigurationProperties(prefix="thumbnail")
+public class ThumbnailUploadProperties {
     private String uploadDir;
  
     public String getUploadDir() {

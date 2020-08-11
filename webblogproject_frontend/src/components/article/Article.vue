@@ -1,24 +1,36 @@
 <template>
   <div>
+    <br />
     <div
       class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
       id="title"
-    >{{ article.title }}</div>
+    >
+      {{ article.title }}
+    </div>
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
-        작성자 : {{ article.editornickname }} |
-        작성일 : {{ article.editdate | dateToString }} |
-        조회수 : {{ article.hits }} |
-        <v-btn color="red accent-4" icon v-if="article.isLiked" @click="changeLiked()">
+        작성자 : {{ article.editornickname }} | 작성일 :
+        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
+        <v-btn
+          color="red accent-4"
+          icon
+          v-if="article.isLiked"
+          @click="changeLiked()"
+        >
           <v-icon middle color="red accent-4">mdi-heart</v-icon>
         </v-btn>
         <v-btn color="red accent-4" icon v-else @click="changeLiked()">
           <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
         </v-btn>
-        <div class="d-inline-block" v-if="(loggedIn !== null && user.id === article.writerid)">
+        <div
+          class="d-inline-block"
+          v-if="loggedIn !== null && user.id === article.writerid"
+        >
           <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
+            <v-icon middle color="black accent-4"
+              >mdi-file-document-edit</v-icon
+            >
           </v-btn>
           <v-btn color="black accent-4" icon @click="deleteArticle()">
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
@@ -33,7 +45,8 @@
           v-for="tag in tags"
           :key="tag.tagid"
           @click="searchTag(tag.tagname)"
-        >#{{ tag.tagname }}</v-chip>
+          >#{{ tag.tagname }}</v-chip
+        >
       </div>
       <div
         class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
@@ -78,34 +91,38 @@ export default {
   },
   created() {
     if (this.loggedIn !== null) {
-    axios
-      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
-        headers: {
-          "jwt-auth-token": this.jwtAuthToken,
-        },
-      })
-      .then((res) => {
-        if (res.status) {
-          let data = res.data.data;
-          this.user = data;
-        }
-      })}
+      axios
+        .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
+          headers: {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        })
+        .then((res) => {
+          if (res.status) {
+            let data = res.data.data;
+            this.user = data;
+          }
+        });
+    }
     this.article = this.$store.state.currentArticle;
-    
+
     if (this.article.articleid !== this.$route.params.articleId) {
-      this.$router.push({ name : 'CheatArticle', props : { articleId : this.$route.params.articleid } })
+      this.$router.push({
+        name: "CheatArticle",
+        props: { articleId: this.$route.params.articleid },
+      });
     }
 
-    this.article.hits += 1
+    this.article.hits += 1;
     axios.put(process.env.VUE_APP_ARTICLE + "update/", {
-      articleid : this.article.articleid,
+      articleid: this.article.articleid,
       title: this.article.title,
       content: this.article.content,
       editornickname: this.article.editornickname,
       category: this.article.category,
       modify: this.article.modify,
-      writerid : this.article.writerid,
-      hits : this.article.hits,
+      writerid: this.article.writerid,
+      hits: this.article.hits,
     });
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
@@ -151,7 +168,7 @@ export default {
             alert("게시글 삭제에 성공했습니다!");
             this.$router.push({ name: "Home" });
           }
-        })
+        });
     },
     checkLiked(id) {
       if (this.loggedIn !== null) return this.userLiked.includes(id);
