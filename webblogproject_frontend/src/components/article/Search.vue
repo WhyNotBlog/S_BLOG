@@ -3,7 +3,13 @@
     <br />
     <v-layout row wrap justify-center>
       <v-flex xs3 sm3 md3 lg3 xl3>
-        <v-select :items="types" label="유형" solo v-model="typeBox"></v-select>
+        <v-select
+          :items="types"
+          label="유형"
+          solo
+          v-model="typeBox"
+          style="margin-left:5px"
+        ></v-select>
       </v-flex>
       <v-flex xs8 sm8 md8 lg8 xl8>
         <v-text-field
@@ -14,6 +20,7 @@
           placeholder="검색어를 입력하세요"
           v-model="search"
           @keyup.enter="searchRoute"
+          style="margin-left:5px"
           solo
           clearable
           single-line
