@@ -109,12 +109,12 @@
 
           <div class="text-center" id="btn">
             <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
-              >Save</v-btn
+              >임시저장</v-btn
             >
             <v-btn color="success" class="mr-4" @click="validateSubmit"
-              >Submit</v-btn
+              >글 쓰기</v-btn
             >
-            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -231,6 +231,7 @@ export default {
       }
     },
     postArticle() {
+      console.log(this.thumbnail.data ? true : false);
       axios
         .post(process.env.VUE_APP_ARTICLE + "regist", {
           title: this.title,
@@ -239,7 +240,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.user.id,
-          thumbnail: this.thumbnail != null ? true : false,
+          thumbnail: this.thumbnail.data ? true : false,
         })
         .then((res) => {
           let data = res.data.data;
@@ -247,7 +248,7 @@ export default {
           this.setCurrentArticle(this.article);
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          this.addItem();
+          if (this.thumbnail.data) this.addItem();
           axios
             .post(process.env.VUE_APP_TAG + "regist", {
               articleid: data.articleid,
