@@ -1,84 +1,69 @@
 <template>
-  <v-layout row justify-start style="margin:auto">
-    <v-flex
-      v-for="article in articles"
-      :key="article.articleid"
-      xl3
-      lg4
-      md6
-      sm6
-      xs12
-    >
-      <div class="content" @click="moveToArticle(article)">
-        <v-card
-          class="d-inline-block my-3"
-          :width="moblieWidth"
-          min-width="270px"
-        >
-          <div style="background-color:white">
-            <v-img
-              contain
-              class="white--text align-end"
-              height="168px"
-              style="margin-top:16px;margin-left:16px;margin-right:16px; "
-              :src="imgSrc(article.articleid, article.thumbnail)"
-            ></v-img>
-          </div>
-          <v-card-title class="card-title justify-center">
-            {{ article.title.slice(0, 10)
-            }}{{ article.title.length > 10 ? "..." : "" }}
-          </v-card-title>
+  <div>
+    <v-layout row justify-start style="margin:auto">
+      <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
+        <div class="content" @click="moveToArticle(article)">
+          <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="270px">
+            <div style="background-color:white">
+              <v-img
+                contain
+                class="white--text align-end"
+                height="168px"
+                style="margin-top:16px;margin-left:16px;margin-right:16px; "
+                :src="imgSrc(article.articleid, article.thumbnail)"
+              ></v-img>
+            </div>
+            <v-card-title class="card-title justify-center">
+              {{ article.title.slice(0, 10)
+              }}{{ article.title.length > 10 ? "..." : "" }}
+            </v-card-title>
 
-          <v-card-text class="card-text text--primary">
-            <div class="text-center">
-              {{ article.content.slice(0, 20)
-              }}{{ article.content.length > 20 ? "..." : "" }}
-            </div>
-          </v-card-text>
-          <v-footer class="d-flex justify-space-around">
-            <div>
-              <b>{{ article.editdate | dateToString }}</b>
-            </div>
-            <div>
-              <b>|</b>
-            </div>
-            <div>
-              <b>{{ article.editornickname }}</b>
-            </div>
-            <div>
-              <b>|</b>
-            </div>
-            <div>
-              <b>조회수 : {{ article.hits }}</b>
-            </div>
-          </v-footer>
+            <v-card-text class="card-text text--primary">
+              <div class="text-center">
+                {{ article.content.slice(0, 20)
+                }}{{ article.content.length > 20 ? "..." : "" }}
+              </div>
+            </v-card-text>
+            <v-footer class="d-flex justify-space-around">
+              <div>
+                <b>{{ article.editdate | dateToString }}</b>
+              </div>
+              <div>
+                <b>|</b>
+              </div>
+              <div>
+                <b>{{ article.editornickname }}</b>
+              </div>
+              <div>
+                <b>|</b>
+              </div>
+              <div>
+                <b>조회수 : {{ article.hits }}</b>
+              </div>
+            </v-footer>
 
-          <v-card-actions class="justify-space-around">
-            <v-btn color="orange" icon @click.stop="copyLink(article)">
-              <v-icon middle color>mdi-share</v-icon>
-            </v-btn>
-            <v-btn
-              color="red accent-4"
-              icon
-              v-if="checkLiked(article.articleid)"
-              @click.stop="changeLiked(article.articleid)"
-            >
-              <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
-            </v-btn>
-            <v-btn
-              color="red accent-4"
-              icon
-              v-else
-              @click.stop="changeLiked(article.articleid)"
-            >
-              <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
-            </v-btn>
-            {{ likeArticleCount[article.articleid] }} 명이 좋아합니다.
-          </v-card-actions>
-        </v-card>
-      </div>
-    </v-flex>
-  </v-layout>
+            <v-card-actions class="justify-space-around">
+              <v-btn color="orange" icon @click.stop="copyLink(article)">
+                <v-icon middle color>mdi-share</v-icon>
+              </v-btn>
+              <v-btn
+                color="red accent-4"
+                icon
+                v-if="checkLiked(article.articleid)"
+                @click.stop="changeLiked(article.articleid)"
+              >
+                <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
+              </v-btn>
+              <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article.articleid)">
+                <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+              </v-btn>
+              {{ likeArticleCount[article.articleid] }} 명이 좋아합니다.
+            </v-card-actions>
+          </v-card>
+        </div>
+      </v-flex>
+    </v-layout>
+  </div>
 </template>
 
 <script>
@@ -142,6 +127,7 @@ export default {
       },
     },
     articles() {
+      console.log(this.data);
       return this.data;
     },
     moblieWidth() {
