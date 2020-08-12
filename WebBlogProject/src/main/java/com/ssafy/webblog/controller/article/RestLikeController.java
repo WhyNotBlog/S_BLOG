@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.webblog.controller.handler.ResultHandler;
 import com.ssafy.webblog.model.dto.Likearticle;
+import com.ssafy.webblog.model.service.ArticleService;
 import com.ssafy.webblog.model.service.LikeService;
 
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +37,9 @@ public class RestLikeController {
 
 	@Autowired
 	LikeService lService;
+	
+	@Autowired
+	ArticleService artiService;
 
 	@Autowired
 	ResultHandler resultHandler;
@@ -72,6 +76,7 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			Likearticle result = lService.registLike(like);
+			artiService.addLikeToArticle(result.getArticleid());
 			entity = resultHandler.handleSuccess(result,CLASSNAME);
 		} catch (RuntimeException e) {
 			entity = resultHandler.handleException(e,CLASSNAME);
@@ -89,6 +94,7 @@ public class RestLikeController {
 			int likekey = lService.getLikekeyByUseridAndArticleid(Integer.parseInt(userid), Integer.parseInt(articleid));
 			Likearticle deleteLike = new Likearticle(likekey, Integer.parseInt(userid), Integer.parseInt(articleid));
 			lService.deleteLike(deleteLike);
+			artiService.dropLikeToArticle(Integer.parseInt(articleid));
 			entity = resultHandler.handleSuccess("success",CLASSNAME);
 		} catch (RuntimeException e) {
 			entity = resultHandler.handleException(e,CLASSNAME);
