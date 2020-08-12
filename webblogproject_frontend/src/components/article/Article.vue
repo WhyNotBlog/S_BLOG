@@ -177,8 +177,7 @@ export default {
 
     axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.article.articleid)
     .then((res) => {
-      console.log(res);
-      this.article.hits += 1;
+      this.article.hits = res.data.data;
     });
     
     axios
