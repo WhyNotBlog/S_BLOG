@@ -237,8 +237,8 @@ public class RestArticleController {
 		logger.debug("Searching all article ");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			artiService.visitedArticle(Integer.parseInt(articleid));
-			entity = handleSuccess("success");
+			int hits = artiService.visitedArticle(Integer.parseInt(articleid));
+			entity = handleSuccess(hits);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
