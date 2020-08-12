@@ -290,10 +290,18 @@ export default {
           //console.log(this.articleid);
           if (this.thumbnail.name != null) this.addItem();
           axios
-            .post(process.env.VUE_APP_TAG + "regist", {
-              articleid: data.articleid,
-              tags: String(this.tags),
-            })
+            .post(
+              process.env.VUE_APP_TAG + "regist",
+              {
+                articleid: data.articleid,
+                tags: String(this.tags),
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
               this.$router.push({
                 name: "Article",
@@ -304,22 +312,38 @@ export default {
     },
     saveTempArticle() {
       axios
-        .post(process.env.VUE_APP_ARTICLETEMP + "regist", {
-          title: this.title,
-          content: this.editorMarkdown,
-          editornickname: this.loggedIn,
-          category: this.categoryInt,
-          modify: this.modify,
-          writerid: this.user.id,
-          thumbnail: this.thumbnail.name != null ? true : false,
-        })
+        .post(
+          process.env.VUE_APP_ARTICLETEMP + "regist",
+          {
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+            writerid: this.user.id,
+            thumbnail: this.thumbnail.name != null ? true : false,
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
         .then((res) => {
           let data = res.data.data;
           axios
-            .post(process.env.VUE_APP_TAGTEMP + "regist", {
-              articletempid: data.articleid,
-              tagtemps: String(this.tags),
-            })
+            .post(
+              process.env.VUE_APP_TAGTEMP + "regist",
+              {
+                articletempid: data.articleid,
+                tagtemps: String(this.tags),
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
               this.text = "임시저장에 성공했습니다.";
               this.snackbar = true;
@@ -375,6 +399,7 @@ export default {
           headers: {
             "Content-Type": "multipart/form-data",
             articleNum: this.articleid,
+            "jwt-auth-token": this.jwtAuthToken,
           },
         })
         .then((res) => {
