@@ -11,7 +11,7 @@
       :top="y === 'top'"
       :vertical="mode === 'vertical'"
     >
-      {{text}}
+      {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
@@ -23,7 +23,10 @@
       class="d-block text-center"
       id="comment-list"
     >
-      <div class="d-flex justify-space-around" :id="'comment' + comment.commentid">
+      <div
+        class="d-flex justify-space-around"
+        :id="'comment' + comment.commentid"
+      >
         <div>{{ comment.commentcontent }}</div>
         <div>
           {{ comment.commentornickname }} |
@@ -34,10 +37,14 @@
           >
             |
             <v-btn color="black accent-4" icon>
-              <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
+              <v-icon middle color="black accent-4"
+                >mdi-pencil-box-outline</v-icon
+              >
             </v-btn>
             <v-btn color="red accent-4" icon @click="deleteComment(comment)">
-              <v-icon middle color="red accent-4">mdi-alpha-x-box-outline</v-icon>
+              <v-icon middle color="red accent-4"
+                >mdi-alpha-x-box-outline</v-icon
+              >
             </v-btn>
           </div>
         </div>
@@ -48,23 +55,23 @@
             style="display:flex;justify-content: center;"
             lazy-validation
           >
-          <v-textarea
-            prepend-inner-icon="mdi-comment"
-            class="mx-2"
-            :rules="commentRules"
-            rows="1"
-            color="secondary"
-            auto-grow
-            v-model="willUpdatedComment"
+            <v-textarea
+              prepend-inner-icon="mdi-comment"
+              class="mx-2"
+              :rules="commentRules"
+              rows="1"
+              color="secondary"
+              auto-grow
+              v-model="willUpdatedComment"
             ></v-textarea>
 
             <v-btn class="d-inline mx-1 my-auto" color="secondary">
-            댓글 수정
+              댓글 수정
             </v-btn>
             <v-btn class="d-inline mx-1 my-auto" color="secondary">
-            취소
+              취소
             </v-btn>
-        </v-form>
+          </v-form>
         </div>
       </div>
     </div>
@@ -83,7 +90,9 @@
         v-model="comment"
       ></v-textarea>
 
-      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate">댓글 작성</v-btn>
+      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate"
+        >댓글 작성</v-btn
+      >
     </v-form>
   </div>
 </template>
@@ -103,7 +112,7 @@ export default {
           this.loggedIn !== null || "로그인을 해야 댓글을 작성할 수 있습니다.",
       ],
       comments: new Object(),
-      needUpdate : new Array(),
+      needUpdate: new Array(),
       willUpdatedComment: "",
       willUpdatedCommentCopy: new Object(),
       snackbar: false,
@@ -129,17 +138,30 @@ export default {
         }
 
         axios
-          .post(process.env.VUE_APP_COMMENT + "regist", {
-            articleid: this.$store.state.currentArticle.articleid,
-            commentcontent: this.comment,
-            commentornickname: this.loggedIn,
-          })
+          .post(
+            process.env.VUE_APP_COMMENT + "regist",
+            {
+              articleid: this.$store.state.currentArticle.articleid,
+              commentcontent: this.comment,
+              commentornickname: this.loggedIn,
+            },
+            {
+              headers: {
+                "jwt-auth-token": this.jwtAuthToken,
+              },
+            }
+          )
           .then(() => {
             axios
               .get(
                 process.env.VUE_APP_COMMENT +
                   "article/" +
-                  this.$store.state.currentArticle.articleid
+                  this.$store.state.currentArticle.articleid,
+                {
+                  headers: {
+                    "jwt-auth-token": this.jwtAuthToken,
+                  },
+                }
               )
               .then((res) => {
                 this.comments = res.data.data;
@@ -154,7 +176,13 @@ export default {
     deleteComment(currentComment) {
       axios
         .delete(
-          process.env.VUE_APP_COMMENT + "delete/" + currentComment.commentid
+          process.env.VUE_APP_COMMENT + "delete/" + currentComment.commentid,
+          {},
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
         )
         .then(() => {
           this.text = "댓글 삭제에 성공했습니다.";
@@ -163,7 +191,12 @@ export default {
             .get(
               process.env.VUE_APP_COMMENT +
                 "article/" +
-                this.$store.state.currentArticle.articleid
+                this.$store.state.currentArticle.articleid,
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
             )
             .then((res) => {
               this.comments = res.data.data;
@@ -171,9 +204,9 @@ export default {
         });
     },
     changeComment(currentComment) {
-        this.needUpdate[currentComment.commentid] = true;
-        this.willUpdatedCommentCopy = currentComment;
-        currentComment = this.willUpdatedComment;
+      this.needUpdate[currentComment.commentid] = true;
+      this.willUpdatedCommentCopy = currentComment;
+      currentComment = this.willUpdatedComment;
     },
     // updateComment(currentComment) {
 
@@ -189,6 +222,14 @@ export default {
         this.$store.dispatch("setLoggedIn", value);
       },
     },
+    jwtAuthToken: {
+      get() {
+        return this.$store.getters.jwtAuthToken;
+      },
+      set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+      },
+    },
   },
   props: {
     articleId: {
@@ -200,11 +241,18 @@ export default {
       .get(
         process.env.VUE_APP_COMMENT +
           "article/" +
-          this.$store.state.currentArticle.articleid
+          this.$store.state.currentArticle.articleid,
+        {
+          headers: {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        }
       )
       .then((res) => {
         this.comments = res.data.data;
-        this.comments.forEach(comment => this.needUpdate[comment.commentid] = false);
+        this.comments.forEach(
+          (comment) => (this.needUpdate[comment.commentid] = false)
+        );
         console.log(this.needUpdate);
       });
   },
