@@ -1,95 +1,113 @@
 <template>
-  <v-card>
-    <v-row align="center" justify="center" class="registModal">
-      <v-col class="registModal">
-        <v-card class="elevation-12" style="background-color:#f1f3f5">
-          <v-toolbar color="#595959" dark flat>
-            <v-icon left>person_add</v-icon>
+  <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+    <v-card>
+      <v-row align="center" justify="center" class="registModal">
+        <v-col class="registModal">
+          <v-card class="elevation-12" style="background-color:#f1f3f5">
+            <v-toolbar color="#595959" dark flat>
+              <v-icon left>person_add</v-icon>
 
-            <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
 
-            <v-btn text :small="true" @click="closeModal">
-              <v-icon :small="true">close</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-card-text>
-            <v-form ref="form">
-              <v-text-field
-                id="email"
-                label="Email*"
-                name="email"
-                ref="email"
-                prepend-icon="mdi-email"
-                type="text"
-                color="black"
-                @change="reCheckEmail"
-                v-model="email"
-                :rules="[rules.emailRequired, rules.email, rules.emailCheck]"
-                :append-icon="emailIcon"
-                @click:append="searchEmail"
-              ></v-text-field>
+              <v-btn text :small="true" @click="closeModal">
+                <v-icon :small="true">close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+              <v-form ref="form">
+                <v-text-field
+                  id="email"
+                  label="Email*"
+                  name="email"
+                  ref="email"
+                  prepend-icon="mdi-email"
+                  type="text"
+                  color="black"
+                  @change="reCheckEmail"
+                  v-model="email"
+                  :rules="[rules.emailRequired, rules.email, rules.emailCheck]"
+                  :append-icon="emailIcon"
+                  @click:append="searchEmail"
+                ></v-text-field>
 
-              <v-text-field
-                id="nickname"
-                ref="nickname"
-                label="Nickname*"
-                name="nickname"
-                prepend-icon="mdi-account-circle"
-                type="text"
-                color="black"
-                @change="reCheckNickname"
-                v-model="nickname"
-                :rules="[rules.nicknameRequired, rules.nicknameCheck]"
-                :append-icon="nicknameIcon"
-                @click:append="searchNickname"
-              ></v-text-field>
+                <v-text-field
+                  id="nickname"
+                  ref="nickname"
+                  label="Nickname*"
+                  name="nickname"
+                  prepend-icon="mdi-account-circle"
+                  type="text"
+                  color="black"
+                  @change="reCheckNickname"
+                  v-model="nickname"
+                  :rules="[rules.nicknameRequired, rules.nicknameCheck]"
+                  :append-icon="nicknameIcon"
+                  @click:append="searchNickname"
+                ></v-text-field>
 
-              <v-text-field
-                id="password"
-                label="Password*"
-                ref="password"
-                name="password"
-                prepend-icon="mdi-lock"
-                type="password"
-                color="black"
-                v-model="password"
-                :rules="[rules.passwordRequired, rules.password]"
-              ></v-text-field>
+                <v-text-field
+                  id="password"
+                  label="Password*"
+                  ref="password"
+                  name="password"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  color="black"
+                  v-model="password"
+                  :rules="[rules.passwordRequired, rules.password]"
+                ></v-text-field>
 
-              <v-text-field
-                id="passwordCheck"
-                label="Password Check*"
-                name="passwordCheck"
-                prepend-icon="mdi-lock"
-                type="password"
-                color="black"
-                v-model="passwordCheck"
-                :rules="[rules.passwordCheckRequired, rules.passwordCheck]"
-              ></v-text-field>
+                <v-text-field
+                  id="passwordCheck"
+                  label="Password Check*"
+                  name="passwordCheck"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  color="black"
+                  v-model="passwordCheck"
+                  :rules="[rules.passwordCheckRequired, rules.passwordCheck]"
+                ></v-text-field>
 
-              <v-text-field
-                id="gitUrl"
-                ref="gitUrl"
-                label="Git URL (Optional)"
-                name="gitUrl"
-                prepend-icon="mdi-git"
-                type="text"
-                color="black"
-                v-model="gitUrl"
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text @click="loginModalOpen">이미 계정이 있으신가요?</v-btn>
-            <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler">회원가입</v-btn>
-          </v-card-actions>
+                <v-text-field
+                  id="gitUrl"
+                  ref="gitUrl"
+                  label="Git URL (Optional)"
+                  name="gitUrl"
+                  prepend-icon="mdi-git"
+                  type="text"
+                  color="black"
+                  v-model="gitUrl"
+                ></v-text-field>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="loginModalOpen">이미 계정이 있으신가요?</v-btn>
+              <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler">회원가입</v-btn>
+            </v-card-actions>
 
-          <br />
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-card>
+            <br />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -160,7 +178,8 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          alert("회원가입 실패");
+          this.text = "회원가입 중 오류가 생겼습니다. 다시 진행해주세요!";
+          this.snackbar = true;
         });
     },
     searchNickname() {
@@ -172,7 +191,8 @@ export default {
         .get(process.env.VUE_APP_ACCOUNT + "findNickname/" + this.nickname)
         .then((res) => {
           if (res.data.data == 0) {
-            alert("이미 존재하는 닉네임입니다.");
+            this.text = "이미 존재하는 닉네임입니다.";
+            this.snackbar = true;
             this.nickname = "";
             this.$refs.nickname.focus();
             this.nicknameIcon = "mdi-checkbox-multiple-blank-outline";
@@ -194,7 +214,8 @@ export default {
         .get(process.env.VUE_APP_ACCOUNT + "findEmail/" + this.email)
         .then((res) => {
           if (res.data.data == 0) {
-            alert("이미 존재하는 이메일입니다.");
+            this.text = "이미 존재하는 이메일입니다.";
+            this.snackbar = true;
             this.email = "";
             this.$refs.email.focus();
             this.emailIcon = "mdi-checkbox-multiple-blank-outline";
@@ -236,6 +257,12 @@ export default {
         nicknameCheck: () => false || "닉네임은 중복확인이 필요합니다.",
         emailCheck: () => false || "이메일은 중복확인이 필요합니다.",
       },
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
 };
