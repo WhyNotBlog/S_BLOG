@@ -11,7 +11,7 @@
       :top="y === 'top'"
       :vertical="mode === 'vertical'"
     >
-      {{text}}
+      {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
@@ -19,7 +19,12 @@
     <v-container fluid>
       <v-row>
         <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
+          <v-form
+            class="mx-10 full-width"
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
             <div class="d-flex" id="title">
               <v-text-field
                 class="mx-3"
@@ -108,7 +113,8 @@
                 v-show="tagsSelected[selectIndex(tag)]"
                 close
                 @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
+                >#{{ tag }}</v-chip
+              >
             </div>
 
             <div class="text-center" id="tag">
@@ -122,19 +128,29 @@
                 color="secondary"
                 style="width:50%; height:5%;"
               ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+              <v-btn
+                color="secondary"
+                class="d-inline-block mx-2 mr-4"
+                @click="addTag"
+                >태그 추가</v-btn
+              >
             </div>
           </v-form>
 
           <div class="text-center" id="btn">
-            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
-            <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
+            <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
+              >Save</v-btn
+            >
+            <v-btn color="success" class="mr-4" @click="validateSubmit"
+              >Submit</v-btn
+            >
             <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             <v-btn
               style="background-color:red; color:white;"
               class="mr-4"
               @click="deleteTempArticle"
-            >Delete</v-btn>
+              >Delete</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -194,7 +210,7 @@ export default {
       bigCategory: new String(),
       middleCategory: new String(),
       smallCategory: new Object(),
-      categoryInt : 0,
+      categoryInt: 0,
       modify: 0,
 
       editorText: "",
@@ -251,41 +267,32 @@ export default {
         }
       }
     },
-  closeTag(tagIndex) {
-    if (this.tags) {
-      this.tags.splice(tagIndex, 1);
-      this.tagsSelected.splice(tagIndex, 1);
-    }
-  },
-  ...mapActions(["setCurrentArticle"]),
-  postArticle() {
-    axios
-      .post(process.env.VUE_APP_ARTICLE + "regist", {
-        title: this.title,
-        content: this.editorMarkdown,
-        editornickname: this.loggedIn,
-        category: this.categoryInt,
-        modify: this.modify,
-        writerid : this.user.id,
-        thumbnail : this.thumbnailB.name != null ? true : false,
-      })
-      .then(res => {
-        let data = res.data.data;
-        let postedArticleId = data.articleid;
-        this.article = data;
-        this.setCurrentArticle(this.article);
-
-
-        axios.post(process.env.VUE_APP_TAG + "regist", {
-          articleid : data.articleid,
-          tags : String(this.tags),
-        }).then(() => {
-          axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
-        { data: { articletempid: this.articleid } })
-        .then(() => {
-          this.$router.push({name : 'Article', params : { articleId : postedArticleId }});
-        })
-        })
+    closeTag(tagIndex) {
+      if (this.tags) {
+        this.tags.splice(tagIndex, 1);
+        this.tagsSelected.splice(tagIndex, 1);
+      }
+    },
+    ...mapActions(["setCurrentArticle"]),
+    postArticle() {
+      axios
+        .post(
+          process.env.VUE_APP_ARTICLE + "regist",
+          {
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+            writerid: this.user.id,
+            thumbnail: this.thumbnailB.name != null ? true : false,
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
         .then((res) => {
           let data = res.data.data;
           let postedArticleId = data.articleid;
@@ -293,15 +300,28 @@ export default {
           this.setCurrentArticle(this.article);
 
           axios
-            .post(process.env.VUE_APP_TAG + "regist", {
-              articleid: data.articleid,
-              tags: String(this.tags),
-            })
+            .post(
+              process.env.VUE_APP_TAG + "regist",
+              {
+                articleid: data.articleid,
+                tags: String(this.tags),
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
               axios
                 .delete(
                   process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
-                  { data: { articletempid: this.articleid } }
+                  { data: { articletempid: this.articleid } },
+                  {
+                    headers: {
+                      "jwt-auth-token": this.jwtAuthToken,
+                    },
+                  }
                 )
                 .then(() => {
                   this.$router.push({
@@ -309,51 +329,123 @@ export default {
                     params: { articleId: postedArticleId },
                   });
                 });
+            })
+            .then((res) => {
+              let data = res.data.data;
+              let postedArticleId = data.articleid;
+              this.article = data;
+              this.setCurrentArticle(this.article);
+
+              axios
+                .post(
+                  process.env.VUE_APP_TAG + "regist",
+                  {
+                    articleid: data.articleid,
+                    tags: String(this.tags),
+                  },
+                  {
+                    headers: {
+                      "jwt-auth-token": this.jwtAuthToken,
+                    },
+                  }
+                )
+                .then(() => {
+                  axios
+                    .delete(
+                      process.env.VUE_APP_ARTICLETEMP +
+                        `delete/${this.articleid}`,
+                      { data: { articletempid: this.articleid } },
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then(() => {
+                      this.$router.push({
+                        name: "Article",
+                        params: { articleId: postedArticleId },
+                      });
+                    });
+                });
             });
         });
-    })
-  },
+    },
     saveTempArticle() {
-      axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
-        articleid : this.articleid,
-        title: this.title,
-        content: this.editorMarkdown,
-        editornickname: this.loggedIn,
-        category: this.categoryInt,
-        modify: this.modify,
-        writerid : this.user.id,
-        thumbnail : this.thumbnail.name != null ? true : false,
-      }).then((res) => {
-        let data = res.data.data;
-        axios.put(process.env.VUE_APP_TAGTEMP + "update", {
-          articletempid : data.articleid,
-          tagtemps : String(this.tags),
-        })
-        .then(() =>
-        {
-          alert('임시저장에 성공했습니다.');
-          this.$router.push({ name : 'TempList'})
-        })
+      axios
+        .put(
+          process.env.VUE_APP_ARTICLETEMP + "update",
+          {
+            articleid: this.articleid,
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+            writerid: this.user.id,
+            thumbnail: this.thumbnail.name != null ? true : false,
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
         .then((res) => {
           let data = res.data.data;
           axios
-            .put(process.env.VUE_APP_TAGTEMP + "update", {
-              articletempid: data.articleid,
-              tagtemps: String(this.tags),
-            })
+            .put(
+              process.env.VUE_APP_TAGTEMP + "update",
+              {
+                articletempid: data.articleid,
+                tagtemps: String(this.tags),
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
-              this.text = "임시저장에 성공했습니다.";
-              this.snackbar = true;
+              alert("임시저장에 성공했습니다.");
               this.$router.push({ name: "TempList" });
+            })
+            .then((res) => {
+              let data = res.data.data;
+              axios
+                .put(
+                  process.env.VUE_APP_TAGTEMP + "update",
+                  {
+                    articletempid: data.articleid,
+                    tagtemps: String(this.tags),
+                  },
+                  {
+                    headers: {
+                      "jwt-auth-token": this.jwtAuthToken,
+                    },
+                  }
+                )
+                .then(() => {
+                  this.text = "임시저장에 성공했습니다.";
+                  this.snackbar = true;
+                  this.$router.push({ name: "TempList" });
+                });
             });
         });
-    })
     },
     deleteTempArticle() {
       axios
-        .delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`, {
-          data: { articleid: this.articleid },
-        })
+        .delete(
+          process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+          {
+            data: { articleid: this.articleid },
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
         .then(() => {
           this.text = "임시글을 삭제했습니다.";
           this.snackbar = true;
@@ -368,17 +460,25 @@ export default {
     },
     changeBigCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategories = this.$store.state.middleCategories[
+        categoryIndexBig
+      ];
       this.middleCategory = this.middleCategories[0];
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      let categoryIndexMiddle = this.middleCategories.indexOf(
+        this.middleCategory
+      );
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
@@ -411,15 +511,19 @@ export default {
     this.writerid = this.article.writerid;
     this.thumbnailB = this.article.thumbnail;
 
-    let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
-    let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;
-    let smallCategoryIndex = parseInt(String(this.categoryInt)[2])-1;
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[bigCategoryIndex];
-    this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[
+      bigCategoryIndex
+    ];
     this.middleCategory = this.middleCategories[middleCategoryIndex];
-    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
+      middleCategoryIndex
+    ];
     this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
@@ -436,7 +540,11 @@ export default {
       });
 
     axios
-      .get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
+      .get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid, {
+        headers: {
+          "jwt-auth-token": this.jwtAuthToken,
+        },
+      })
       .then((res) => {
         let tagData = res.data.data;
         tagData.forEach((obj) => {
