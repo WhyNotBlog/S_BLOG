@@ -8,8 +8,9 @@
       md6
       sm6
       xs12
+      @click="moveToArticle(article)"
     >
-      <div class="content" @click="moveToArticle(article)">
+      <div class="content">
         <v-card
           class="d-inline-block my-3"
           :width="moblieWidth"
@@ -31,8 +32,6 @@
 
           <v-card-text class="card-text text--primary">
             <div class="text-center">
-              {{ article.content.slice(0, 20)
-              }}{{ article.content.length > 20 ? "..." : "" }}
             </div>
           </v-card-text>
           <v-footer class="d-flex justify-space-around">
