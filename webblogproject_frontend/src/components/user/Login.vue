@@ -111,6 +111,23 @@ export default {
       set(value) {
         this.$store.dispatch("setLoginModal", value);
       },
+
+      followingList: {
+        get() {
+          return this.$store.getters.followingList;
+        },
+        set(value) {
+          this.$store.dispatch("setFollowingList", value);
+        },
+      },
+      followerList: {
+        get() {
+          return this.$store.getters.followerList;
+        },
+        set(value) {
+          this.$store.dispatch("setFollowerList", value);
+        },
+      },
     },
   },
 
@@ -139,16 +156,19 @@ export default {
         .then((res) => {
           if (res.status) {
             this.loggedIn = res.data.data.nickname;
+            this.userId = res.data.data.id;
+
             this.profile =
               process.env.VUE_APP_ACCOUNT +
               "downloadFile/" +
-              res.data.data.id +
+              this.userId +
               ".jpg";
-            this.userId = res.data.data.id;
-            //console.log(this.userId);
+
+            this.getFollowingList();
+
             this.jwtAuthToken = res.headers["jwt-auth-token"];
+
             this.$emit("login-success");
-            //console.log(this.profile);
             this.$router.push("/");
           }
         })
@@ -160,11 +180,27 @@ export default {
     closeModal() {
       this.$emit("close-modal");
     },
+    getFollowingList() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList = res.data.data;
+        });
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
+        .then((res) => {
+          this.followerList = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   data() {
     return {
       email: "",
       password: "",
+      following: new Array(),
       rules: {
         emailRequired: (value) => !!value || "이메일은 필수값입니다.",
         passwordRequired: (value) => !!value || "패스워드는 필수값입니다.",

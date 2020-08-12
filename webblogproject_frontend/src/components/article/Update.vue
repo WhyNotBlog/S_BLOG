@@ -1,39 +1,65 @@
 <template>
   <div>
-    <v-container fluid>
+    <v-container>
       <v-row>
         <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
-            <div class="d-flex" id="title">
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <div id="title">
               <v-text-field
-                class="mx-3"
                 color="secondary"
-                style="width:60%;"
                 v-model="title"
                 :rules="titleRules"
                 :counter="30"
-                label="Title"
+                label="제목"
                 data-vv-name="title"
                 required
                 autofocus
               ></v-text-field>
-
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedCategory"
-                :items="categories"
-                item-text="name"
-                item-value="value"
-                label="Category"
-                color="secondary"
-                outlined
-                v-model="category"
-                @change="changeCategory"
-              ></v-select>
             </div>
+            <br />
+
+            <v-layout justify-space-between id="category">
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedBigCategory"
+                  :items="bigCategories"
+                  label="대분류"
+                  color="secondary"
+                  outlined
+                  v-model="bigCategory"
+                  @change="changeBigCategory"
+                ></v-select>
+              </v-flex>
+
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedMiddleCategory"
+                  :items="middleCategories"
+                  label="중분류"
+                  color="secondary"
+                  outlined
+                  v-model="middleCategory"
+                  @change="changeMiddleCategory"
+                ></v-select>
+              </v-flex>
+
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedSmallCategory"
+                  :items="smallCategories"
+                  item-text="name"
+                  item-value="value"
+                  label="소분류"
+                  color="secondary"
+                  outlined
+                  v-model="smallCategory"
+                  @change="changeSmallCategory"
+                ></v-select>
+              </v-flex>
+            </v-layout>
 
             <div id="thumbnail">
-              <v-file-input label="Thumbnail" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
+              <v-file-input label="썸네일" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
             </div>
 
             <div id="content">
@@ -70,7 +96,6 @@
                 id="tagInput"
                 class="d-inline-block mx-2"
                 v-model="tag"
-                label="Tag"
                 :rules="tagsRules"
                 data-vv-name="tag"
                 color="secondary"
@@ -81,8 +106,8 @@
           </v-form>
 
           <div class="text-center" id="btn">
-            <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
-            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
+            <v-btn color="success" class="mr-4" @click="validateSubmit">글 수정</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -129,8 +154,12 @@ export default {
       title: "",
       content: "",
       editornickname: "",
-      categories: new Array(),
-      category: new String(),
+      bigCategories: new Array(),
+      middleCategories: new Array(),
+      smallCategories: new Array(),
+      bigCategory: new String(),
+      middleCategory: new String(),
+      smallCategory: new Object(),
       categoryInt: 0,
       modify: 0,
 
@@ -143,7 +172,7 @@ export default {
       editorVisible: true,
       editorPlugin: [],
       viewerText: "",
-      thumbnail: "",
+      thumbnail: new Object(),
     };
   },
   methods: {
@@ -198,13 +227,15 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.userId,
-          thumbnail: this.thumbnailB,
+          thumbnail:
+            this.thumbnail.name != null || this.thumbnailB ? true : false,
         })
         .then((res) => {
           let data = res.data.data;
           this.article = data;
-          if (this.thumbnail.name != null) this.addItem();
+
           this.setCurrentArticle(this.article);
+          if (this.thumbnail.name != null) this.addItem();
 
           axios
             .put(process.env.VUE_APP_TAG + "update", {
@@ -226,10 +257,35 @@ export default {
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
-    changeCategory() {
-      this.categoryInt = this.categories.indexOf(this.category);
+    changeBigCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      this.middleCategories = this.$store.state.middleCategories[
+        categoryIndexBig
+      ];
+      this.middleCategory = this.middleCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][0];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
-
+    changeMiddleCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      let categoryIndexMiddle = this.middleCategories.indexOf(
+        this.middleCategory
+      );
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][categoryIndexMiddle];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeSmallCategory() {
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnail; // 선택된 파일객체
@@ -240,7 +296,7 @@ export default {
         .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
           headers: {
             "Content-Type": "multipart/form-data",
-            articleNum: this.articleid,
+            articleNum: this.article.articleid,
           },
         })
         .then((res) => {
@@ -255,7 +311,6 @@ export default {
     editor: Editor,
   },
   created() {
-    this.categories = this.$store.state.categories;
     this.article = this.$store.state.currentArticle;
 
     this.articleid = this.article.articleid;
@@ -265,8 +320,24 @@ export default {
     this.categoryInt = this.article.category;
     this.editdate = this.article.editdate;
     this.modify = this.article.modify;
-    this.category = this.categories[this.categoryInt];
+    this.category = this.article.category;
     this.thumbnailB = this.article.thumbnail;
+    console.log(this.article);
+
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+
+    this.bigCategories = this.$store.state.bigCategories;
+    this.bigCategory = this.bigCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[
+      bigCategoryIndex
+    ];
+    this.middleCategory = this.middleCategories[middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
+      middleCategoryIndex
+    ];
+    this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
@@ -308,4 +379,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-select,
+.v-text-field {
+  margin-left: 10px;
+}
+</style>

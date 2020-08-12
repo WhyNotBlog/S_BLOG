@@ -12,6 +12,8 @@ const store = new Vuex.Store({
     }),
   ],
   state: {
+    followingList: new Array(),
+    followerList: new Array(),
     registModal: false,
     loginModal: false,
     loggedIn: null,
@@ -20,37 +22,55 @@ const store = new Vuex.Store({
     jwtAuthToken: null,
     currentArticle: new Object(),
     currentTempArticle: new Object(),
-    bigCategories : [
-      '알고리즘',
-      '웹 개발자',
-      '어플 개발자'
-    ],
+    bigCategories: ["알고리즘", "웹 개발자", "어플 개발자"],
     middleCategories: [
-      ["기본 문제",
-      "기출 문제"],
-      ["프론트엔드",
-      "백엔드",],
-      ["안드로이드",
-      "IOS",],
+      ["기본 문제", "기출 문제"],
+      ["프론트엔드", "백엔드"],
+      ["안드로이드", "IOS"],
     ],
-    smallCategories: [[
-      [{name : "", value : 11},],
-      [{name : "삼성", value : 12},{name : "카카오", value : 13},{name : "기타", value : 14},],
+    smallCategories: [
+      [
+        [{ name: "기초", value: 111 }],
+        [
+          { name: "삼성", value: 121 },
+          { name: "카카오", value: 122 },
+          { name: "기타", value: 123 },
+        ],
+      ],
+      [
+        [
+          { name: "Vue", value: 211 },
+          { name: "React", value: 212 },
+          { name: "Angular", value: 213 },
+          { name: "HTML", value: 214 },
+          { name: "CSS", value: 215 },
+          { name: "JavaScript", value: 216 },
+          { name: "JQuery", value: 217 },
+          { name: "JSP", value: 218 },
+        ],
+        [
+          { name: "Spring", value: 221 },
+          { name: "Django", value: 222 },
+          { name: "Node", value: 223 },
+          { name: "Flask", value: 224 },
+        ],
+      ],
+      [
+        [
+          { name: "Java", value: 311 },
+          { name: "Kotlin", value: 312 },
+        ],
+        [{ name: "Swift", value: 321 }],
+      ],
     ],
-    [
-      [{name : "Vue", value : 21}, {name : "React", value : 22}, {name : "Angular", value : 23},
-      {name : "HTML", value : 24}, {name : "CSS", value : 25}, {name : "JavaScript", value : 26},
-      {name : "JQuery", value : 27}, {name : "JSP", value : 28},],
-      [{name : "Spring", value : 31}, {name : "Django", value : 32}, {name : "Node", value : 33},
-      {name : "Flask", value : 34},],
-    ],
-    [
-      [{name : "Java", value : 41}, {name : "Kotlin", value : 42},],
-      [{name : "Swift", value : 43},],
-    ],
-    ]
   },
   mutations: {
+    setFollowingList(state, payload) {
+      state.followingList = payload;
+    },
+    setFollowerList(state, payload) {
+      state.followerList = payload;
+    },
     setJwtAuthToken(state, payload) {
       state.jwtAuthToken = payload;
     },
@@ -78,6 +98,12 @@ const store = new Vuex.Store({
     },
   },
   getters: {
+    followerList(state) {
+      return state.followerList;
+    },
+    followingList(state) {
+      return state.followingList;
+    },
     jwtAuthToken(state) {
       return state.jwtAuthToken;
     },
@@ -105,6 +131,12 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    setFollowerList({ commit }, payload) {
+      commit("setFollowerList", payload);
+    },
+    setFollowingList({ commit }, payload) {
+      commit("setFollowingList", payload);
+    },
     setJwtAuthToken({ commit }, payload) {
       commit("setJwtAuthToken", payload);
     },
