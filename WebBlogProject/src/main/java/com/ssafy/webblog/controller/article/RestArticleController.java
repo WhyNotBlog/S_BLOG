@@ -84,7 +84,6 @@ public class RestArticleController {
 		logger.debug("Article regist : " + article.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			System.out.println(article.getContent());
 			Article result = artiService.insertArticle(article);
 			System.out.println(result);
 			entity = handleSuccess(result);
