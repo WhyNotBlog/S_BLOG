@@ -32,7 +32,7 @@
             </div>
             <v-card-title class="card-title justify-center">
               {{ article.title ? article.title.slice(0, 10) : "제목없음"
-              }}{{ article.title.length > 10 ? "..." : "" }}
+              }}
             </v-card-title>
 
             <v-card-text class="card-text text--primary">
@@ -251,6 +251,7 @@ export default {
                 });
             });
         }
+        console.log(this.userLiked);
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
         this.snackbar = true;
