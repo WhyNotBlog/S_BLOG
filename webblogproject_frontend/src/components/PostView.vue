@@ -11,16 +11,28 @@
       :top="y === 'top'"
       :vertical="mode === 'vertical'"
     >
-      {{text}}
+      {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
     </v-snackbar>
 
     <v-layout row justify-start style="margin:auto">
-      <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
+      <v-flex
+        v-for="article in articles"
+        :key="article.articleid"
+        xl3
+        lg4
+        md6
+        sm6
+        xs12
+      >
         <div class="content" @click="moveToArticle(article)">
-          <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="270px">
+          <v-card
+            class="d-inline-block my-3"
+            :width="moblieWidth"
+            min-width="270px"
+          >
             <div style="background-color:white">
               <v-img
                 contain
@@ -31,12 +43,10 @@
               ></v-img>
             </div>
             <v-card-title class="card-title justify-center">
-              {{ article.title ? article.title.slice(0, 10) : "제목없음"
-              }}
+              {{ article.title ? article.title.slice(0, 10) : "제목없음" }}
             </v-card-title>
 
-            <v-card-text class="card-text text--primary">
-            </v-card-text>
+            <v-card-text class="card-text text--primary"> </v-card-text>
             <v-footer class="d-flex justify-space-around">
               <div>
                 <b>{{ article.editdate | dateToString }}</b>
@@ -67,7 +77,12 @@
               >
                 <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
               </v-btn>
-              <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article)">
+              <v-btn
+                color="red accent-4"
+                icon
+                v-else
+                @click.stop="changeLiked(article)"
+              >
                 <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
               </v-btn>
               {{ article.likecount }} 명이 좋아합니다.
@@ -112,7 +127,11 @@ export default {
             let data = res.data.data;
             this.user = data;
             axios
-              .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
+              .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`, {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              })
               .then((res) => (this.userLiked = res.data.data));
           }
         });
@@ -174,9 +193,17 @@ export default {
     updateTotalLike() {
       this.articleIdList.forEach((articleId) => {
         axios
-          .post(process.env.VUE_APP_LIKE + "articlelist", {
-            articleid: String(articleId),
-          })
+          .post(
+            process.env.VUE_APP_LIKE + "articlelist",
+            {
+              articleid: String(articleId),
+            },
+            {
+              headers: {
+                "jwt-auth-token": this.jwtAuthToken,
+              },
+            }
+          )
           .then((res) => {
             this.likeArticleCount[articleId] = res.data.data[articleId];
           });
@@ -205,7 +232,8 @@ export default {
     },
 
     checkLiked(article) {
-      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
+      if (this.loggedIn !== null)
+        return this.userLiked.includes(article.articleid);
       else return false;
     },
 
@@ -213,41 +241,90 @@ export default {
       if (this.loggedIn !== null) {
         if (!this.checkLiked(article.articleid)) {
           axios
-            .post(process.env.VUE_APP_LIKE + "regist", {
-              userid: this.user.id,
-              articleid: article.articleid,
-            })
-            .then(() => {
-              article.likecount += 1
-              axios
-              .put(process.env.VUE_APP_ARTICLE + "update", {
+            .post(
+              process.env.VUE_APP_LIKE + "regist",
+              {
+                userid: this.user.id,
                 articleid: article.articleid,
-                likecount: article.likecount })
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
+            .then(() => {
+              article.likecount += 1;
+              axios
+                .put(
+                  process.env.VUE_APP_ARTICLE + "update",
+                  {
+                    articleid: article.articleid,
+                    likecount: article.likecount,
+                  },
+                  {
+                    headers: {
+                      "jwt-auth-token": this.jwtAuthToken,
+                    },
+                  }
+                )
                 .then(() => {
                   axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-                .then((res) => {
-                  this.userLiked = res.data.data;
-                  });
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
                 });
             });
         } else {
           axios
-            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${article.articleid}`, {
-              data: { userid: this.user.id, articleid: article.articleid },
-            })
+            .delete(
+              process.env.VUE_APP_LIKE +
+                `delete/${this.user.id}/${article.articleid}`,
+              {
+                data: { userid: this.user.id, articleid: article.articleid },
+              },
+              {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
-              article.likecount -= 1
+              article.likecount -= 1;
               axios
-              .put(process.env.VUE_APP_ARTICLE + "update", {
-                articleid: article.articleid,
-                likecount: article.likecount })
+                .put(
+                  process.env.VUE_APP_ARTICLE + "update",
+                  {
+                    articleid: article.articleid,
+                    likecount: article.likecount,
+                  },
+                  {
+                    headers: {
+                      "jwt-auth-token": this.jwtAuthToken,
+                    },
+                  }
+                )
                 .then(() => {
                   axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
-                .then((res) => {
-                  this.userLiked = res.data.data;
-                  });
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
                 });
             });
         }
