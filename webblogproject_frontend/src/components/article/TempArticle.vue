@@ -311,7 +311,8 @@ export default {
                 });
             });
         });
-    },
+    })
+  },
     saveTempArticle() {
       axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
         articleid : this.articleid,
@@ -346,6 +347,7 @@ export default {
               this.$router.push({ name: "TempList" });
             });
         });
+    })
     },
     deleteTempArticle() {
       axios
