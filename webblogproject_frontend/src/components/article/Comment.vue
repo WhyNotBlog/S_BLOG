@@ -90,7 +90,7 @@
         v-model="comment"
       ></v-textarea>
 
-      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate"
+      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="commentValidate"
         >댓글 작성</v-btn
       >
     </v-form>
@@ -124,8 +124,8 @@ export default {
     };
   },
   methods: {
-    validate() {
-      if (this.$refs.form.validate()) {
+    commentValidate() {
+      if (this.$refs.form[0].validate()) {
         this.postComment();
       }
     },
@@ -203,11 +203,11 @@ export default {
             });
         });
     },
-    changeComment(currentComment) {
-      this.needUpdate[currentComment.commentid] = true;
-      this.willUpdatedCommentCopy = currentComment;
-      currentComment = this.willUpdatedComment;
-    },
+    // changeComment(currentComment) {
+    //   this.needUpdate[currentComment.commentid] = true;
+    //   this.willUpdatedCommentCopy = currentComment;
+    //   currentComment = this.willUpdatedComment;
+    // },
     // updateComment(currentComment) {
 
     // },
