@@ -137,6 +137,12 @@ export default {
         });
     }
   },
+  mounted() {
+    this.updateTotalLike();
+  },
+  updated() {
+    this.updateTotalLike();
+  },
   props: { data: Array },
   computed: {
     articleIdList() {
@@ -226,15 +232,13 @@ export default {
     },
 
     checkLiked(article) {
-      if (this.loggedIn !== null){
-        return this.userLiked.includes(article.articleid);
-      }
+      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
       else return false;
     },
 
     changeLiked(article) {
       if (this.loggedIn !== null) {
-        if (!this.checkLiked(article.articleid)) {
+        if (!this.checkLiked(article)) {
           axios
             .post(
               process.env.VUE_APP_LIKE + "regist",
@@ -248,7 +252,8 @@ export default {
                 },
               }
             )
-            .then(() => {
+            .then((res) => {
+              article.likecount = res.data.data;
                   axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
@@ -274,7 +279,8 @@ export default {
                 },
               }
             )
-            .then(() => {
+            .then((res) => {
+              article.likecount = res.data.data;
                   axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
@@ -289,7 +295,6 @@ export default {
                     });
                 });
         }
-        console.log(this.userLiked);
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
         this.snackbar = true;
