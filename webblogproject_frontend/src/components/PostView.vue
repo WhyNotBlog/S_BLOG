@@ -137,6 +137,12 @@ export default {
         });
     }
   },
+  mounted() {
+    this.updateTotalLike();
+  },
+  updated() {
+    this.updateTotalLike();
+  },
   props: { data: Array },
   computed: {
     articleIdList() {
@@ -241,7 +247,7 @@ export default {
 
     changeLiked(article) {
       if (this.loggedIn !== null) {
-        if (!this.checkLiked(article.articleid)) {
+        if (!this.checkLiked(article)) {
           axios
             .post(
               process.env.VUE_APP_LIKE + "regist",
@@ -255,16 +261,20 @@ export default {
                 },
               }
             )
-            .then(() => {
-              axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.userId}`, {
-                  headers: {
-                    "jwt-auth-token": this.jwtAuthToken,
-                  },
-                })
-                .then((res) => {
-                  this.userLiked = res.data.data;
-                });
+            .then((res) => {
+              article.likecount = res.data.data;
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
             });
         } else {
           axios
@@ -278,19 +288,23 @@ export default {
                 },
               }
             )
-            .then(() => {
-              axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.userId}`, {
-                  headers: {
-                    "jwt-auth-token": this.jwtAuthToken,
-                  },
-                })
-                .then((res) => {
-                  this.userLiked = res.data.data;
+            .then((res) => {
+              article.likecount = res.data.data;
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
                 });
             });
         }
-        console.log(this.userLiked);
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
         this.snackbar = true;
