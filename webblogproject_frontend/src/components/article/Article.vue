@@ -142,11 +142,11 @@ export default {
     }
 
     this.article = this.$store.state.currentArticle;
-
-    if (this.article.articleid !== this.$route.params.articleId) {
+    
+    if (this.article.articleid !== Number(this.$route.params.articleId)) {
       this.$router.push({
         name: "CheatArticle",
-        props: { articleId: this.$route.params.articleid },
+        props: { articleId: Number(this.$route.params.articleid) },
       });
     }
 
@@ -176,7 +176,10 @@ export default {
     });
 
     axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.article.articleid)
-    .then((res) => console.log(res));
+    .then((res) => {
+      console.log(res);
+      this.article.hits += 1;
+    });
     
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
