@@ -1,15 +1,29 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+
     <div
       v-for="comment in comments"
       :key="comment.commentid"
       class="d-block text-center"
       id="comment-list"
     >
-      <div
-        class="d-flex justify-space-around"
-        :id="'comment' + comment.commentid"
-      >
+      <div class="d-flex justify-space-around" :id="'comment' + comment.commentid">
         <div>{{ comment.commentcontent }}</div>
         <div>
           {{ comment.commentornickname }} |
@@ -20,14 +34,10 @@
           >
             |
             <v-btn color="black accent-4" icon>
-              <v-icon middle color="black accent-4"
-                >mdi-pencil-box-outline</v-icon
-              >
+              <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
             </v-btn>
             <v-btn color="red accent-4" icon @click="deleteComment(comment)">
-              <v-icon middle color="red accent-4"
-                >mdi-alpha-x-box-outline</v-icon
-              >
+              <v-icon middle color="red accent-4">mdi-alpha-x-box-outline</v-icon>
             </v-btn>
           </div>
         </div>
@@ -42,16 +52,13 @@
       <v-textarea
         prepend-inner-icon="mdi-comment"
         class="mx-2"
-        :rules="commentRules"
         rows="1"
         color="secondary"
         auto-grow
         v-model="comment"
       ></v-textarea>
 
-      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate">
-        댓글 작성
-      </v-btn>
+      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate">댓글 작성</v-btn>
     </v-form>
   </div>
 </template>
@@ -73,6 +80,12 @@ export default {
       comments: new Object(),
       willUpdatedComment: "",
       willUpdatedCommentCopy: new Object(),
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   methods: {
@@ -83,6 +96,12 @@ export default {
     },
     postComment() {
       if (this.loggedIn !== null) {
+        if (this.comment == "") {
+          this.text = "댓글은 내용을 반드시 작성해야합니다.";
+          this.snackbar = true;
+          return;
+        }
+
         axios
           .post(process.env.VUE_APP_COMMENT + "regist", {
             articleid: this.$store.state.currentArticle.articleid,
@@ -101,6 +120,9 @@ export default {
                 this.comment = "";
               });
           });
+      } else {
+        this.text = "댓글은 로그인해야 작성할 수 있습니다.";
+        this.snackbar = true;
       }
     },
     deleteComment(currentComment) {
@@ -109,7 +131,8 @@ export default {
           process.env.VUE_APP_COMMENT + "delete/" + currentComment.commentid
         )
         .then(() => {
-          alert("댓글 삭제에 성공했습니다.");
+          this.text = "댓글 삭제에 성공했습니다.";
+          this.snackbar = true;
           axios
             .get(
               process.env.VUE_APP_COMMENT +

@@ -1,5 +1,22 @@
 <template>
   <div class="page">
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn width="64px" dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+
     <br />
     <div v-show="mobileView">
       <div class="backImg">
@@ -12,11 +29,7 @@
           <br />
           <div class="file">
             <form enctype="multipart/form-data">
-              <v-file-input
-                class="fileInput"
-                label="File"
-                @change="fileUpload($event)"
-              ></v-file-input>
+              <v-file-input class="fileInput" label="File" @change="fileUpload($event)"></v-file-input>
             </form>
             <v-btn text color="595959" v-on:click="addItem">등록하기</v-btn>
           </div>
@@ -92,13 +105,9 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler"
-            >계정 탈퇴를 원하시나요?</v-btn
-          >
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
-            >수정하기</v-btn
-          >
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
       </div>
     </div>
@@ -115,10 +124,7 @@
           <div class="file">
             <div class="fileData">
               <form enctype="multipart/form-data">
-                <v-file-input
-                  label="Profile Image"
-                  @change="fileUpload($event)"
-                ></v-file-input>
+                <v-file-input label="Profile Image" @change="fileUpload($event)"></v-file-input>
               </form>
             </div>
           </div>
@@ -196,13 +202,9 @@
         </div>
 
         <div class="btns">
-          <v-btn text color="black" @click="dropHandler"
-            >계정 탈퇴를 원하시나요?</v-btn
-          >
+          <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler"
-            >수정하기</v-btn
-          >
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -291,7 +293,11 @@ export default {
         })
         .then((res) => {
           if (res.status) {
-            alert("탈퇴 처리가 되었습니다!");
+            setTimeout(() => {
+              this.text = "회원 탈퇴 처리가 되었습니다!";
+              this.snackbar = true;
+            }, 3000);
+
             this.loggedIn = null;
 
             this.jwtAuthToken = null;
@@ -300,7 +306,8 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          alert("회원탈퇴 실패");
+          this.text = "회원 탈퇴 중 오류가 발생하였습니다.";
+          this.snackbar = true;
         });
     },
     updateHandler() {
@@ -334,14 +341,15 @@ export default {
         .then((res) => {
           if (res.status) {
             this.loggedIn = this.nickname;
-            alert("회원정보 수정이 완료되었습니다.");
+            this.text = "회원정보 수정이 완료되었습니다.";
+            this.snackbar = true;
             this.addItem();
-            this.$router.push("/user/info");
           }
         })
         .catch((err) => {
           console.log(err);
-          alert("회원정보 수정 실패");
+          this.text = "회원정보 수정 중 오류가 발생하였습니다.";
+          this.snackbar = true;
         });
     },
     fileUpload(file) {
@@ -384,7 +392,8 @@ export default {
         .get(process.env.VUE_APP_ACCOUNT + "findNickname/" + this.nickname)
         .then((res) => {
           if (res.data.data == 0) {
-            alert("이미 존재하는 닉네임입니다.");
+            this.text = "이미 존재하는 닉네임입니다.";
+            this.snackbar = true;
             this.nickname = "";
             this.$refs.nickname.focus();
             this.nicknameIcon = "mdi-checkbox-multiple-blank-outline";
@@ -434,6 +443,12 @@ export default {
           "패스워드는 8자리 이상의 문자, 숫자 조합이어야 합니다.",
         nicknameCheck: () => false || "닉네임은 중복확인이 필요합니다.",
       },
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
 };

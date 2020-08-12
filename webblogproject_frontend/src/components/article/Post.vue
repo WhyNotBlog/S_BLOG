@@ -1,5 +1,21 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
     <v-container>
       <v-row>
         <v-col>
@@ -180,6 +196,12 @@ export default {
       editorVisible: true,
       editorPlugin: [],
       viewerText: "",
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   methods: {
@@ -275,7 +297,8 @@ export default {
               tagtemps: String(this.tags),
             })
             .then(() => {
-              alert("임시저장에 성공했습니다.");
+              this.text = "임시저장에 성공했습니다.";
+              this.snackbar = true;
               this.$router.push({ name: "TempList" });
             });
         });

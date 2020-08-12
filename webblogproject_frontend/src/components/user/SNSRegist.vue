@@ -1,42 +1,60 @@
 <template>
-  <v-dialog v-model="nicknameModal" persistent width="500">
-    <v-card>
-      <v-row align="center" justify="center" class="modal">
-        <v-col class="modal">
-          <v-card class="elevation-12">
-            <v-toolbar color="black" dark flat>
-              <v-icon left>how_to_reg</v-icon>
-              <v-spacer></v-spacer>
-              <v-btn text :small="true" @click="closeModal">
-                <v-icon :small="true">close</v-icon>
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <v-form ref="form">
-                <v-text-field
-                  id="nickname"
-                  ref="nickname"
-                  label="Nickname"
-                  name="nickname"
-                  prepend-icon="mdi-account-circle"
-                  type="text"
-                  color="black"
-                  v-model="nickname"
-                  :rules="[rules.nicknameRequired, rules.nicknameCheck]"
-                  :append-icon="nicknameIcon"
-                  @click:append="searchNickname"
-                ></v-text-field>
-              </v-form>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="black white--text" @click="joinHandler">회원가입</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-dialog>
+  <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+    <v-dialog v-model="nicknameModal" persistent width="500">
+      <v-card>
+        <v-row align="center" justify="center" class="modal">
+          <v-col class="modal">
+            <v-card class="elevation-12">
+              <v-toolbar color="black" dark flat>
+                <v-icon left>how_to_reg</v-icon>
+                <v-spacer></v-spacer>
+                <v-btn text :small="true" @click="closeModal">
+                  <v-icon :small="true">close</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-card-text>
+                <v-form ref="form">
+                  <v-text-field
+                    id="nickname"
+                    ref="nickname"
+                    label="Nickname"
+                    name="nickname"
+                    prepend-icon="mdi-account-circle"
+                    type="text"
+                    color="black"
+                    v-model="nickname"
+                    :rules="[rules.nicknameRequired, rules.nicknameCheck]"
+                    :append-icon="nicknameIcon"
+                    @click:append="searchNickname"
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="black white--text" @click="joinHandler">회원가입</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -79,6 +97,12 @@ export default {
         nicknameRequired: (value) => !!value || "닉네임은 필수값입니다.",
         nicknameCheck: () => false || "닉네임은 중복확인이 필요합니다.",
       },
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   methods: {
@@ -87,7 +111,8 @@ export default {
         .get(process.env.VUE_APP_ACCOUNT + "findNickname/" + this.nickname)
         .then((res) => {
           if (res.data.data == 0) {
-            alert("이미 존재하는 닉네임입니다.");
+            this.text = "이미 존재하는 닉네임입니다.";
+            this.snackbar = true;
             this.nickname = "";
             //this.$refs.nickname.focus();
             this.nicknameIcon = "mdi-checkbox-multiple-blank-outline";

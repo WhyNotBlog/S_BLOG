@@ -1,5 +1,22 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+
     <v-layout row justify-start style="margin:auto">
       <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
         <div class="content" @click="moveToArticle(article)">
@@ -77,6 +94,12 @@ export default {
       userLike: null,
       userLiked: new Array(),
       failImg: new Array(),
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   created() {
@@ -127,7 +150,7 @@ export default {
       },
     },
     articles() {
-      console.log(this.data);
+      //console.log(this.data);
       return this.data;
     },
     moblieWidth() {
@@ -170,7 +193,9 @@ export default {
       copyURL.select();
       document.execCommand("copy");
       document.body.removeChild(copyURL);
-      alert("링크가 복사되었습니다!");
+
+      this.text = "링크가 복사되었습니다!";
+      this.snackbar = true;
     },
 
     ...mapActions(["setCurrentArticle"]),
@@ -219,7 +244,8 @@ export default {
             });
         }
       } else {
-        alert("좋아요 기능을 사용하려면 로그인을 해야합니다.");
+        this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
+        this.snackbar = true;
       }
     },
   },
