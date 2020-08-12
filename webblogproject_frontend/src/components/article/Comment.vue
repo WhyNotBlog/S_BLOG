@@ -177,7 +177,6 @@ export default {
       axios
         .delete(
           process.env.VUE_APP_COMMENT + "delete/" + currentComment.commentid,
-          {},
           {
             headers: {
               "jwt-auth-token": this.jwtAuthToken,
