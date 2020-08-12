@@ -307,8 +307,8 @@ export default {
       axios
         .delete(
           process.env.VUE_APP_ARTICLE + `delete/${this.article.articleid}`,
-          { data: { articleid: this.article.articleid } },
           {
+            data: { articleid: this.article.articleid },
             headers: {
               "jwt-auth-token": this.jwtAuthToken,
             },
@@ -361,17 +361,12 @@ export default {
             });
         } else {
           axios
-            .delete(
-              process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`,
-              {
-                data: { userid: this.user.id, articleid: id },
+            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
+              data: { userid: this.user.id, articleid: id },
+              headers: {
+                "jwt-auth-token": this.jwtAuthToken,
               },
-              {
-                headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
-              }
-            )
+            })
             .then(() => {
               axios
                 .get(
