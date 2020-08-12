@@ -64,7 +64,7 @@ public class RestArticleController {
 
 	@GetMapping("/{articleId}")
 	@ApiOperation(value = "게시글 조회")
-	public ResponseEntity<Map<String, Object>> getArticle(HttpServletResponse res, @PathVariable int articleId)
+	public ResponseEntity<Map<String, Object>> getArticle(HttpServletRequest req, HttpServletResponse res, @PathVariable int articleId)
 			throws JsonProcessingException, IOException {
 		logger.debug("select by article id: " + articleId);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -97,7 +97,7 @@ public class RestArticleController {
 
 	@DeleteMapping("/delete/{articleid}")
 	@ApiOperation(value = "게시글 삭제")
-	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletResponse res, @PathVariable int articleid)
+	public ResponseEntity<Map<String, Object>> articleDelete(HttpServletRequest req, HttpServletResponse res, @PathVariable int articleid)
 			throws IOException {
 		logger.debug("delete article by articleId: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -119,7 +119,7 @@ public class RestArticleController {
 
 	@PutMapping("/update")
 	@ApiOperation(value = "게시글 수정")
-	public ResponseEntity<Map<String, Object>> articleUpdate(HttpServletResponse res, @RequestBody Article article)
+	public ResponseEntity<Map<String, Object>> articleUpdate(HttpServletRequest req, HttpServletResponse res, @RequestBody Article article)
 			throws  IOException {
 		logger.debug("update article before : " + artiService.getArticleByArticleId(article.getArticleid()));
 		logger.debug("update article after : " + article.toString());
@@ -136,7 +136,7 @@ public class RestArticleController {
 
 	@GetMapping("/searchBy/nickname/{nickname}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 닉네임으로 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByNickname(HttpServletResponse res, @PathVariable String nickname, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getArticleListByNickname(HttpServletRequest req, HttpServletResponse res, @PathVariable String nickname, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by nickname : " + nickname);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -150,7 +150,7 @@ public class RestArticleController {
 	}
 	@GetMapping("/searchBy/category/{category}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 카테고리별로 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByCategory(HttpServletResponse res, @PathVariable String category, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getArticleListByCategory(HttpServletRequest req, HttpServletResponse res, @PathVariable String category, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by nickname : " + category);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -164,7 +164,7 @@ public class RestArticleController {
 	}
 	@GetMapping("/searchBy/title/{title}/{page}")
 	@ApiOperation(value = "게시글 목록 검색 - 타이틀 검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByTitle(HttpServletResponse res, @PathVariable String title, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getArticleListByTitle(HttpServletRequest req, HttpServletResponse res, @PathVariable String title, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching article by title: " + title);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -179,7 +179,7 @@ public class RestArticleController {
 
 	@GetMapping("/searchBy/tag/{tagname}/{page}")
 	@ApiOperation(value = "태그로 아티클검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletResponse res, @PathVariable String tagname, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getArticleListByTagname(HttpServletRequest req, HttpServletResponse res, @PathVariable String tagname, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching article by tagname : " + tagname);
 		Map<String, Object> resultMap = new HashMap<>();
@@ -200,7 +200,7 @@ public class RestArticleController {
 
 	@GetMapping("/searchBy/allarticle/{page}")
 	@ApiOperation(value = "전체 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletResponse res, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletRequest req, HttpServletResponse res, @PathVariable int page)
 			throws IOException {
 		logger.debug("Searching all article ");
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -216,7 +216,7 @@ public class RestArticleController {
 
 	@GetMapping("/user/{userid}/{page}")
 	@ApiOperation(value = "유저가 작성한 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletResponse res, @PathVariable String userid, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getArticleBy(HttpServletRequest req, HttpServletResponse res, @PathVariable String userid, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Articletemp select by user id: " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;

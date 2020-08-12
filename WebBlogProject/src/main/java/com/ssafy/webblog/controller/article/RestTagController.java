@@ -57,7 +57,7 @@ public class RestTagController {
 
 	@PostMapping("/regist")
 	@ApiOperation(value = "태그 등록")
-	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
+	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletRequest req,HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
 		String tags = (String) map.get("tags");
 		int articleid = (int) map.get("articleid");
@@ -85,7 +85,7 @@ public class RestTagController {
 
 	@PutMapping("/update")
 	@ApiOperation(value = "태그 상태 업데이트")
-	public ResponseEntity<Map<String, Object>> tagUpdate(HttpServletResponse res, @RequestBody Map<String, Object> map)
+	public ResponseEntity<Map<String, Object>> tagUpdate(HttpServletRequest req, HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
@@ -145,7 +145,7 @@ public class RestTagController {
 
 	@GetMapping("/taglist/{articleid}")
 	@ApiOperation(value = "아티클에 등록된 태그")
-	public ResponseEntity<Map<String, Object>> getTagListByArticleid(HttpServletResponse res,
+	public ResponseEntity<Map<String, Object>> getTagListByArticleid(HttpServletRequest req, HttpServletResponse res,
 			@PathVariable String articleid) throws JsonProcessingException, IOException {
 		logger.debug("Searching Tag List registing article id: " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -161,7 +161,7 @@ public class RestTagController {
 
 	@GetMapping("/tentaglist")
 	@ApiOperation(value = "전체 태그중 상위 5개")
-	public ResponseEntity<Map<String, Object>> getTagList() throws JsonProcessingException, IOException {
+	public ResponseEntity<Map<String, Object>> getTagList(HttpServletRequest req) throws JsonProcessingException, IOException {
 		logger.debug("Searching Ten Tag List");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
@@ -175,7 +175,7 @@ public class RestTagController {
 
 	@DeleteMapping("/delete")
 	@ApiOperation(value = "아티클이 지워지면 delete")
-	public ResponseEntity<Map<String, Object>> getTagList(@RequestBody String articleid)
+	public ResponseEntity<Map<String, Object>> getTagList(HttpServletRequest req, @RequestBody String articleid)
 			throws JsonProcessingException, IOException {
 		logger.debug("delete article - > tag delete : " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
