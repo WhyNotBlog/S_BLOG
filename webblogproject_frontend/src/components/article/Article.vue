@@ -175,26 +175,9 @@ export default {
       }
     });
 
-    this.article.hits += 1;
-    axios.put(
-      process.env.VUE_APP_ARTICLE + "update/",
-      {
-        articleid: this.article.articleid,
-        title: this.article.title,
-        content: this.article.content,
-        editornickname: this.article.editornickname,
-        category: this.article.category,
-        modify: this.article.modify,
-        writerid: this.article.writerid,
-        hits: this.article.hits,
-        thumbnail: this.article.thumbnail,
-      },
-      {
-        headers: {
-          "jwt-auth-token": this.jwtAuthToken,
-        },
-      }
-    );
+    axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.article.articleid)
+    .then((res) => console.log(res));
+    
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
       .then((res) => {
