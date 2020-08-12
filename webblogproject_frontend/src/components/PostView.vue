@@ -165,6 +165,14 @@ export default {
     moblieWidth() {
       return window.innerWidth <= 500 ? "220px" : "280px";
     },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
   },
   filters: {
     dateToString(date) {
@@ -226,10 +234,9 @@ export default {
     },
 
     checkLiked(article) {
-      if (this.loggedIn !== null){
+      if (this.loggedIn !== null) {
         return this.userLiked.includes(article.articleid);
-      }
-      else return false;
+      } else return false;
     },
 
     changeLiked(article) {
@@ -239,7 +246,7 @@ export default {
             .post(
               process.env.VUE_APP_LIKE + "regist",
               {
-                userid: this.user.id,
+                userid: this.userId,
                 articleid: article.articleid,
               },
               {
@@ -249,45 +256,39 @@ export default {
               }
             )
             .then(() => {
-                  axios
-                    .get(
-                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
-                      {
-                        headers: {
-                          "jwt-auth-token": this.jwtAuthToken,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      this.userLiked = res.data.data;
-                    });
+              axios
+                .get(process.env.VUE_APP_LIKE + `userlike/${this.userId}`, {
+                  headers: {
+                    "jwt-auth-token": this.jwtAuthToken,
+                  },
+                })
+                .then((res) => {
+                  this.userLiked = res.data.data;
+                });
             });
         } else {
           axios
             .delete(
               process.env.VUE_APP_LIKE +
-                `delete/${this.user.id}/${article.articleid}`,
+                `delete/${this.userId}/${article.articleid}`,
               {
-                data: { userid: this.user.id, articleid: article.articleid },
+                data: { userid: this.userId, articleid: article.articleid },
                 headers: {
                   "jwt-auth-token": this.jwtAuthToken,
                 },
               }
             )
             .then(() => {
-                  axios
-                    .get(
-                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
-                      {
-                        headers: {
-                          "jwt-auth-token": this.jwtAuthToken,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      this.userLiked = res.data.data;
-                    });
+              axios
+                .get(process.env.VUE_APP_LIKE + `userlike/${this.userId}`, {
+                  headers: {
+                    "jwt-auth-token": this.jwtAuthToken,
+                  },
+                })
+                .then((res) => {
+                  this.userLiked = res.data.data;
                 });
+            });
         }
         console.log(this.userLiked);
       } else {

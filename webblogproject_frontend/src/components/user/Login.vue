@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-snackbar
-      v-model="snackbar"
+      v-show="snackbar"
       :bottom="y === 'bottom'"
       color="#9FA9D8"
       :left="x === 'left'"
@@ -11,7 +11,7 @@
       :top="y === 'top'"
       :vertical="mode === 'vertical'"
     >
-      {{text}}
+      {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
@@ -63,7 +63,9 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
+              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler"
+                >로그인</v-btn
+              >
             </v-card-actions>
             <br />
           </v-card>

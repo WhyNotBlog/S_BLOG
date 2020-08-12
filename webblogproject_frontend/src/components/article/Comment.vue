@@ -245,7 +245,7 @@ export default {
         this.comments.forEach(
           (comment) => (this.needUpdate[comment.commentid] = false)
         );
-        console.log(this.needUpdate);
+        //console.log(this.needUpdate);
       });
   },
   filters: {
