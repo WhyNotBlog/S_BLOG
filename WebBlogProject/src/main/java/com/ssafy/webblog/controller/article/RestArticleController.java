@@ -62,7 +62,7 @@ public class RestArticleController {
 	@Autowired
 	TagkindService tkService;
 
-	@GetMapping("/{articleId}")
+	@GetMapping("/detail/{articleId}")
 	@ApiOperation(value = "게시글 조회")
 	public ResponseEntity<Map<String, Object>> getArticle(HttpServletRequest req, HttpServletResponse res, @PathVariable int articleId)
 			throws JsonProcessingException, IOException {
