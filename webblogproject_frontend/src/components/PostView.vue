@@ -171,6 +171,14 @@ export default {
     moblieWidth() {
       return window.innerWidth <= 500 ? "220px" : "280px";
     },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
   },
   filters: {
     dateToString(date) {
@@ -232,8 +240,9 @@ export default {
     },
 
     checkLiked(article) {
-      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
-      else return false;
+      if (this.loggedIn !== null) {
+        return this.userLiked.includes(article.articleid);
+      } else return false;
     },
 
     changeLiked(article) {
@@ -243,7 +252,7 @@ export default {
             .post(
               process.env.VUE_APP_LIKE + "regist",
               {
-                userid: this.user.id,
+                userid: this.userId,
                 articleid: article.articleid,
               },
               {
@@ -271,9 +280,9 @@ export default {
           axios
             .delete(
               process.env.VUE_APP_LIKE +
-                `delete/${this.user.id}/${article.articleid}`,
+                `delete/${this.userId}/${article.articleid}`,
               {
-                data: { userid: this.user.id, articleid: article.articleid },
+                data: { userid: this.userId, articleid: article.articleid },
                 headers: {
                   "jwt-auth-token": this.jwtAuthToken,
                 },
@@ -294,6 +303,7 @@ export default {
                       this.userLiked = res.data.data;
                     });
                 });
+            });
         }
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
