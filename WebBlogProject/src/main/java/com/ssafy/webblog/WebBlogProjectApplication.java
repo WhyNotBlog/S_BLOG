@@ -43,7 +43,7 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 	private JwtInterceptor jwtInterceptor;
 
 	public void addInterceptors(InterceptorRegistry registry) {
-	      registry.addInterceptor(jwtInterceptor).addPathPatterns("/account/**") // 기본 적용 경로
+	      registry.addInterceptor(jwtInterceptor).addPathPatterns("/account/**").addPathPatterns("/article/**") // 기본 적용 경로
 	      .excludePathPatterns(Arrays.asList(	    		  
 	    		  "/account/login", 
 	    		  "/account/sendMail/**", 
@@ -65,7 +65,7 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 	    		  "/account/getProfile", 
 	    		  "/account/setProfile", 
 	    		  "/account/combineId",
-	    		  "/account/downloadFile/**")).addPathPatterns("/article/regist/**"); // 적용 제외 경로
+	    		  "/account/downloadFile/**")); // 적용 제외 경로
 	   }
 	// Interceptor를 이용해서 처리하므로 전역의 Cross origin 처리를 해준다.
 	@Override
