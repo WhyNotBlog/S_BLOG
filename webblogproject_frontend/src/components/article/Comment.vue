@@ -125,9 +125,7 @@ export default {
   },
   methods: {
     validate() {
-      if (this.$refs.form.validate()) {
-        this.postComment();
-      }
+      this.postComment();
     },
     postComment() {
       if (this.loggedIn !== null) {
