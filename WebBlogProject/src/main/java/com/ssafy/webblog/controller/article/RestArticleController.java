@@ -79,12 +79,12 @@ public class RestArticleController {
 	}
 	@PostMapping("/regist")
 	@ApiOperation(value = "게시글 등록")
-	public ResponseEntity<Map<String, Object>> articleRegist(HttpServletResponse res, @RequestBody Article article)
+	public ResponseEntity<Map<String, Object>> articleRegist(HttpServletRequest req, @RequestBody Article article)
 			throws IOException {
 		logger.debug("Article regist : " + article.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			System.out.println(article.getContent());
+			req.getHeader("jwt-auth-token");
 			Article result = artiService.insertArticle(article);
 			System.out.println(result);
 			entity = handleSuccess(result);
