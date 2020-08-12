@@ -269,8 +269,6 @@ export default {
                 `delete/${this.user.id}/${article.articleid}`,
               {
                 data: { userid: this.user.id, articleid: article.articleid },
-              },
-              {
                 headers: {
                   "jwt-auth-token": this.jwtAuthToken,
                 },

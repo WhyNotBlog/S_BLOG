@@ -124,10 +124,8 @@ export default {
     };
   },
   methods: {
-    commentValidate() {
-      if (this.$refs.form[0].validate()) {
-        this.postComment();
-      }
+    validate() {
+      this.postComment();
     },
     postComment() {
       if (this.loggedIn !== null) {
@@ -177,7 +175,6 @@ export default {
       axios
         .delete(
           process.env.VUE_APP_COMMENT + "delete/" + currentComment.commentid,
-          {},
           {
             headers: {
               "jwt-auth-token": this.jwtAuthToken,
