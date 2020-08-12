@@ -286,7 +286,7 @@ export default {
             this.userId +
             "/" +
             this.article.writerid,
-          {},
+
           {
             headers: {
               "jwt-auth-token": this.jwtAuthToken,
