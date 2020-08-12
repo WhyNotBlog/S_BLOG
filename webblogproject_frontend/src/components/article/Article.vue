@@ -78,6 +78,7 @@
         id="text"
       >
         <viewer
+          v-if="article.content"
           id="markdown-viewer"
           :initialValue="article.content"
           :value="viewerText"
@@ -111,6 +112,9 @@ export default {
       categories: new Array(),
       category: new String(),
       categoryInt: new Number(),
+      bigCategory: "",
+      middleCategory: "",
+      smallCategory: "",
       followOrUnfollow: "mdi-account-plus",
       index: 0,
       snackbar: false,
@@ -125,7 +129,8 @@ export default {
     Comment,
     viewer: Viewer,
   },
-  created() {
+  props: ["articleId"],
+  async created() {
     if (this.loggedIn !== null) {
       axios
         .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -141,32 +146,32 @@ export default {
         });
     }
 
-    this.article = this.$store.state.currentArticle;
-    
-    if (this.article.articleid !== Number(this.$route.params.articleId)) {
-      this.$router.push({
-        name: "CheatArticle",
-        props: { articleId: Number(this.$route.params.articleid) },
-      });
-    }
+    await axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
 
+    const response = await axios
+      .get(process.env.VUE_APP_ARTICLE + "detail/" + this.articleId)
+      .catch((error) => {
+        console.log(error);
+      });
+
+    this.article = response.data.data;
     this.categoryInt = this.article.category;
 
-    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+    const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
-    this.bigCategories = this.$store.state.bigCategories;
-    this.middleCategories = this.$store.state.middleCategories;
-    this.smallCategories = this.$store.state.smallCategories;
+    const bigCategories = this.$store.state.bigCategories;
+    const middleCategories = this.$store.state.middleCategories;
+    const smallCategories = this.$store.state.smallCategories;
 
-    this.bigCategory = this.bigCategories[bigCategoryIndex];
-    this.middleCategory = this.middleCategories[bigCategoryIndex][
-      middleCategoryIndex
-    ];
-    this.smallCategory = this.smallCategories[bigCategoryIndex][
-      middleCategoryIndex
-    ][smallCategoryIndex].name;
+    this.bigCategory = bigCategories[bigCategoryIndex];
+    this.middleCategory =
+      middleCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory =
+      smallCategories[bigCategoryIndex][middleCategoryIndex][
+        smallCategoryIndex
+      ].name;
 
     this.followingList.forEach((element, index) => {
       if (element.id == this.article.writerid) {
@@ -175,19 +180,14 @@ export default {
       }
     });
 
-    axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.article.articleid)
-    .then((res) => {
-      this.article.hits = res.data.data;
-    });
-    
     axios
-      .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.articleId)
       .then((res) => {
         let tagData = res.data.data;
         this.tags = tagData;
       });
   },
-  mounted() {},
+
   computed: {
     jwtAuthToken: {
       get() {
@@ -290,15 +290,12 @@ export default {
     },
     deleteArticle() {
       axios
-        .delete(
-          process.env.VUE_APP_ARTICLE + `delete/${this.article.articleid}`,
-          {
-            data: { articleid: this.article.articleid },
-            headers: {
-              "jwt-auth-token": this.jwtAuthToken,
-            },
-          }
-        )
+        .delete(process.env.VUE_APP_ARTICLE + "delete/" + this.articleId, {
+          data: { articleid: this.articleId },
+          headers: {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        })
         .then((res) => {
           if (res.status === 200) {
             this.text = "게시글 삭제에 성공했습니다!";
@@ -331,38 +328,33 @@ export default {
             )
             .then(() => {
               axios
-                .get(
-                  process.env.VUE_APP_LIKE +
-                    `article/${this.article.articleid}`,
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
+                .get(`${process.env.VUE_APP_LIKE}article/${this.articleId}`, {
+                  headers: {
+                    "jwt-auth-token": this.jwtAuthToken,
+                  },
+                })
                 .then((res) => {
                   this.articleLiked = res.data.data;
                 });
             });
         } else {
           axios
-            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
-              data: { userid: this.user.id, articleid: id },
-              headers: {
-                "jwt-auth-token": this.jwtAuthToken,
-              },
-            })
+            .delete(
+              `${process.env.VUE_APP_LIKE}delete/${this.articleId}/${id}`,
+              {
+                data: { userid: this.user.id, articleid: id },
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then(() => {
               axios
-                .get(
-                  process.env.VUE_APP_LIKE +
-                    `article/${this.article.articleid}`,
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
+                .get(process.env.VUE_APP_LIKE + `article/${this.articleId}`, {
+                  headers: {
+                    "jwt-auth-token": this.jwtAuthToken,
+                  },
+                })
                 .then((res) => {
                   this.articleLiked = res.data.data;
                 });
