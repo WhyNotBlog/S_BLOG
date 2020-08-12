@@ -25,6 +25,9 @@
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
+        카테고리 : {{ bigCategory }} - {{ middleCategory }} - {{ smallCategory }}
+      </div>
+      <div class="font-weight-bold text-center">
         작성자 : {{ article.editornickname }}
         <v-btn text @click="checkFollow" v-if="user.id != article.writerid">
           <v-icon>{{ followOrUnfollow }}</v-icon>
@@ -91,6 +94,9 @@ export default {
       userLike: null,
       articleLiked: null,
       userLiked: new Array(),
+      categories : new Array(),
+      category : new String(),
+      categoryInt : new Number(),
       followOrUnfollow: "mdi-account-plus",
       index: 0,
       snackbar: false,
@@ -120,15 +126,8 @@ export default {
           }
         });
     }
+    
     this.article = this.$store.state.currentArticle;
-    //console.log(this.article);
-
-    this.followingList.forEach((element, index) => {
-      if (element.id == this.article.writerid) {
-        this.followOrUnfollow = "mdi-account-remove";
-        this.index = index;
-      }
-    });
 
     if (this.article.articleid !== this.$route.params.articleId) {
       this.$router.push({
@@ -136,6 +135,27 @@ export default {
         props: { articleId: this.$route.params.articleid },
       });
     }
+    
+    this.categoryInt = this.article.category;
+
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+
+    this.bigCategories = this.$store.state.bigCategories;
+    this.middleCategories = this.$store.state.middleCategories;
+    this.smallCategories = this.$store.state.smallCategories;
+    
+    this.bigCategory = this.bigCategories[bigCategoryIndex];
+    this.middleCategory = this.middleCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory = this.smallCategories[bigCategoryIndex][middleCategoryIndex][smallCategoryIndex].name;
+
+    this.followingList.forEach((element, index) => {
+      if (element.id == this.article.writerid) {
+        this.followOrUnfollow = "mdi-account-remove";
+        this.index = index;
+      }
+    });
 
     this.article.hits += 1;
     axios.put(process.env.VUE_APP_ARTICLE + "update/", {
