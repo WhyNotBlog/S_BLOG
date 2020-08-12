@@ -184,7 +184,7 @@ export default {
       bigCategory: new String(),
       middleCategory: new String(),
       smallCategory: new Object(),
-      categoryInt: 0,
+      categoryInt: 111,
       modify: 0,
 
       editorText: "",
@@ -288,7 +288,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.user.id,
-          thumbnail : this.thumbnail.name != null ? true : false,
+          thumbnail: this.thumbnail.name != null ? true : false,
         })
         .then((res) => {
           let data = res.data.data;

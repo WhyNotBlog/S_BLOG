@@ -1,12 +1,27 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+
     <br />
     <div
       class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
       id="title"
-    >
-      {{ article.title }}
-    </div>
+    >{{ article.title }}</div>
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
@@ -14,30 +29,20 @@
       </div>
       <div class="font-weight-bold text-center">
         작성자 : {{ article.editornickname }}
-        <v-btn text @click="checkFollow" v-if="user.id != article.writerid"
-          ><v-icon>{{ followOrUnfollow }}</v-icon></v-btn
-        >
+        <v-btn text @click="checkFollow" v-if="user.id != article.writerid">
+          <v-icon>{{ followOrUnfollow }}</v-icon>
+        </v-btn>
         | 작성일 :
-        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }}
-        <v-btn
-          color="red accent-4"
-          icon
-          v-if="article.isLiked"
-          @click="changeLiked()"
-        >
+        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
+        <v-btn color="red accent-4" icon v-if="article.isLiked" @click="changeLiked()">
           <v-icon middle color="red accent-4">mdi-heart</v-icon>
         </v-btn>
         <v-btn color="red accent-4" icon v-else @click="changeLiked()">
           <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
         </v-btn>
-        <div
-          class="d-inline-block"
-          v-if="loggedIn !== null && user.id === article.writerid"
-        >
+        <div class="d-inline-block" v-if="loggedIn !== null && user.id === article.writerid">
           <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4"
-              >mdi-file-document-edit</v-icon
-            >
+            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
           </v-btn>
           <v-btn color="black accent-4" icon @click="deleteArticle()">
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
@@ -52,8 +57,7 @@
           v-for="tag in tags"
           :key="tag.tagid"
           @click="searchTag(tag.tagname)"
-          >#{{ tag.tagname }}</v-chip
-        >
+        >#{{ tag.tagname }}</v-chip>
       </div>
       <div
         class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
@@ -95,6 +99,12 @@ export default {
       categoryInt : new Number(),
       followOrUnfollow: "mdi-account-plus",
       index: 0,
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   components: {
@@ -204,7 +214,9 @@ export default {
   methods: {
     checkFollow() {
       if (this.loggedIn == null) {
-        alert("로그인시 팔로우 가능합니다!");
+        this.text = "로그인시 팔로우 가능합니다!";
+        this.snackbar = true;
+
         return;
       }
 
@@ -259,7 +271,9 @@ export default {
         )
         .then((res) => {
           if (res.status === 200) {
-            alert("게시글 삭제에 성공했습니다!");
+            this.text = "게시글 삭제에 성공했습니다!";
+            this.snackbar = true;
+
             this.$router.push({ name: "Home" });
           }
         });
@@ -302,7 +316,8 @@ export default {
             });
         }
       } else {
-        alert("좋아요 기능을 사용하려면 로그인을 해야합니다.");
+        this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
+        this.snackbar = true;
       }
     },
   },
