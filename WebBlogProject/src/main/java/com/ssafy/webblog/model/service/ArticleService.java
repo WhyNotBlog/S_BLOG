@@ -76,5 +76,14 @@ public class ArticleService {
 		Page<Article> result = artiDao.getArticleByWriterid(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), writerid);
 		return result;
 	}
+	
+	public void addLikeToArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setLikecount(article.getLikecount()+1);
+	}
+	public void dropLikeToArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setLikecount(article.getLikecount()-1);
+	}
 
 }

@@ -51,6 +51,23 @@ export default {
         this.$store.dispatch("setProfile", value);
       },
     },
+
+    followingList: {
+      get() {
+        return this.$store.getters.followingList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowingList", value);
+      },
+    },
+    followerList: {
+      get() {
+        return this.$store.getters.followerList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowerList", value);
+      },
+    },
   },
   created() {
     this.loginModal = false;
@@ -73,13 +90,33 @@ export default {
               "downloadFile/" +
               res.data.data.id +
               ".jpg";
-            console.log(this.profile);
+            this.getFollowingList();
+            //console.log(this.profile);
             this.$router.push("/");
           });
       })
       .catch((err) => {
         console.log(err);
       });
+  },
+
+  methods: {
+    getFollowingList() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList = res.data.data;
+        });
+
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
+        .then((res) => {
+          this.followerList = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>

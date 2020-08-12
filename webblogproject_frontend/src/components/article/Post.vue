@@ -1,72 +1,67 @@
 <template>
   <div>
-    <v-container fluid>
+    <v-container>
       <v-row>
         <v-col>
-          <v-form
-            class="mx-10 full-width"
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
-            <div class="d-flex" id="title">
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <div id="title">
               <v-text-field
-                class="mx-3"
                 color="secondary"
-                style="width:70%;"
                 v-model="title"
                 :rules="titleRules"
                 :counter="30"
-                label="Title"
+                label="제목"
                 data-vv-name="title"
                 required
                 autofocus
               ></v-text-field>
             </div>
+            <br />
 
-            <div class="d-flex" id="category">
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedBigCategory"
-                :items="bigCategories"
-                label="BigCategory"
-                color="secondary"
-                outlined
-                v-model="bigCategory"
-                @change="changeBigCategory"
-              ></v-select>
+            <v-layout justify-space-between id="category">
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedBigCategory"
+                  :items="bigCategories"
+                  label="대분류"
+                  color="secondary"
+                  outlined
+                  v-model="bigCategory"
+                  @change="changeBigCategory"
+                ></v-select>
+              </v-flex>
 
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedMiddleCategory"
-                :items="middleCategories"
-                label="MiddleCategory"
-                color="secondary"
-                outlined
-                v-model="middleCategory"
-                @change="changeMiddleCategory"
-              ></v-select>
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedMiddleCategory"
+                  :items="middleCategories"
+                  label="중분류"
+                  color="secondary"
+                  outlined
+                  v-model="middleCategory"
+                  @change="changeMiddleCategory"
+                ></v-select>
+              </v-flex>
 
-              <v-select
-                class="d-inline-block mx-3"
-                id="selectedSmallCategory"
-                :items="smallCategories"
-                item-text="name"
-                item-value="value"
-                label="SmallCategory"
-                color="secondary"
-                outlined
-                v-model="smallCategory"
-                @change="changeSmallCategory"
-              ></v-select>
-            </div>
-
+              <v-flex sm4 md4>
+                <v-select
+                  id="selectedSmallCategory"
+                  :items="smallCategories"
+                  item-text="name"
+                  item-value="value"
+                  label="소분류"
+                  color="secondary"
+                  outlined
+                  v-model="smallCategory"
+                  @change="changeSmallCategory"
+                ></v-select>
+              </v-flex>
+            </v-layout>
             <div id="thumbnail">
               <v-file-input
-                label="Thumbnail"
+                label="썸네일"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnail"
               ></v-file-input>
             </div>
 
@@ -104,7 +99,6 @@
                 id="tagInput"
                 class="d-inline-block mx-2"
                 v-model="tag"
-                label="Tag"
                 :rules="tagsRules"
                 data-vv-name="tag"
                 color="secondary"
@@ -118,15 +112,16 @@
               >
             </div>
           </v-form>
+          <br />
 
           <div class="text-center" id="btn">
+            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
             <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
               >임시저장</v-btn
             >
             <v-btn color="success" class="mr-4" @click="validateSubmit"
               >글 쓰기</v-btn
             >
-            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -309,17 +304,25 @@ export default {
     },
     changeBigCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategories = this.$store.state.middleCategories[
+        categoryIndexBig
+      ];
       this.middleCategory = this.middleCategories[0];
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
-      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      let categoryIndexMiddle = this.middleCategories.indexOf(
+        this.middleCategory
+      );
+      this.smallCategories = this.$store.state.smallCategories[
+        categoryIndexBig
+      ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
       console.log(this.categoryInt);
@@ -356,9 +359,9 @@ export default {
   created() {
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[0];
-    this.middleCategories = this.$store.state.middleCategories[0]
-    this.middleCategory = this.middleCategories[0],
-    this.smallCategories = this.$store.state.smallCategories[0][0];
+    this.middleCategories = this.$store.state.middleCategories[0];
+    (this.middleCategory = this.middleCategories[0]),
+      (this.smallCategories = this.$store.state.smallCategories[0][0]);
     this.smallCategory = this.smallCategories[0];
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -394,4 +397,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-select,
+.v-text-field {
+  margin-left: 10px;
+}
+</style>

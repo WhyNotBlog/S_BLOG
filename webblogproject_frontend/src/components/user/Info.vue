@@ -33,12 +33,14 @@
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
-          <div>{{ contentCnt }}</div>
+          <div>
+            <v-btn text @click="getCard">{{ contentCnt }}</v-btn>
+          </div>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
 
-          <v-dialog v-model="followerModal" persistent width="650px">
+          <v-dialog v-model="followerModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text
@@ -47,13 +49,10 @@
                 v-bind="attrs"
                 v-on="{ ...dialog }"
               >
-                {{ follower }}
+                {{ followerList.length }}
               </div>
             </template>
             <Follow
-              :followerList="followerList"
-              :followingList="followingList"
-              @update-follow="getCount"
               @close-modal="closeModal"
               type="Follower"
               :id="this.userId"
@@ -62,7 +61,7 @@
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로잉</h4>
-          <v-dialog v-model="followingModal" persistent width="650px">
+          <v-dialog v-model="followingModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
               <div
                 text
@@ -71,14 +70,11 @@
                 v-bind="attrs"
                 v-on="{ ...dialog }"
               >
-                {{ following }}
+                {{ followingList.length }}
               </div>
             </template>
 
             <Follow
-              :followerList="followerList"
-              :followingList="followingList"
-              @update-follow="getCount"
               @close-modal="closeModal2"
               type="Following"
               :id="this.userId"
@@ -100,9 +96,6 @@
     </div>
     <br />
     <br />
-    <v-btn text @click="getCard" style="margin-left:10px">
-      <strong>{{ description }}</strong>
-    </v-btn>
 
     <div class="post" style="margin-left:10px; margin-right:10px">
       <Card :data="this.articles" v-if="isCard" />
@@ -159,6 +152,23 @@ export default {
         this.$store.dispatch("setUserId", value);
       },
     },
+    followingList: {
+      get() {
+        return this.$store.getters.followingList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowingList", value);
+      },
+    },
+
+    followerList: {
+      get() {
+        return this.$store.getters.followerList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowerList", value);
+      },
+    },
 
     profile: {
       get() {
@@ -198,26 +208,11 @@ export default {
           this.gitUrl = data.giturl;
           this.introduce = data.introduce;
           this.loggedIn = data.nickname;
-
-          this.getCount();
         }
       });
-    this.getList();
   },
 
   methods: {
-    getCount() {
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "count/" + this.userId)
-        .then((res) => {
-          //console.log(res);
-          this.follower = res.data.data.follower;
-          this.following = res.data.data.following;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     moveUpdate() {
       this.$router.push("/user/update");
     },
@@ -231,36 +226,12 @@ export default {
       this.followingModal = false;
     },
     getCard() {
-      if (this.description == "상세보기") this.description = "접어두기";
-      else this.description = "상세보기";
       this.isCard = !this.isCard;
-    },
-
-    getList() {
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
-        .then((res) => {
-          this.followerList.push(...res.data.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
-        .then((res) => {
-          this.followingList.push(...res.data.data);
-        })
-        .then(() => {})
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
 
   data() {
     return {
-      description: "상세보기",
       isCard: false,
       imgSrc: "",
       fileName: "",
@@ -273,13 +244,9 @@ export default {
       introduce: "",
       articles: new Array(),
       contentCnt: 0,
-      following: 0,
-      follower: 0,
       followerModal: false,
       followingModal: false,
       page: 0,
-      followerList: new Array(),
-      followingList: new Array(),
     };
   },
 };

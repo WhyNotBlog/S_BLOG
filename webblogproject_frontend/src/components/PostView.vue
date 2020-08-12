@@ -9,7 +9,7 @@
       sm6
       xs12
     >
-      <div class="content">
+      <div class="content" @click="moveToArticle(article)">
         <v-card
           class="d-inline-block my-3"
           :width="moblieWidth"
@@ -24,10 +24,7 @@
               :src="imgSrc(article.articleid, article.thumbnail)"
             ></v-img>
           </div>
-          <v-card-title
-            @click="moveToArticle(article)"
-            class="card-title justify-center"
-          >
+          <v-card-title class="card-title justify-center">
             {{ article.title.slice(0, 10)
             }}{{ article.title.length > 10 ? "..." : "" }}
           </v-card-title>
@@ -57,14 +54,14 @@
           </v-footer>
 
           <v-card-actions class="justify-space-around">
-            <v-btn color="orange" icon @click="copyLink(article)">
+            <v-btn color="orange" icon @click.stop="copyLink(article)">
               <v-icon middle color>mdi-share</v-icon>
             </v-btn>
             <v-btn
               color="red accent-4"
               icon
               v-if="checkLiked(article.articleid)"
-              @click="changeLiked(article.articleid)"
+              @click.stop="changeLiked(article.articleid)"
             >
               <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
             </v-btn>
@@ -72,7 +69,7 @@
               color="red accent-4"
               icon
               v-else
-              @click="changeLiked(article.articleid)"
+              @click.stop="changeLiked(article.articleid)"
             >
               <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
             </v-btn>
@@ -156,7 +153,7 @@ export default {
       try {
         return date.slice(0, 10);
       } catch (e) {
-        //console.log("");
+        console.log("");
       }
     },
   },
@@ -255,5 +252,6 @@ export default {
 .content:hover {
   transform: translate3d(-4px, -4px, -4px);
   box-shadow: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
 }
 </style>
