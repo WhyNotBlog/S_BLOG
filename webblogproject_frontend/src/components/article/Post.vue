@@ -11,7 +11,7 @@
       :top="y === 'top'"
       :vertical="mode === 'vertical'"
     >
-      {{text}}
+      {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
@@ -74,7 +74,12 @@
               </v-flex>
             </v-layout>
             <div id="thumbnail">
-              <v-file-input label="썸네일" v-model="thumbnail" filled prepend-icon="mdi-camera"></v-file-input>
+              <v-file-input
+                label="썸네일"
+                v-model="thumbnail"
+                filled
+                prepend-icon="mdi-camera"
+              ></v-file-input>
             </div>
 
             <div id="content">
@@ -102,7 +107,8 @@
                 v-show="tagsSelected[selectIndex(tag)]"
                 close
                 @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
+                >#{{ tag }}</v-chip
+              >
             </div>
 
             <div class="text-center" id="tag">
@@ -115,15 +121,24 @@
                 color="secondary"
                 style="width:50%; height:5%;"
               ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+              <v-btn
+                color="secondary"
+                class="d-inline-block mx-2 mr-4"
+                @click="addTag"
+                >태그 추가</v-btn
+              >
             </div>
           </v-form>
           <br />
 
           <div class="text-center" id="btn">
             <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
-            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
-            <v-btn color="success" class="mr-4" @click="validateSubmit">글 쓰기</v-btn>
+            <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
+              >임시저장</v-btn
+            >
+            <v-btn color="success" class="mr-4" @click="validateSubmit"
+              >글 쓰기</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -248,17 +263,25 @@ export default {
       }
     },
     postArticle() {
-      console.log(this.thumbnail.name);
+      // console.log(this.thumbnail.name);
       axios
-        .post(process.env.VUE_APP_ARTICLE + "regist", {
-          title: this.title,
-          content: this.editorMarkdown,
-          editornickname: this.loggedIn,
-          category: this.categoryInt,
-          modify: this.modify,
-          writerid: this.user.id,
-          thumbnail: this.thumbnail.name != null ? true : false,
-        })
+        .post(
+          process.env.VUE_APP_ARTICLE + "regist",
+          {
+            title: this.title,
+            content: this.editorMarkdown,
+            editornickname: this.loggedIn,
+            category: this.categoryInt,
+            modify: this.modify,
+            writerid: this.user.id,
+            thumbnail: this.thumbnail.name != null ? true : false,
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
         .then((res) => {
           let data = res.data.data;
           this.article = data;
