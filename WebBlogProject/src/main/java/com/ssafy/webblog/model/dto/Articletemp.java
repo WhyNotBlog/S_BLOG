@@ -40,4 +40,5 @@ public class Articletemp {
     
     private int writerid;
     private boolean thumbnail;
+    private int likecount;
 }

@@ -43,4 +43,5 @@ public class Article {
     
     private int writerid;
     private boolean thumbnail;
+    private int likecount;
 }
