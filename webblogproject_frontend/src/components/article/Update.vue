@@ -249,6 +249,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.userId,
+          hits: this.article.hits,
           thumbnail:
             this.thumbnail.name != null || this.thumbnailB ? true : false,
         })
@@ -268,10 +269,12 @@ export default {
               this.text = "글 수정이 완료되었습니다!";
               this.snackbar = true;
 
-              this.$router.push({
-                name: "Article",
-                params: { articleId: this.article.articleid },
-              });
+              setTimeout(() => {
+                this.$router.push({
+                  name: "Article",
+                  params: { articleId: this.article.articleid },
+                });
+              }, 1000);
             });
         })
         .catch(() => {
