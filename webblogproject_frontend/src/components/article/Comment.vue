@@ -241,12 +241,7 @@ export default {
       .get(
         process.env.VUE_APP_COMMENT +
           "article/" +
-          this.$store.state.currentArticle.articleid,
-        {
-          headers: {
-            "jwt-auth-token": this.jwtAuthToken,
-          },
-        }
+          this.$store.state.currentArticle.articleid
       )
       .then((res) => {
         this.comments = res.data.data;

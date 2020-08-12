@@ -196,11 +196,7 @@ export default {
       }
     );
     axios
-      .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid, {
-        headers: {
-          "jwt-auth-token": this.jwtAuthToken,
-        },
-      })
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid)
       .then((res) => {
         let tagData = res.data.data;
         this.tags = tagData;
