@@ -31,15 +31,11 @@
               ></v-img>
             </div>
             <v-card-title class="card-title justify-center">
-              {{ article.title.slice(0, 10)
+              {{ article.title ? article.title.slice(0, 10) : "제목없음"
               }}{{ article.title.length > 10 ? "..." : "" }}
             </v-card-title>
 
             <v-card-text class="card-text text--primary">
-              <div class="text-center">
-                {{ article.content.slice(0, 20)
-                }}{{ article.content.length > 20 ? "..." : "" }}
-              </div>
             </v-card-text>
             <v-footer class="d-flex justify-space-around">
               <div>
@@ -66,15 +62,15 @@
               <v-btn
                 color="red accent-4"
                 icon
-                v-if="checkLiked(article.articleid)"
-                @click.stop="changeLiked(article.articleid)"
+                v-if="checkLiked(article)"
+                @click.stop="changeLiked(article)"
               >
                 <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
               </v-btn>
-              <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article.articleid)">
+              <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article)">
                 <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
               </v-btn>
-              {{ likeArticleCount[article.articleid] }} 명이 좋아합니다.
+              {{ article.likecount }} 명이 좋아합니다.
             </v-card-actions>
           </v-card>
         </div>
@@ -208,38 +204,50 @@ export default {
       });
     },
 
-    checkLiked(id) {
-      if (this.loggedIn !== null) return this.userLiked.includes(id);
+    checkLiked(article) {
+      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
       else return false;
     },
 
-    changeLiked(id) {
+    changeLiked(article) {
       if (this.loggedIn !== null) {
-        if (!this.checkLiked(id)) {
+        if (!this.checkLiked(article.articleid)) {
           axios
             .post(process.env.VUE_APP_LIKE + "regist", {
               userid: this.user.id,
-              articleid: id,
+              articleid: article.articleid,
             })
             .then(() => {
+              article.likecount += 1
               axios
+              .put(process.env.VUE_APP_ARTICLE + "update", {
+                articleid: article.articleid,
+                likecount: article.likecount })
+                .then(() => {
+                  axios
                 .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
                 .then((res) => {
                   this.userLiked = res.data.data;
-                  this.updateTotalLike();
+                  });
                 });
             });
         } else {
           axios
-            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
-              data: { userid: this.user.id, articleid: id },
+            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${article.articleid}`, {
+              data: { userid: this.user.id, articleid: article.articleid },
             })
             .then(() => {
+              article.likecount -= 1
               axios
+              .put(process.env.VUE_APP_ARTICLE + "update", {
+                articleid: article.articleid,
+                likecount: article.likecount })
+                .then(() => {
+                  axios
                 .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`)
                 .then((res) => {
                   this.userLiked = res.data.data;
-                  this.updateTotalLike();
+                  });
                 });
             });
         }
