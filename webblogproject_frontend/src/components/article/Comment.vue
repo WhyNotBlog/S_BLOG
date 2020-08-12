@@ -19,7 +19,7 @@
             v-if="loggedIn != null && loggedIn === comment.commentornickname"
           >
             |
-            <v-btn color="black accent-4" icon>
+            <v-btn color="black accent-4" icon @click="changeComment(comment)">
               <v-icon middle color="black accent-4"
                 >mdi-pencil-box-outline</v-icon
               >
@@ -30,6 +30,31 @@
               >
             </v-btn>
           </div>
+        </div>
+        <div v-show="needUpdate[comment.commentid]">
+          <v-form
+            ref="form"
+            v-model="valid"
+            style="display:flex;justify-content: center;"
+            lazy-validation
+          >
+          <v-textarea
+            prepend-inner-icon="mdi-comment"
+            class="mx-2"
+            :rules="commentRules"
+            rows="1"
+            color="secondary"
+            auto-grow
+            v-model="willUpdatedComment"
+            ></v-textarea>
+
+            <v-btn class="d-inline mx-1 my-auto" color="secondary">
+            댓글 수정
+            </v-btn>
+            <v-btn class="d-inline mx-1 my-auto" color="secondary">
+            취소
+            </v-btn>
+        </v-form>
         </div>
       </div>
     </div>
@@ -71,6 +96,7 @@ export default {
           this.loggedIn !== null || "로그인을 해야 댓글을 작성할 수 있습니다.",
       ],
       comments: new Object(),
+      needUpdate : new Array(),
       willUpdatedComment: "",
       willUpdatedCommentCopy: new Object(),
     };
@@ -121,17 +147,14 @@ export default {
             });
         });
     },
+    changeComment(currentComment) {
+        this.needUpdate[currentComment.commentid] = true;
+        this.willUpdatedCommentCopy = currentComment;
+        currentComment = this.willUpdatedComment;
+    },
     // updateComment(currentComment) {
-    //     this.willUpdatedCommentCopy = currentComment;
-    //     let willChangedComment = document.querySelector(`#comment${currentComment.commentid}`);
-    //     willChangedComment.innerHTML = '';
-    //     const commentUpdateInput = document.createElement("input");
-    //     commentUpdateInput.setAttribute('v-model', 'willUpdatedComment')
-    //     const commentUpdateButton = document.createElement("button");
-    //     commentUpdateButton.innerText = '댓글 수정'
-    //     commentUpdateButton.setAttribute('type', 'submit')
-    //     willChangedComment.append(commentUpdateInput, commentUpdateButton);
-    // }
+
+    // },
   },
   component: {},
   computed: {
@@ -158,6 +181,8 @@ export default {
       )
       .then((res) => {
         this.comments = res.data.data;
+        this.comments.forEach(comment => this.needUpdate[comment.commentid] = false);
+        console.log(this.needUpdate);
       });
   },
   filters: {

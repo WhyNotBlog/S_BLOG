@@ -17,31 +17,43 @@
                 required
                 autofocus
               ></v-text-field>
+            </div>
+
+            <div class="d-flex" id="category">
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedBigCategory"
+                :items="bigCategories"
+                label="BigCategory"
+                color="secondary"
+                outlined
+                v-model="bigCategory"
+                @change="changeBigCategory"
+              ></v-select>
 
               <v-select
-              class="d-inline-block mx-3"
-              id="selectedBigCategory"
-              :items="bigCategories"
-              item-text="name"
-              label="BigCategory"
-              color="secondary"
-              outlined
-              v-model="bigCategory"
-              @change="changeBigCategory"
-            ></v-select>
+                class="d-inline-block mx-3"
+                id="selectedMiddleCategory"
+                :items="middleCategories"
+                label="MiddleCategory"
+                color="secondary"
+                outlined
+                v-model="middleCategory"
+                @change="changeMiddleCategory"
+              ></v-select>
 
-            <v-select
-              class="d-inline-block mx-3"
-              id="selectedSmallCategory"
-              :items="smallCategories"
-              item-text="name"
-              item-value="value"
-              label="SmallCategory"
-              color="secondary"
-              outlined
-              v-model="smallCategory"
-              @change="changeSmallCategory"
-            ></v-select>
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedSmallCategory"
+                :items="smallCategories"
+                item-text="name"
+                item-value="value"
+                label="SmallCategory"
+                color="secondary"
+                outlined
+                v-model="smallCategory"
+                @change="changeSmallCategory"
+              ></v-select>
             </div>
 
             <div id="thumbnail">
@@ -49,8 +61,7 @@
                 label="Thumbnail"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnail"
-                @change="changeFile"
+                v-model="thumbnailB"
               ></v-file-input>
             </div>
 
@@ -155,10 +166,12 @@ export default {
       thumbnail:new Object(),
       content: "",
       editornickname: "",
-      bigCategories : new Array(),
-      smallCategories : new Array(),
+      bigCategories: new Array(),
+      middleCategories: new Array(),
+      smallCategories: new Array(),
       bigCategory: new String(),
-      smallCategory: new String(),
+      middleCategory: new String(),
+      smallCategory: new Object(),
       categoryInt : 0,
       modify: 0,
 
@@ -226,6 +239,7 @@ export default {
         category: this.categoryInt,
         modify: this.modify,
         writerid : this.user.id,
+        thumbnail : this.thumbnailB.name != null ? true : false,
       })
       .then(res => {
         let data = res.data.data;
@@ -253,7 +267,8 @@ export default {
         editornickname: this.loggedIn,
         category: this.categoryInt,
         modify: this.modify,
-        writerid : this.user.id
+        writerid : this.user.id,
+        thumbnail : this.thumbnail.name != null ? true : false,
       }).then((res) => {
         let data = res.data.data;
         axios.put(process.env.VUE_APP_TAGTEMP + "update", {
@@ -282,13 +297,25 @@ export default {
       this.editorMarkdown = markdown;
     },
     changeBigCategory() {
-        let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
-        this.smallCategories = this.$store.state.smallCategories[categoryIndex];
-        this.smallCategory = this.smallCategories[0].value;
-        this.categoryInt = this.smallCategory;
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategory = this.middleCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeMiddleCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
     changeSmallCategory() {
       this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
     changeFile() {
       console.log(this.thumbnail)
@@ -312,6 +339,18 @@ export default {
     this.modify = this.article.modify;
     this.category = this.categories[this.categoryInt]
     this.writerid = this.article.writerid;
+    this.thumbnailB = this.article.thumbnail;
+
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2])-1;
+
+    this.bigCategories = this.$store.state.bigCategories;
+    this.bigCategory = this.bigCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    this.middleCategory = this.middleCategories[middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {

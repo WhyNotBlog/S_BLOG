@@ -285,6 +285,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.user.id,
+          thumbnail : this.thumbnail.name != null ? true : false,
         })
         .then((res) => {
           let data = res.data.data;
