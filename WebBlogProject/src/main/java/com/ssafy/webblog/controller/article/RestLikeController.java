@@ -77,8 +77,8 @@ public class RestLikeController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			Likearticle result = lService.registLike(like);
-			artiService.addLikeToArticle(result.getArticleid());
-			entity = resultHandler.handleSuccess(result,CLASSNAME);
+			int likes = artiService.addLikeToArticle(result.getArticleid());
+			entity = resultHandler.handleSuccess(likes,CLASSNAME);
 		} catch (RuntimeException e) {
 			entity = resultHandler.handleException(e,CLASSNAME);
 		}
@@ -95,8 +95,8 @@ public class RestLikeController {
 			int likekey = lService.getLikekeyByUseridAndArticleid(Integer.parseInt(userid), Integer.parseInt(articleid));
 			Likearticle deleteLike = new Likearticle(likekey, Integer.parseInt(userid), Integer.parseInt(articleid));
 			lService.deleteLike(deleteLike);
-			artiService.dropLikeToArticle(Integer.parseInt(articleid));
-			entity = resultHandler.handleSuccess("success",CLASSNAME);
+			int likes = artiService.dropLikeToArticle(Integer.parseInt(articleid));
+			entity = resultHandler.handleSuccess(likes,CLASSNAME);
 		} catch (RuntimeException e) {
 			entity = resultHandler.handleException(e,CLASSNAME);
 		}
