@@ -33,7 +33,9 @@
                 required
                 autofocus
               ></v-text-field>
+            </div>
 
+            <div class="d-flex" id="category">
               <v-select
                 class="d-inline-block mx-3"
                 id="selectedBigCategory"
@@ -44,6 +46,17 @@
                 outlined
                 v-model="bigCategory"
                 @change="changeBigCategory"
+              ></v-select>
+
+              <v-select
+                class="d-inline-block mx-3"
+                id="selectedMiddleCategory"
+                :items="middleCategories"
+                label="MiddleCategory"
+                color="secondary"
+                outlined
+                v-model="middleCategory"
+                @change="changeMiddleCategory"
               ></v-select>
 
               <v-select
@@ -65,8 +78,7 @@
                 label="Thumbnail"
                 filled
                 prepend-icon="mdi-camera"
-                v-model="thumbnail"
-                @change="changeFile"
+                v-model="thumbnailB"
               ></v-file-input>
             </div>
 
@@ -177,10 +189,12 @@ export default {
       content: "",
       editornickname: "",
       bigCategories: new Array(),
+      middleCategories: new Array(),
       smallCategories: new Array(),
       bigCategory: new String(),
-      smallCategory: new String(),
-      categoryInt: 0,
+      middleCategory: new String(),
+      smallCategory: new Object(),
+      categoryInt : 0,
       modify: 0,
 
       editorText: "",
@@ -237,22 +251,40 @@ export default {
         }
       }
     },
-    closeTag(tagIndex) {
-      if (this.tags) {
-        this.tags.splice(tagIndex, 1);
-        this.tagsSelected.splice(tagIndex, 1);
-      }
-    },
-    ...mapActions(["setCurrentArticle"]),
-    postArticle() {
-      axios
-        .post(process.env.VUE_APP_ARTICLE + "regist", {
-          title: this.title,
-          content: this.editorMarkdown,
-          editornickname: this.loggedIn,
-          category: this.categoryInt,
-          modify: this.modify,
-          writerid: this.user.id,
+  closeTag(tagIndex) {
+    if (this.tags) {
+      this.tags.splice(tagIndex, 1);
+      this.tagsSelected.splice(tagIndex, 1);
+    }
+  },
+  ...mapActions(["setCurrentArticle"]),
+  postArticle() {
+    axios
+      .post(process.env.VUE_APP_ARTICLE + "regist", {
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
+        writerid : this.user.id,
+        thumbnail : this.thumbnailB.name != null ? true : false,
+      })
+      .then(res => {
+        let data = res.data.data;
+        let postedArticleId = data.articleid;
+        this.article = data;
+        this.setCurrentArticle(this.article);
+
+
+        axios.post(process.env.VUE_APP_TAG + "regist", {
+          articleid : data.articleid,
+          tags : String(this.tags),
+        }).then(() => {
+          axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+        { data: { articletempid: this.articleid } })
+        .then(() => {
+          this.$router.push({name : 'Article', params : { articleId : postedArticleId }});
+        })
         })
         .then((res) => {
           let data = res.data.data;
@@ -281,15 +313,25 @@ export default {
         });
     },
     saveTempArticle() {
-      axios
-        .put(process.env.VUE_APP_ARTICLETEMP + "update", {
-          articleid: this.articleid,
-          title: this.title,
-          content: this.editorMarkdown,
-          editornickname: this.loggedIn,
-          category: this.categoryInt,
-          modify: this.modify,
-          writerid: this.user.id,
+      axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
+        articleid : this.articleid,
+        title: this.title,
+        content: this.editorMarkdown,
+        editornickname: this.loggedIn,
+        category: this.categoryInt,
+        modify: this.modify,
+        writerid : this.user.id,
+        thumbnail : this.thumbnail.name != null ? true : false,
+      }).then((res) => {
+        let data = res.data.data;
+        axios.put(process.env.VUE_APP_TAGTEMP + "update", {
+          articletempid : data.articleid,
+          tagtemps : String(this.tags),
+        })
+        .then(() =>
+        {
+          alert('임시저장에 성공했습니다.');
+          this.$router.push({ name : 'TempList'})
         })
         .then((res) => {
           let data = res.data.data;
@@ -323,13 +365,25 @@ export default {
       this.editorMarkdown = markdown;
     },
     changeBigCategory() {
-      let categoryIndex = this.bigCategories.indexOf(this.bigCategory);
-      this.smallCategories = this.$store.state.smallCategories[categoryIndex];
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      this.middleCategories = this.$store.state.middleCategories[categoryIndexBig];
+      this.middleCategory = this.middleCategories[0];
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
+    },
+    changeMiddleCategory() {
+      let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
+      let categoryIndexMiddle = this.middleCategories.indexOf(this.middleCategory);
+      this.smallCategories = this.$store.state.smallCategories[categoryIndexBig][categoryIndexMiddle];
+      this.smallCategory = this.smallCategories[0].value;
+      this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
     changeSmallCategory() {
       this.categoryInt = this.smallCategory;
+      console.log(this.categoryInt);
     },
     changeFile() {
       console.log(this.thumbnail);
@@ -353,6 +407,18 @@ export default {
     this.modify = this.article.modify;
     this.category = this.categories[this.categoryInt];
     this.writerid = this.article.writerid;
+    this.thumbnailB = this.article.thumbnail;
+
+    let bigCategoryIndex = parseInt(String(this.categoryInt)[0])-1;
+    let middleCategoryIndex = parseInt(String(this.categoryInt)[1])-1;
+    let smallCategoryIndex = parseInt(String(this.categoryInt)[2])-1;
+
+    this.bigCategories = this.$store.state.bigCategories;
+    this.bigCategory = this.bigCategories[bigCategoryIndex];
+    this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    this.middleCategory = this.middleCategories[middleCategoryIndex];
+    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory = this.smallCategories[smallCategoryIndex];
 
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
