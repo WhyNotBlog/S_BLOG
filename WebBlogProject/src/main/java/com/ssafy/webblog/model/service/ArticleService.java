@@ -85,5 +85,10 @@ public class ArticleService {
 		Article article = artiDao.getArticleByArticleid(articleid);
 		article.setLikecount(article.getLikecount()-1);
 	}
+	
+	public void visitedArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setHits(article.getHits()+1);
+	}
 
 }

@@ -229,6 +229,21 @@ public class RestArticleController {
 		}
 		return entity;
 	}
+	
+	@GetMapping("/visit/{articleid}")
+	@ApiOperation(value = "게시글 조회 카운트 추가")
+	public ResponseEntity<Map<String, Object>> visited(HttpServletRequest req, HttpServletResponse res, @PathVariable String articleid)
+			throws IOException {
+		logger.debug("Searching all article ");
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			artiService.visitedArticle(Integer.parseInt(articleid));
+			entity = handleSuccess("success");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
 
 	@Autowired
 	private ThumbnailUploadDownloadService service;
@@ -254,13 +269,7 @@ public class RestArticleController {
 		return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
 	}
 
-//	@PostMapping("/uploadMultipleFiles")
-//	public List<FileUploadResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) throws FileUploadException{
-//		return Arrays.asList(files)
-//				.stream()
-//				.map(file -> uploadFile(file))
-//				.collect(Collectors.toList());
-//	}
+
 
 	@GetMapping("/downloadThumbnail/{fileName:.+}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException{
