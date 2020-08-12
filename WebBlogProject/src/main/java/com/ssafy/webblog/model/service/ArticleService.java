@@ -77,13 +77,15 @@ public class ArticleService {
 		return result;
 	}
 	
-	public void addLikeToArticle(int articleid) {
+	public int addLikeToArticle(int articleid) {
 		Article article = artiDao.getArticleByArticleid(articleid);
 		article.setLikecount(article.getLikecount()+1);
+		return article.getLikecount();
 	}
-	public void dropLikeToArticle(int articleid) {
+	public int dropLikeToArticle(int articleid) {
 		Article article = artiDao.getArticleByArticleid(articleid);
 		article.setLikecount(article.getLikecount()-1);
+		return article.getLikecount();
 	}
 	
 	public int visitedArticle(int articleid) {
