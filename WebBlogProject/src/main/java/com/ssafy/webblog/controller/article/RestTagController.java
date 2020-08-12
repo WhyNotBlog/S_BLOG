@@ -117,14 +117,14 @@ public class RestTagController {
 			for (Tag tag : currentTagList) {
 				System.out.println("삭제 : " + tag.toString());
 				tService.deleteTag(tag.getTagid());
-				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), tag.getTagname()).getSize();
+				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
 				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			System.out.println();
 			for (Tag tag : inputTagList) {
 				System.out.println("삽입 : " + tag.toString());
 				tService.insertTag(tag);
-				int tagcount = tService.getTagByTagname(PageRequest.of(0, 6, Sort.Direction.DESC, "articleid"), tag.getTagname()).getSize();
+				int tagcount = tService.getTagByTagname(tag.getTagname()).size();
 				tkService.insertTagkind(new Tagkind(tag.getTagname(), tagcount));
 			}
 			entity = resultHandler.handleSuccess("success", CLASSNAME);
