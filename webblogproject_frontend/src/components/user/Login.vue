@@ -1,60 +1,76 @@
 <template>
-  <v-card>
-    <v-row align="center" justify="center" class="loginModal">
-      <v-col class="loginModal">
-        <v-card class="elevation-12" style="background-color:#f1f3f5">
-          <v-toolbar color="#595959" dark flat>
-            <v-icon left>power_settings_new</v-icon>
+  <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
+    <v-card>
+      <v-row align="center" justify="center" class="loginModal">
+        <v-col class="loginModal">
+          <v-card class="elevation-12" style="background-color:#f1f3f5">
+            <v-toolbar color="#595959" dark flat>
+              <v-icon left>power_settings_new</v-icon>
 
-            <v-spacer></v-spacer>
-            <v-btn text :small="true" @click="closeModal">
-              <v-icon :small="true">close</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-card-text>
-            <v-form ref="form">
-              <v-text-field
-                id="email"
-                label="Email"
-                name="email"
-                prepend-icon="mdi-account"
-                type="text"
-                color="black"
-                v-model="email"
-                :rules="[rules.emailRequired, rules.email]"
-              ></v-text-field>
+              <v-spacer></v-spacer>
+              <v-btn text :small="true" @click="closeModal">
+                <v-icon :small="true">close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+              <v-form ref="form">
+                <v-text-field
+                  id="email"
+                  label="Email"
+                  name="email"
+                  prepend-icon="mdi-account"
+                  type="text"
+                  color="black"
+                  v-model="email"
+                  :rules="[rules.emailRequired, rules.email]"
+                ></v-text-field>
 
-              <v-text-field
-                id="password"
-                label="Password"
-                name="password"
-                prepend-icon="mdi-lock"
-                type="password"
-                color="black"
-                v-model="password"
-                :rules="[rules.passwordRequired]"
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
+                <v-text-field
+                  id="password"
+                  label="Password"
+                  name="password"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  color="black"
+                  v-model="password"
+                  :rules="[rules.passwordRequired]"
+                ></v-text-field>
+              </v-form>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-btn text @click="kakaoLogin">
-              <img src="@/assets/kakao_btn5.png" class="btn" />
-            </v-btn>
-            <v-btn text @click="naverLogin">
-              <img src="@/assets/naver_btn2.png" class="btn" />
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-            <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler"
-              >로그인</v-btn
-            >
-          </v-card-actions>
-          <br />
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-card>
+            <v-card-actions>
+              <v-btn text @click="kakaoLogin">
+                <img src="@/assets/kakao_btn5.png" class="btn" />
+              </v-btn>
+              <v-btn text @click="naverLogin">
+                <img src="@/assets/naver_btn2.png" class="btn" />
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
+              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
+            </v-card-actions>
+            <br />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -172,9 +188,10 @@ export default {
             this.$router.push("/");
           }
         })
-        .catch((err) => {
-          console.log(err);
-          alert("로그인 실패");
+        .catch(() => {
+          //console.log(err);
+          this.text = "아이디 또는 비밀번호를 다시 확인해주세요!";
+          this.snackbar = true;
         });
     },
     closeModal() {
@@ -208,6 +225,12 @@ export default {
           /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(value) ||
           "이메일 형식이 아닙니다.",
       },
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
 };

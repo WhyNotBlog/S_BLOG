@@ -1,5 +1,21 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
     <v-container>
       <v-row>
         <v-col>
@@ -173,6 +189,12 @@ export default {
       editorPlugin: [],
       viewerText: "",
       thumbnail: new Object(),
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   methods: {
@@ -227,6 +249,7 @@ export default {
           category: this.categoryInt,
           modify: this.modify,
           writerid: this.userId,
+          hits: this.article.hits,
           thumbnail:
             this.thumbnail.name != null || this.thumbnailB ? true : false,
         })
@@ -243,11 +266,20 @@ export default {
               tags: String(this.tags),
             })
             .then(() => {
-              this.$router.push({
-                name: "Article",
-                params: { articleId: this.article.articleid },
-              });
+              this.text = "글 수정이 완료되었습니다!";
+              this.snackbar = true;
+
+              setTimeout(() => {
+                this.$router.push({
+                  name: "Article",
+                  params: { articleId: this.article.articleid },
+                });
+              }, 1000);
             });
+        })
+        .catch(() => {
+          this.text = "글 수정 중 오류가 발생하였습니다.";
+          this.snackbar = true;
         });
     },
     ...mapActions(["setCurrentArticle"]),

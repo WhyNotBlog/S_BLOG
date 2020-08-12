@@ -1,5 +1,21 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      color="#9FA9D8"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="timeout"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      {{text}}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
+      </template>
+    </v-snackbar>
     <v-container fluid>
       <v-row>
         <v-col>
@@ -24,6 +40,7 @@
                 class="d-inline-block mx-3"
                 id="selectedBigCategory"
                 :items="bigCategories"
+                item-text="name"
                 label="BigCategory"
                 color="secondary"
                 outlined
@@ -66,19 +83,19 @@
             </div>
 
             <div id="content">
-              <editor 
-              :value="editorText"
-              :options="editorOptions"
-              :html="editorHtml"
-              :visible="editorVisible"
-              previewStyle="vertical"
-              :initialValue="this.content"
-              initialEditType="wysiwyg"
-              :plugins="editorPlugin"
-              ref="tuiEditor"
-              height="500px"
-              mode="wysiwyg"
-              @change="mdChange"
+              <editor
+                :value="editorText"
+                :options="editorOptions"
+                :html="editorHtml"
+                :visible="editorVisible"
+                previewStyle="vertical"
+                :initialValue="this.content"
+                initialEditType="wysiwyg"
+                :plugins="editorPlugin"
+                ref="tuiEditor"
+                height="500px"
+                mode="wysiwyg"
+                @change="mdChange"
               />
             </div>
 
@@ -107,15 +124,18 @@
               ></v-text-field>
               <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
             </div>
-
           </v-form>
 
           <div class="text-center" id="btn">
-              <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
-              <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
-              <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
-              <v-btn style="background-color:red; color:white;" class="mr-4" @click="deleteTempArticle">Delete</v-btn>
-            </div>
+            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
+            <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
+            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
+            <v-btn
+              style="background-color:red; color:white;"
+              class="mr-4"
+              @click="deleteTempArticle"
+            >Delete</v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -123,9 +143,9 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/vue-editor';
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
 import { mapActions } from "vuex";
 
@@ -134,10 +154,10 @@ export default {
   name: "Post",
   data() {
     return {
-      user : new Object(),
-      dialog : false,
+      user: new Object(),
+      dialog: false,
       valid: true,
-      article : new Object(),
+      article: new Object(),
       titleRules: [
         (v) => !!v || "제목은 반드시 작성해야합니다.",
         (v) => (v && v.length <= 30) || "제목은 30글자 이하여야 합니다.",
@@ -154,7 +174,9 @@ export default {
       tagsRules: [
         () => {
           let regExp = /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/gi;
-          return !regExp.test(this.tag) || "태그에는 특수문자가 포함될 수 없습니다."
+          return (
+            !regExp.test(this.tag) || "태그에는 특수문자가 포함될 수 없습니다."
+          );
         },
         () => !this.tags.includes(this.tag) || "이미 추가된 태그입니다.",
         () =>
@@ -163,7 +185,7 @@ export default {
         () => !(this.tags.length === 0) || "최소 한개의 태그를 추가해야합니다!",
       ],
       title: "",
-      thumbnail:new Object(),
+      thumbnail: new Object(),
       content: "",
       editornickname: "",
       bigCategories: new Array(),
@@ -175,21 +197,27 @@ export default {
       categoryInt : 0,
       modify: 0,
 
-      editorText: '',
+      editorText: "",
       editorOptions: {
-          hideModeSwitch: true
+        hideModeSwitch: true,
       },
-      editorHtml: '',
-      editorMarkdown: '',
+      editorHtml: "",
+      editorMarkdown: "",
       editorVisible: true,
-      editorPlugin : [],
-      viewerText : '',
+      editorPlugin: [],
+      viewerText: "",
+      snackbar: false,
+      text: "",
+      timeout: 5000,
+      x: null,
+      y: "top",
+      mode: "",
     };
   },
   methods: {
     validateSubmit() {
-      if(this.$refs.form.validate()) {
-      this.postArticle();
+      if (this.$refs.form.validate()) {
+        this.postArticle();
       }
     },
     reset() {
@@ -258,7 +286,32 @@ export default {
           this.$router.push({name : 'Article', params : { articleId : postedArticleId }});
         })
         })
-    })},
+        .then((res) => {
+          let data = res.data.data;
+          let postedArticleId = data.articleid;
+          this.article = data;
+          this.setCurrentArticle(this.article);
+
+          axios
+            .post(process.env.VUE_APP_TAG + "regist", {
+              articleid: data.articleid,
+              tags: String(this.tags),
+            })
+            .then(() => {
+              axios
+                .delete(
+                  process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+                  { data: { articletempid: this.articleid } }
+                )
+                .then(() => {
+                  this.$router.push({
+                    name: "Article",
+                    params: { articleId: postedArticleId },
+                  });
+                });
+            });
+        });
+    },
     saveTempArticle() {
       axios.put(process.env.VUE_APP_ARTICLETEMP + "update", {
         articleid : this.articleid,
@@ -280,19 +333,34 @@ export default {
           alert('임시저장에 성공했습니다.');
           this.$router.push({ name : 'TempList'})
         })
-      })
+        .then((res) => {
+          let data = res.data.data;
+          axios
+            .put(process.env.VUE_APP_TAGTEMP + "update", {
+              articletempid: data.articleid,
+              tagtemps: String(this.tags),
+            })
+            .then(() => {
+              this.text = "임시저장에 성공했습니다.";
+              this.snackbar = true;
+              this.$router.push({ name: "TempList" });
+            });
+        });
     },
     deleteTempArticle() {
-      axios.delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
-      { data : { articleid : this.articleid } })
-      .then(() => {
-          alert('임시글을 삭제했습니다.')
-          this.$router.push({ name : 'TempList' });
+      axios
+        .delete(process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`, {
+          data: { articleid: this.articleid },
         })
+        .then(() => {
+          this.text = "임시글을 삭제했습니다.";
+          this.snackbar = true;
+          this.$router.push({ name: "TempList" });
+        });
     },
     mdChange() {
-      let html = this.$refs.tuiEditor.invoke('getHtml');
-      let markdown = this.$refs.tuiEditor.invoke('getMarkdown');
+      let html = this.$refs.tuiEditor.invoke("getHtml");
+      let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
       this.editorHtml = html;
       this.editorMarkdown = markdown;
     },
@@ -318,11 +386,11 @@ export default {
       console.log(this.categoryInt);
     },
     changeFile() {
-      console.log(this.thumbnail)
-    }
+      console.log(this.thumbnail);
+    },
   },
   components: {
-    editor : Editor,
+    editor: Editor,
   },
   created() {
     this.categories = this.$store.state.categories;
@@ -337,7 +405,7 @@ export default {
     this.categoryInt = this.article.category;
     this.editdate = this.article.editdate;
     this.modify = this.article.modify;
-    this.category = this.categories[this.categoryInt]
+    this.category = this.categories[this.categoryInt];
     this.writerid = this.article.writerid;
     this.thumbnailB = this.article.thumbnail;
 
@@ -354,35 +422,36 @@ export default {
 
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
-          headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
+        headers: {
+          "jwt-auth-token": this.jwtAuthToken,
+        },
       })
       .then((res) => {
         if (res.status) {
-            let data = res.data.data;
-            this.user = data;
-            }
-            })
-    
-    axios.get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
-        .then((res) => {
-          let tagData = res.data.data;
-          tagData.forEach(obj => {
-            this.tags.push(obj.tagname)
-            this.tagsSelected.push(true);
-            })
+          let data = res.data.data;
+          this.user = data;
+        }
+      });
+
+    axios
+      .get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid)
+      .then((res) => {
+        let tagData = res.data.data;
+        tagData.forEach((obj) => {
+          this.tags.push(obj.tagname);
+          this.tagsSelected.push(true);
         });
+      });
   },
   computed: {
     jwtAuthToken: {
-        get() {
+      get() {
         return this.$store.getters.jwtAuthToken;
-        },
-        set(value) {
-        this.$store.dispatch("setJwtAuthToken", value);
-        },
       },
+      set(value) {
+        this.$store.dispatch("setJwtAuthToken", value);
+      },
+    },
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
