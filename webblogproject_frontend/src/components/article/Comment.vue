@@ -90,7 +90,7 @@
         v-model="comment"
       ></v-textarea>
 
-      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="commentValidate"
+      <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate"
         >댓글 작성</v-btn
       >
     </v-form>
