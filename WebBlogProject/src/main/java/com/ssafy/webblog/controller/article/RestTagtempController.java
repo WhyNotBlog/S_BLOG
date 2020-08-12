@@ -51,7 +51,7 @@ public class RestTagtempController {
 
 	@PostMapping("/regist")
 	@ApiOperation(value = "임시 태그 등록")
-	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
+	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletRequest req, HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
 		String tagtemps = (String) map.get("tagtemps");
 		int articletempid = (int) map.get("articletempid");
@@ -76,7 +76,7 @@ public class RestTagtempController {
 
 	@PutMapping("/update")
 	@ApiOperation(value = "임시 태그 상태 업데이트")
-	public ResponseEntity<Map<String, Object>> tagUpdate(HttpServletResponse res, @RequestBody Map<String, Object> map)
+	public ResponseEntity<Map<String, Object>> tagUpdate(HttpServletRequest req, HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
@@ -106,7 +106,7 @@ public class RestTagtempController {
 
 	@GetMapping("/taglist/{articletempid}")
 	@ApiOperation(value = "임시 아티클에 등록된 임시태그")
-	public ResponseEntity<Map<String, Object>> getTagListByArticleid(HttpServletResponse res,
+	public ResponseEntity<Map<String, Object>> getTagListByArticleid(HttpServletRequest req, HttpServletResponse res,
 			@PathVariable String articletempid) throws JsonProcessingException, IOException {
 		logger.debug("Searching Tag List registing article id: " + articletempid);
 		ResponseEntity<Map<String, Object>> entity = null;

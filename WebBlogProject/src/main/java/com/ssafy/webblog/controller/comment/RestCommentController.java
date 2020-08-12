@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class RestCommentController {
 	//삽입 삭제 업데이트
 	@PostMapping("/regist")
 	@ApiOperation(value = "게시글에 댓글 등록")
-	public ResponseEntity<Map<String, Object>> commentRegist(HttpServletResponse res, @RequestBody Comment comment)
+	public ResponseEntity<Map<String, Object>> commentRegist(HttpServletRequest req, HttpServletResponse res, @RequestBody Comment comment)
 			throws IOException {
 		logger.debug("comment regist comment: " + comment.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -60,7 +61,7 @@ public class RestCommentController {
 
 	@DeleteMapping("/delete/{commentId}")
 	@ApiOperation(value = "댓글 삭제")
-	public ResponseEntity<Map<String, Object>> commentDelete(HttpServletResponse res, @PathVariable String commentId)
+	public ResponseEntity<Map<String, Object>> commentDelete(HttpServletRequest req, HttpServletResponse res, @PathVariable String commentId)
 			throws IOException {
 		logger.debug("delete comment by commentId: " + commentId);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -75,7 +76,7 @@ public class RestCommentController {
 	
 	@PutMapping("/update")
 	@ApiOperation(value = "댓글 수정")
-	public ResponseEntity<Map<String, Object>> commentUpdate(HttpServletResponse res, @RequestBody Comment comment)
+	public ResponseEntity<Map<String, Object>> commentUpdate(HttpServletRequest req, HttpServletResponse res, @RequestBody Comment comment)
 			throws  IOException {
 		logger.debug("update comment before : " + cService.getCommentByCommentid(Integer.toString(comment.getCommentid())));
 		logger.debug("update comment after : " + comment.toString());
@@ -92,7 +93,7 @@ public class RestCommentController {
 	// 조회
 	@GetMapping("/article/{articleId}")
 	@ApiOperation(value = "게시글에 달린 댓글 목록 검색 ")
-	public ResponseEntity<Map<String, Object>> getCommentListByArticleId(HttpServletResponse res, @PathVariable String articleId)
+	public ResponseEntity<Map<String, Object>> getCommentListByArticleId(HttpServletRequest req, HttpServletResponse res, @PathVariable String articleId)
 			throws IOException {
 		logger.debug("Searching Comment by articleId: " + articleId);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -107,7 +108,7 @@ public class RestCommentController {
 	
 	@GetMapping("/{commentid}")
 	@ApiOperation(value = "댓글 한개 조회")
-	public ResponseEntity<Map<String, Object>> getComment(HttpServletResponse res, @PathVariable String commentid)
+	public ResponseEntity<Map<String, Object>> getComment(HttpServletRequest req, HttpServletResponse res, @PathVariable String commentid)
 			throws JsonProcessingException, IOException {
 		logger.debug("get comment info by commentid: " + commentid);
 		ResponseEntity<Map<String, Object>> entity = null;

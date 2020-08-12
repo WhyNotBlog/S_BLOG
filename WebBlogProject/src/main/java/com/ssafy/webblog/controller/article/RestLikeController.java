@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class RestLikeController {
 	
 	@PostMapping("/articlelist")
 	@ApiOperation(value = "아티클 번호에 대한 like수 반환")
-	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletResponse res, @RequestBody Map<String, Object> map)
+	public ResponseEntity<Map<String, Object>> tagRegist(HttpServletRequest req, HttpServletResponse res, @RequestBody Map<String, Object> map)
 			throws IOException {
 		String articleids = (String) map.get("articleid");	
 		logger.debug("Request Like count by ariticle id " + articleids);
@@ -70,7 +71,7 @@ public class RestLikeController {
 	
 	@PostMapping("/regist")
 	@ApiOperation(value = "좋아요 하나 등록")
-	public ResponseEntity<Map<String, Object>> likeRegist(HttpServletResponse res, @RequestBody Likearticle like)
+	public ResponseEntity<Map<String, Object>> likeRegist(HttpServletRequest req, HttpServletResponse res, @RequestBody Likearticle like)
 			throws IOException {
 		logger.info("Like regist : " + like.toString());
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -86,7 +87,7 @@ public class RestLikeController {
 	
 	@DeleteMapping("/delete/{userid}/{articleid}")
 	@ApiOperation(value = "좋아요 취소")
-	public ResponseEntity<Map<String, Object>> likeDelete(HttpServletResponse res, @PathVariable String userid,@PathVariable String articleid)
+	public ResponseEntity<Map<String, Object>> likeDelete(HttpServletRequest req, HttpServletResponse res, @PathVariable String userid,@PathVariable String articleid)
 			throws IOException {
 		logger.debug("delete userid - articleid: " + userid + "/" + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -104,7 +105,7 @@ public class RestLikeController {
 	
 	@GetMapping("/article/{articleid}")
 	@ApiOperation(value = "게시글한개의 좋아요 수")
-	public ResponseEntity<Map<String, Object>> likeDelete(HttpServletResponse res, @PathVariable String articleid)
+	public ResponseEntity<Map<String, Object>> likeDelete(HttpServletRequest req,HttpServletResponse res, @PathVariable String articleid)
 			throws IOException {
 		logger.debug("article like count : " + articleid);
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -119,7 +120,7 @@ public class RestLikeController {
 	
 	@GetMapping("/userlike/{userid}")
 	@ApiOperation(value = "유저가 좋아요 누른 아티클 번호리스트")
-	public ResponseEntity<Map<String, Object>> articleListByUserLike(@PathVariable String userid)
+	public ResponseEntity<Map<String, Object>> articleListByUserLike(HttpServletRequest req, @PathVariable String userid)
 			throws IOException {
 		logger.debug("user likes article : " + userid);
 		ResponseEntity<Map<String, Object>> entity = null;
