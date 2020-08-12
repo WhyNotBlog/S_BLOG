@@ -271,7 +271,6 @@ export default {
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid)
       .then((res) => {
-        console.log(res.data.data);
         let tagData = res.data.data;
         tagData.forEach((obj) => {
           this.tags.push(obj.tagname);
