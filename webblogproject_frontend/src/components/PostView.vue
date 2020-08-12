@@ -137,12 +137,6 @@ export default {
         });
     }
   },
-  beforeMount() {
-    this.updateTotalLike();
-  },
-  updated() {
-    this.updateTotalLike();
-  },
   props: { data: Array },
   computed: {
     articleIdList() {
@@ -232,8 +226,9 @@ export default {
     },
 
     checkLiked(article) {
-      if (this.loggedIn !== null)
+      if (this.loggedIn !== null){
         return this.userLiked.includes(article.articleid);
+      }
       else return false;
     },
 
@@ -254,21 +249,6 @@ export default {
               }
             )
             .then(() => {
-              article.likecount += 1;
-              axios
-                .put(
-                  process.env.VUE_APP_ARTICLE + "update",
-                  {
-                    articleid: article.articleid,
-                    likecount: article.likecount,
-                  },
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then(() => {
                   axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
@@ -281,7 +261,6 @@ export default {
                     .then((res) => {
                       this.userLiked = res.data.data;
                     });
-                });
             });
         } else {
           axios
@@ -296,21 +275,6 @@ export default {
               }
             )
             .then(() => {
-              article.likecount -= 1;
-              axios
-                .put(
-                  process.env.VUE_APP_ARTICLE + "update",
-                  {
-                    articleid: article.articleid,
-                    likecount: article.likecount,
-                  },
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then(() => {
                   axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
@@ -324,7 +288,6 @@ export default {
                       this.userLiked = res.data.data;
                     });
                 });
-            });
         }
         console.log(this.userLiked);
       } else {
