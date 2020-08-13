@@ -2,6 +2,7 @@
   <div>
     <v-snackbar
       v-show="snackbar"
+      v-model="snackbar"
       :bottom="y === 'bottom'"
       color="#9FA9D8"
       :left="x === 'left'"
@@ -98,12 +99,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text @click="loginModalOpen"
-                >이미 계정이 있으신가요?</v-btn
-              >
-              <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler"
-                >회원가입</v-btn
-              >
+              <v-btn text @click="loginModalOpen">이미 계정이 있으신가요?</v-btn>
+              <v-btn class="joinBtn" color="#9fa9d8" dark @click="joinHandler">회원가입</v-btn>
             </v-card-actions>
 
             <br />
