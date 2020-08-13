@@ -1,5 +1,5 @@
 <template>
-  <carousel-3d class="card" :display="6">
+  <carousel-3d class="card">
     <slide v-for="(article, i) in articles" :index="i" :key="i">
       <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
         <div
@@ -116,5 +116,9 @@ export default {
   .carousel-3d-container {
     height: 270px !important;
   }
+}
+
+:root {
+  --ck-color-widget-blurred-border: none;
 }
 </style>
