@@ -20,7 +20,7 @@ const store = new Vuex.Store({
     userId: null,
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
-    currentArticle: new Object(),
+
     currentTempArticle: new Object(),
     bigCategories: ["알고리즘", "웹 개발자", "어플 개발자"],
     middleCategories: [
@@ -90,9 +90,7 @@ const store = new Vuex.Store({
     setLoginModal(state, payload) {
       state.loginModal = payload;
     },
-    setCurrentArticle: (state, payload) => {
-      state.currentArticle = payload;
-    },
+
     setCurrentTempArticle: (state, payload) => {
       state.currentTempArticle = payload;
     },
@@ -123,9 +121,7 @@ const store = new Vuex.Store({
     loginModal(state) {
       return state.loginModal;
     },
-    currentArticle: (state) => {
-      return state.currentArticle;
-    },
+
     currentTempArticle: (state) => {
       return state.currentTempArticle;
     },
@@ -156,9 +152,7 @@ const store = new Vuex.Store({
     setLoginModal({ commit }, payload) {
       commit("setLoginModal", payload);
     },
-    setCurrentArticle: ({ commit }, payload) => {
-      commit("setCurrentArticle", payload);
-    },
+
     setCurrentTempArticle: ({ commit }, payload) => {
       commit("setCurrentTempArticle", payload);
     },
