@@ -18,21 +18,9 @@
     </v-snackbar>
 
     <v-layout row justify-start style="margin:auto">
-      <v-flex
-        v-for="article in articles"
-        :key="article.articleid"
-        xl3
-        lg4
-        md6
-        sm6
-        xs12
-      >
+      <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
         <div class="content" @click="moveToArticle(article)">
-          <v-card
-            class="d-inline-block my-3"
-            :width="moblieWidth"
-            min-width="270px"
-          >
+          <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="270px">
             <div style="background-color:white">
               <v-img
                 contain
@@ -42,11 +30,11 @@
                 :src="imgSrc(article.articleid, article.thumbnail)"
               ></v-img>
             </div>
-            <v-card-title class="card-title justify-center">
-              {{ article.title ? article.title.slice(0, 10) : "제목없음" }}
-            </v-card-title>
+            <v-card-title
+              class="card-title justify-center"
+            >{{ article.title ? article.title.slice(0, 10) : "제목없음" }}</v-card-title>
 
-            <v-card-text class="card-text text--primary"> </v-card-text>
+            <v-card-text class="card-text text--primary"></v-card-text>
             <v-footer class="d-flex justify-space-around">
               <div>
                 <b>{{ article.editdate | dateToString }}</b>
@@ -77,12 +65,7 @@
               >
                 <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
               </v-btn>
-              <v-btn
-                color="red accent-4"
-                icon
-                v-else
-                @click.stop="changeLiked(article)"
-              >
+              <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article)">
                 <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
               </v-btn>
               {{ article.likecount }} 명이 좋아합니다.
@@ -96,7 +79,7 @@
 
 <script>
 import axios from "axios";
-import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -223,10 +206,7 @@ export default {
       this.snackbar = true;
     },
 
-    ...mapActions(["setCurrentArticle"]),
-
     moveToArticle(article) {
-      this.setCurrentArticle(article);
       this.$router.push({
         name: "Article",
         params: { articleId: article.articleid },
