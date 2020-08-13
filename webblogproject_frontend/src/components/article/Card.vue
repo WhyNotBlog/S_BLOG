@@ -1,5 +1,5 @@
 <template>
-  <carousel-3d>
+  <carousel-3d class="card" :display="6" :clickable="false" :controls-visible="true">
     <slide v-for="(article, i) in articles" :index="i" :key="i">
       <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
         <div
@@ -10,12 +10,12 @@
             onRight: rightIndex >= 0,
           }"
         >
-          <v-card>
+          <v-card class="content" @click="goPost(article.articleid)">
             <v-img
               contain
               class="white--text align-end"
-              height="134px"
-              style="margin-left:16px;margin-right:16px; "
+              height="135px"
+              style="margin:15px"
               :src="imgSrc(article.articleid, article.thumbnail)"
             ></v-img>
 
@@ -24,15 +24,9 @@
               }}{{ article.title.length > 10 ? "..." : "" }}
             </v-card-title>
 
-            <v-card-text class="card-text text--primary">
-              <div class="text-center">
-                {{ article.content.slice(0, 20)
-                }}{{ article.content.length > 20 ? "..." : "" }}
-              </div>
-            </v-card-text>
             <v-footer class="d-flex justify-space-around">
               <div>
-                <b>{{ article.editdate }}</b>
+                <b>{{ article.editdate | dateToString }}</b>
               </div>
               <div>
                 <b>|</b>
@@ -74,8 +68,51 @@ export default {
         ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },
+    goPost(id) {
+      this.$router.push("/article/detail/" + id);
+    },
+  },
+  filters: {
+    dateToString(date) {
+      try {
+        return date.slice(0, 10);
+      } catch (e) {
+        console.log("");
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.carousel-3d-slide {
+  height: 265px !important;
+  overflow: visible;
+  border: none;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none;
+}
+.v-sheet.v-card {
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 630px) {
+  .carousel-3d-slide {
+    width: 270px !important;
+  }
+
+  .carousel-3d-container {
+    height: 270px !important;
+  }
+}
+</style>

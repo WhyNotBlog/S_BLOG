@@ -33,9 +33,7 @@
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
-          <div>
-            <v-btn text @click="getCard">{{ contentCnt }}</v-btn>
-          </div>
+          <div>{{ contentCnt }}</div>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>팔로워</h4>
@@ -48,15 +46,9 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >
-                {{ followerList.length }}
-              </div>
+              >{{ followerList.length }}</div>
             </template>
-            <Follow
-              @close-modal="closeModal"
-              type="Follower"
-              :id="this.userId"
-            ></Follow>
+            <Follow @close-modal="closeModal" type="Follower" :id="this.userId"></Follow>
           </v-dialog>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
@@ -69,16 +61,10 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >
-                {{ followingList.length }}
-              </div>
+              >{{ followingList.length }}</div>
             </template>
 
-            <Follow
-              @close-modal="closeModal2"
-              type="Following"
-              :id="this.userId"
-            ></Follow>
+            <Follow @close-modal="closeModal2" type="Following" :id="this.userId"></Follow>
           </v-dialog>
         </v-flex>
       </v-layout>
@@ -90,8 +76,7 @@
           dark
           @click="moveUpdate"
           style="margin-right:10px"
-          >프로필 편집</v-btn
-        >
+        >프로필 편집</v-btn>
       </div>
     </div>
     <br />
@@ -191,6 +176,7 @@ export default {
       .then((res) => {
         this.contentCnt = res.data.data.totalElements;
         this.articles = res.data.data.content;
+        this.isCard = true;
         //console.log(this.articles);
       });
 
@@ -224,9 +210,6 @@ export default {
     },
     closeModal2() {
       this.followingModal = false;
-    },
-    getCard() {
-      this.isCard = !this.isCard;
     },
   },
 
