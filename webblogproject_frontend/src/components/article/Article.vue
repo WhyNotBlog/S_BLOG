@@ -36,18 +36,7 @@
           <v-icon>{{ followOrUnfollow }}</v-icon>
         </v-btn>
         | 작성일 :
-        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <v-btn
-          color="red accent-4"
-          icon
-          v-if="article.isLiked"
-          @click="changeLiked()"
-        >
-          <v-icon middle color="red accent-4">mdi-heart</v-icon>
-        </v-btn>
-        <v-btn color="red accent-4" icon v-else @click="changeLiked()">
-          <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
-        </v-btn>
+        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} | 
         <div
           class="d-inline-block"
           v-if="loggedIn !== null && user.id === article.writerid"
@@ -61,6 +50,20 @@
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
           </v-btn>
         </div>
+      <div id="buttons">
+        <v-btn
+          color="red accent-4"
+          icon
+          v-if="article.isLiked"
+          @click="changeLiked(article)"
+        >
+          <v-icon middle color="red accent-4">mdi-heart</v-icon>
+        </v-btn>
+        <v-btn color="red accent-4" icon v-else @click="changeLiked(article)">
+          <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+        </v-btn>
+        {{ article.likecount }}명이 좋아합니다
+      </div>
       </div>
       <div class="text-center" id="catalogue">
         <label>태그 :</label>
@@ -137,6 +140,13 @@ export default {
           if (res.status) {
             let data = res.data.data;
             this.user = data;
+            axios
+              .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`, {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              })
+              .then((res) => (this.userLiked = res.data.data));
           }
         });
     }
@@ -308,20 +318,20 @@ export default {
           }
         });
     },
-    checkLiked(id) {
-      if (this.loggedIn !== null) return this.userLiked.includes(id);
+    checkLiked(article) {
+      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
       else return false;
     },
 
-    changeLiked(id) {
+    changeLiked(article) {
       if (this.loggedIn !== null) {
-        if (!this.checkLiked(id)) {
+        if (!this.checkLiked(article)) {
           axios
             .post(
               process.env.VUE_APP_LIKE + "regist",
               {
                 userid: this.user.id,
-                articleid: id,
+                articleid: article.articleid,
               },
               {
                 headers: {
@@ -329,44 +339,48 @@ export default {
                 },
               }
             )
-            .then(() => {
-              axios
-                .get(
-                  process.env.VUE_APP_LIKE +
-                    `article/${this.article.articleid}`,
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then((res) => {
-                  this.articleLiked = res.data.data;
-                });
+            .then((res) => {
+              article.likecount = res.data.data;
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
             });
         } else {
           axios
-            .delete(process.env.VUE_APP_LIKE + `delete/${this.user.id}/${id}`, {
-              data: { userid: this.user.id, articleid: id },
-              headers: {
-                "jwt-auth-token": this.jwtAuthToken,
-              },
-            })
-            .then(() => {
-              axios
-                .get(
-                  process.env.VUE_APP_LIKE +
-                    `article/${this.article.articleid}`,
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then((res) => {
-                  this.articleLiked = res.data.data;
+            .delete(
+              process.env.VUE_APP_LIKE +
+                `delete/${this.user.id}/${article.articleid}`,
+              {
+                data: { userid: this.user.id, articleid: article.articleid },
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
+            .then((res) => {
+              article.likecount = res.data.data;
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
                 });
-            });
         }
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
