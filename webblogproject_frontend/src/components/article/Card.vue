@@ -1,5 +1,5 @@
 <template>
-  <carousel-3d class="card" :display="6" :clickable="false" :controls-visible="true">
+  <carousel-3d class="card" :display="6">
     <slide v-for="(article, i) in articles" :index="i" :key="i">
       <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
         <div
@@ -10,7 +10,7 @@
             onRight: rightIndex >= 0,
           }"
         >
-          <v-card class="content" @click="goPost(article.articleid)">
+          <v-card class="content" @click="goPost(isCurrent,article.articleid)">
             <v-img
               contain
               class="white--text align-end"
@@ -68,8 +68,10 @@ export default {
         ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },
-    goPost(id) {
-      this.$router.push("/article/detail/" + id);
+    goPost(isCurrent, id) {
+      if (isCurrent) {
+        this.$router.push("/article/detail/" + id);
+      }
     },
   },
   filters: {

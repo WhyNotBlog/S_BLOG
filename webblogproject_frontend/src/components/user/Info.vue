@@ -171,6 +171,8 @@ export default {
       this.$router.push("/");
     }
 
+    this.getFollowingList();
+
     axios
       .get(process.env.VUE_APP_ARTICLE + "user/" + this.userId + "/0")
       .then((res) => {
@@ -210,6 +212,22 @@ export default {
     },
     closeModal2() {
       this.followingModal = false;
+    },
+    getFollowingList() {
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList = res.data.data;
+        });
+
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)
+        .then((res) => {
+          this.followerList = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 
