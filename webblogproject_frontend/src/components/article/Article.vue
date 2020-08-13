@@ -30,12 +30,12 @@
       </div>
       <div class="font-weight-bold text-center">
         작성자 : {{ article.editornickname }}
-        <v-btn text @click="checkFollow" v-if="user.id != article.writerid">
+        <v-btn text @click="checkFollow" v-if="userId != article.writerid">
           <v-icon>{{ followOrUnfollow }}</v-icon>
         </v-btn>
         | 작성일 :
         {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <div class="d-inline-block" v-if="loggedIn !== null && user.id === article.writerid">
+        <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
           <v-btn color="black accent-4" icon @click="updateArticle()">
             <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
           </v-btn>
