@@ -133,7 +133,7 @@ export default {
     viewer: Viewer,
   },
   props: ["articleId"],
-  created() {
+  async created() {
     if (this.loggedIn !== null) {
       axios
         .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -156,7 +156,7 @@ export default {
         });
     }
 
-    axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
+    await axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
 
     axios
       .get(process.env.VUE_APP_ARTICLE + "detail/" + this.articleId)
