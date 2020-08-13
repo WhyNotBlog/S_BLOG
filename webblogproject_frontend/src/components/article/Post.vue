@@ -74,12 +74,7 @@
               </v-flex>
             </v-layout>
             <div id="thumbnail">
-              <v-file-input
-                label="썸네일"
-                v-model="thumbnail"
-                filled
-                prepend-icon="mdi-camera"
-              ></v-file-input>
+              <v-file-input label="썸네일" v-model="thumbnail" filled prepend-icon="mdi-camera"></v-file-input>
             </div>
 
             <div id="content">
@@ -107,8 +102,7 @@
                 v-show="tagsSelected[selectIndex(tag)]"
                 close
                 @click:close="closeTag(selectIndex(tag))"
-                >#{{ tag }}</v-chip
-              >
+              >#{{ tag }}</v-chip>
             </div>
 
             <div class="text-center" id="tag">
@@ -121,24 +115,15 @@
                 color="secondary"
                 style="width:50%; height:5%;"
               ></v-text-field>
-              <v-btn
-                color="secondary"
-                class="d-inline-block mx-2 mr-4"
-                @click="addTag"
-                >태그 추가</v-btn
-              >
+              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
             </div>
           </v-form>
           <br />
 
           <div class="text-center" id="btn">
             <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
-            <v-btn color="secondary" class="mr-4" @click="saveTempArticle"
-              >임시저장</v-btn
-            >
-            <v-btn color="success" class="mr-4" @click="validateSubmit"
-              >글 쓰기</v-btn
-            >
+            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
+            <v-btn color="success" class="mr-4" @click="validateSubmit">글 쓰기</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -414,6 +399,11 @@ export default {
     editor: Editor,
   },
   created() {
+    if (this.loggedIn == null) {
+      this.$router.push("/");
+      this.loginModal = true;
+    }
+
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[0];
     this.middleCategories = this.$store.state.middleCategories[0];
@@ -448,6 +438,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setLoggedIn", value);
+      },
+    },
+    loginModal: {
+      get() {
+        return this.$store.getters.loginModal;
+      },
+      set(value) {
+        this.$store.dispatch("setLoginModal", value);
       },
     },
   },
