@@ -387,16 +387,18 @@ export default {
         const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
         this.bigCategories = this.$store.state.bigCategories;
-        this.middleCategories = this.$store.state.middleCategories;
-        this.smallCategories = this.$store.state.smallCategories;
+        this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+        this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+
+        console.log(this.bigCategories);
+        console.log(this.middleCategories);
+        console.log(this.smallCategories);
+
         this.bigCategory = this.bigCategories[bigCategoryIndex];
-        this.middleCategory = this.middleCategories[bigCategoryIndex][
+        this.middleCategory = this.middleCategories[
           middleCategoryIndex
         ];
-
-        this.smallCategory = this.smallCategories[bigCategoryIndex][
-          middleCategoryIndex
-        ][smallCategoryIndex];
+        this.smallCategory = this.smallCategories[smallCategoryIndex];
 
         this.title = this.article.title;
         this.content = this.article.content;
@@ -405,12 +407,8 @@ export default {
         this.modify = this.article.modify;
         this.thumbnailB = this.article.thumbnail;
         console.log(this.article);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
-    axios
+        axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid, {
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
@@ -422,6 +420,10 @@ export default {
           this.tags.push(obj.tagname);
           this.tagsSelected.push(true);
         });
+      });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
   computed: {

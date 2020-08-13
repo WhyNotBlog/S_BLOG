@@ -293,7 +293,7 @@ export default {
       this.$router.push("/search/tag/" + tag);
     },
     updateArticle() {
-      this.$router.push({ name: "Update" });
+      this.$router.push({ name: "Update", params : { articleId : this.article.articleid } });
     },
     deleteArticle() {
       axios
