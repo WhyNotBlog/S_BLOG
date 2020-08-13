@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/components/Home";
-// import Error from "@/components/404";
+import Error from "@/components/404";
 import Search from "@/components/article/Search";
 import Article from "@/components/article/Article";
 import TempArticle from "@/components/article/TempArticle";
@@ -138,11 +138,11 @@ const routes = [
     name: "snsRegist",
     component: SNSRegist,
   },
-  // {
-  //   path: "/*",
-  //   name: "Error",
-  //   component: Error,
-  // },
+  {
+    path: "/*",
+    name: "Error",
+    component: Error,
+  },
 ];
 
 const router = new VueRouter({

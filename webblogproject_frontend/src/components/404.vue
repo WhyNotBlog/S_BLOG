@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div id="clouds">
+    <!-- <div id="clouds">
         <div class="cloud x1"></div>
         <div class="cloud x1_5"></div>
         <div class="cloud x2"></div>
         <div class="cloud x3"></div>
         <div class="cloud x4"></div>
         <div class="cloud x5"></div>
-    </div>
+    </div> -->
     <div class='c'>
         <div class='_404'>404</div>
-        <hr>
-        <div class='_1'>THE PAGE</div>
-        <div class='_2'>WAS NOT FOUND</div>
-        <a class='btn' href='/'>BACK TO MARS</a>
+        <hr class='my-5'>
+        <div class='_1 my-5'>THE PAGE</div>
+        <div class='_2 my-5'>WAS NOT FOUND</div>
+        <a class='btn' href='/'>BACK TO MAIN</a>
     </div>
   </div>
 </template>
@@ -27,11 +27,11 @@ export default {
 <style>
 @import url(https://fonts.googleapis.com/css?family=opensans:500);
 body{
-        background: #33cc99;
+        /* background: #33cc99;
         color:#fff;
         font-family: 'Open Sans', sans-serif;
         max-height:700px;
-        overflow: hidden;
+        overflow: hidden; */
     }
     .c{
         text-align: center;
@@ -94,7 +94,7 @@ body{
         width:60%;
     }
     
-    hr{
+    /* hr{
         padding: 0;
         border: none;
         border-top: 5px solid #fff;
@@ -246,5 +246,5 @@ body{
     @-o-keyframes moveclouds {
         0% {margin-left: 1000px;}
         100% {margin-left: -1000px;}
-    }
+    } */
 </style>
