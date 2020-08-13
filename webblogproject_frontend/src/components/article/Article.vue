@@ -50,20 +50,20 @@
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
           </v-btn>
         </div>
-        <div id="buttons">
-          <v-btn
-            color="red accent-4"
-            icon
-            v-if="checkLiked(article)"
-            @click.stop="changeLiked(article)"
-          >
-            <v-icon middle color="red accent-4">mdi-heart</v-icon>
-          </v-btn>
-          <v-btn color="red accent-4" icon v-else @click="changeLiked(article)">
-            <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
-          </v-btn>
-          {{ article.likecount }}명이 좋아합니다
-        </div>
+      <div id="buttons">
+        <v-btn
+          color="red accent-4"
+          icon
+          v-if="checkLiked(article)"
+                @click.stop="changeLiked(article)"
+        >
+          <v-icon middle color="red accent-4">mdi-heart</v-icon>
+        </v-btn>
+        <v-btn color="red accent-4" icon v-else @click="changeLiked(article)">
+          <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+        </v-btn>
+        {{ article.likecount }}명이 좋아합니다
+      </div>
       </div>
       <div class="text-center" id="catalogue">
         <label>태그 :</label>
@@ -89,7 +89,7 @@
         />
       </div>
     </div>
-    <Comment :articleId="articleId" />
+    <Comment :articleId="article.articleid" />
   </div>
 </template>
 
@@ -133,7 +133,7 @@ export default {
     viewer: Viewer,
   },
   props: ["articleId"],
-  created() {
+  async created() {
     if (this.loggedIn !== null) {
       axios
         .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -156,35 +156,32 @@ export default {
         });
     }
 
-    axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
+    await axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
 
-    axios
+    const response = await axios
       .get(process.env.VUE_APP_ARTICLE + "detail/" + this.articleId)
-      .then((response) => {
-        this.article = response.data.data;
-
-        this.categoryInt = this.article.category;
-        const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-        const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-        const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
-
-        const bigCategories = this.$store.state.bigCategories;
-        const middleCategories = this.$store.state.middleCategories;
-        const smallCategories = this.$store.state.smallCategories;
-
-        this.bigCategory = bigCategories[bigCategoryIndex];
-        this.middleCategory =
-          middleCategories[bigCategoryIndex][middleCategoryIndex];
-        this.smallCategory =
-          smallCategories[bigCategoryIndex][middleCategoryIndex][
-            smallCategoryIndex
-          ].name;
-      })
       .catch((error) => {
         console.log(error);
       });
 
-    //console.log(this.article);
+    this.article = response.data.data;
+    this.categoryInt = this.article.category;
+
+    const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+
+    const bigCategories = this.$store.state.bigCategories;
+    const middleCategories = this.$store.state.middleCategories;
+    const smallCategories = this.$store.state.smallCategories;
+
+    this.bigCategory = bigCategories[bigCategoryIndex];
+    this.middleCategory =
+      middleCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory =
+      smallCategories[bigCategoryIndex][middleCategoryIndex][
+        smallCategoryIndex
+      ].name;
 
     this.followingList.forEach((element, index) => {
       if (element.id == this.article.writerid) {
@@ -333,12 +330,11 @@ export default {
         });
     },
     checkLiked(article) {
-      if (this.loggedIn !== null)
-        return this.userLiked.includes(article.articleid);
+      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
       else return false;
     },
 
-    async changeLiked(article) {
+    changeLiked(article) {
       if (this.loggedIn !== null) {
         if (!this.checkLiked(article)) {
           axios
@@ -356,18 +352,21 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-              axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`, {
-                  headers: {
-                    "jwt-auth-token": this.jwtAuthToken,
-                  },
-                })
-                .then((res) => {
-                  this.userLiked = res.data.data;
-                });
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
             });
         } else {
-          await axios
+          axios
             .delete(
               `${process.env.VUE_APP_LIKE}delete/${this.user.id}/${article.articleid}`,
               {
@@ -379,16 +378,19 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-              axios
-                .get(process.env.VUE_APP_LIKE + `userlike/${this.user.id}`, {
-                  headers: {
-                    "jwt-auth-token": this.jwtAuthToken,
-                  },
-                })
-                .then((res) => {
-                  this.userLiked = res.data.data;
+                  axios
+                    .get(
+                      process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
+                      {
+                        headers: {
+                          "jwt-auth-token": this.jwtAuthToken,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      this.userLiked = res.data.data;
+                    });
                 });
-            });
         }
       } else {
         this.text = "좋아요 기능을 사용하려면 로그인을 해야합니다.";
