@@ -266,6 +266,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             hits: this.article.hits,
+            likecount: this.article.likecount,
             thumbnail:
               this.thumbnail.name != null || this.thumbnailB ? true : false,
           },
