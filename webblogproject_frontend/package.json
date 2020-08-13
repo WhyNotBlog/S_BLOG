@@ -21,6 +21,8 @@
     "datauri": "^3.0.0",
     "dotenv": "^8.2.0",
     "material-design-icons-iconfont": "^5.0.1",
+    "survey-jquery": "^1.7.26",
+    "survey-vue": "^1.7.26",
     "vue": "^2.6.11",
     "vue-carousel-3d": "^0.2.0",
     "vue-infinite-loading": "^2.4.5",

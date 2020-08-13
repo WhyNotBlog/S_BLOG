@@ -85,6 +85,7 @@
 
             <div id="content">
               <editor
+                v-if="this.content"
                 :value="editorText"
                 :options="editorOptions"
                 :html="editorHtml"
@@ -149,11 +150,11 @@ import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
-import { mapActions } from "vuex";
 
 export default {
   value: true,
   name: "Post",
+
   data() {
     return {
       user: new Object(),
@@ -257,7 +258,7 @@ export default {
         .put(
           process.env.VUE_APP_ARTICLE + "update",
           {
-            articleid: this.article.articleid,
+            articleid: this.updateArticleId,
             title: this.title,
             content: this.editorMarkdown,
             editornickname: this.loggedIn,
@@ -278,7 +279,6 @@ export default {
           let data = res.data.data;
           this.article = data;
 
-          this.setCurrentArticle(this.article);
           if (this.thumbnail.name != null) this.addItem();
 
           axios
@@ -301,7 +301,7 @@ export default {
               setTimeout(() => {
                 this.$router.push({
                   name: "Article",
-                  params: { articleId: this.article.articleid },
+                  params: { articleId: this.updateArticleId },
                 });
               }, 1000);
             });
@@ -311,7 +311,6 @@ export default {
           this.snackbar = true;
         });
     },
-    ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke("getHtml");
       let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
@@ -345,7 +344,6 @@ export default {
     },
     changeSmallCategory() {
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
     },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터
@@ -372,36 +370,47 @@ export default {
     editor: Editor,
   },
   created() {
-    this.article = this.$store.state.currentArticle;
-
-    this.articleid = this.article.articleid;
-    this.title = this.article.title;
-    this.content = this.article.content;
-    this.editornickname = this.article.editornickname;
-    this.categoryInt = this.article.category;
-    this.editdate = this.article.editdate;
-    this.modify = this.article.modify;
-    this.category = this.article.category;
-    this.thumbnailB = this.article.thumbnail;
-    console.log(this.article);
-
-    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
-
-    this.bigCategories = this.$store.state.bigCategories;
-    this.bigCategory = this.bigCategories[bigCategoryIndex];
-    this.middleCategories = this.$store.state.middleCategories[
-      bigCategoryIndex
-    ];
-    this.middleCategory = this.middleCategories[middleCategoryIndex];
-    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
-      middleCategoryIndex
-    ];
-    this.smallCategory = this.smallCategories[smallCategoryIndex];
+    if (this.userId == null) {
+      alert("비정상적인 접근입니다!");
+      this.$router.push("/");
+      return;
+    }
 
     axios
-      .get(process.env.VUE_APP_TAG + "taglist/" + this.articleid, {
+      .get(process.env.VUE_APP_ARTICLE + "detail/" + this.updateArticleId)
+      .then((response) => {
+        this.article = response.data.data;
+        this.categoryInt = this.article.category;
+
+        const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+        const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+        const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+        this.bigCategories = this.$store.state.bigCategories;
+        this.middleCategories = this.$store.state.middleCategories[
+          bigCategoryIndex
+        ];
+        this.smallCategories = this.$store.state.smallCategories[
+          bigCategoryIndex
+        ][middleCategoryIndex];
+
+        this.bigCategory = this.bigCategories[bigCategoryIndex];
+        this.middleCategory = this.middleCategories[middleCategoryIndex];
+        this.smallCategory = this.smallCategories[smallCategoryIndex];
+
+        this.title = this.article.title;
+        this.content = this.article.content;
+        this.editornickname = this.article.editornickname;
+        this.editdate = this.article.editdate;
+        this.modify = this.article.modify;
+        this.thumbnailB = this.article.thumbnail;
+        console.log(this.article);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
         },
@@ -438,6 +447,15 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setUserId", value);
+      },
+    },
+
+    updateArticleId: {
+      get() {
+        return this.$store.getters.updateArticleId;
+      },
+      set(value) {
+        this.$store.dispatch("setUpdateArticleId", value);
       },
     },
   },
