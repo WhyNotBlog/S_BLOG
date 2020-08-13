@@ -64,7 +64,9 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
+              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler"
+                >로그인</v-btn
+              >
             </v-card-actions>
             <br />
           </v-card>
@@ -243,7 +245,8 @@ export default {
 }
 
 .btn {
-  width: 40px;
+  width: 45px;
+  background: none;
 }
 @media screen and (max-width: 500px) {
   .v-text-field {
