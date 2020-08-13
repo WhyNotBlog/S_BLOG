@@ -172,14 +172,14 @@ export default {
     const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
     const bigCategories = this.$store.state.bigCategories;
-    const middleCategories = this.$store.state.middleCategories;
-    const smallCategories = this.$store.state.smallCategories;
+    const middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    const smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
 
     this.bigCategory = bigCategories[bigCategoryIndex];
     this.middleCategory =
-      middleCategories[bigCategoryIndex][middleCategoryIndex];
+      middleCategories[middleCategoryIndex];
     this.smallCategory =
-      smallCategories[bigCategoryIndex][middleCategoryIndex][
+      smallCategories[
         smallCategoryIndex
       ].name;
 

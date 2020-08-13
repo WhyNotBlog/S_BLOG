@@ -404,10 +404,6 @@ export default {
         this.modify = this.article.modify;
         this.thumbnailB = this.article.thumbnail;
         console.log(this.article);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
@@ -421,6 +417,10 @@ export default {
           this.tags.push(obj.tagname);
           this.tagsSelected.push(true);
         });
+      });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
   computed: {
