@@ -21,7 +21,9 @@
     <div
       class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
       id="title"
-    >{{ article.title }}</div>
+    >
+      {{ article.title }}
+    </div>
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
@@ -40,7 +42,9 @@
           v-if="loggedIn !== null && user.id === article.writerid"
         >
           <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
+            <v-icon middle color="black accent-4"
+              >mdi-file-document-edit</v-icon
+            >
           </v-btn>
           <v-btn color="black accent-4" icon @click="deleteArticle()">
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
@@ -51,7 +55,7 @@
           color="red accent-4"
           icon
           v-if="checkLiked(article)"
-          @click.stop="changeLiked(article)"
+                @click.stop="changeLiked(article)"
         >
           <v-icon middle color="red accent-4">mdi-heart</v-icon>
         </v-btn>
@@ -69,7 +73,8 @@
           v-for="tag in tags"
           :key="tag.tagid"
           @click="searchTag(tag.tagname)"
-        >#{{ tag.tagname }}</v-chip>
+          >#{{ tag.tagname }}</v-chip
+        >
       </div>
       <div
         class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
@@ -84,7 +89,7 @@
         />
       </div>
     </div>
-    <Comment :articleId="articleId" />
+    <Comment :articleId="article.articleid" />
   </div>
 </template>
 
@@ -128,7 +133,7 @@ export default {
     viewer: Viewer,
   },
   props: ["articleId"],
-  created() {
+  async created() {
     if (this.loggedIn !== null) {
       axios
         .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -151,35 +156,32 @@ export default {
         });
     }
 
-    axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
+    await axios.get(process.env.VUE_APP_ARTICLE + "visit/" + this.articleId);
 
-    axios
+    const response = await axios
       .get(process.env.VUE_APP_ARTICLE + "detail/" + this.articleId)
-      .then((response) => {
-        this.article = response.data.data;
-
-        this.categoryInt = this.article.category;
-        const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-        const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-        const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
-
-        const bigCategories = this.$store.state.bigCategories;
-        const middleCategories = this.$store.state.middleCategories;
-        const smallCategories = this.$store.state.smallCategories;
-
-        this.bigCategory = bigCategories[bigCategoryIndex];
-        this.middleCategory =
-          middleCategories[bigCategoryIndex][middleCategoryIndex];
-        this.smallCategory =
-          smallCategories[bigCategoryIndex][middleCategoryIndex][
-            smallCategoryIndex
-          ].name;
-      })
       .catch((error) => {
         console.log(error);
       });
 
-    //console.log(this.article);
+    this.article = response.data.data;
+    this.categoryInt = this.article.category;
+
+    const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+    const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+    const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+
+    const bigCategories = this.$store.state.bigCategories;
+    const middleCategories = this.$store.state.middleCategories;
+    const smallCategories = this.$store.state.smallCategories;
+
+    this.bigCategory = bigCategories[bigCategoryIndex];
+    this.middleCategory =
+      middleCategories[bigCategoryIndex][middleCategoryIndex];
+    this.smallCategory =
+      smallCategories[bigCategoryIndex][middleCategoryIndex][
+        smallCategoryIndex
+      ].name;
 
     this.followingList.forEach((element, index) => {
       if (element.id == this.article.writerid) {
