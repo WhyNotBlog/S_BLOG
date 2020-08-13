@@ -55,7 +55,7 @@
           color="red accent-4"
           icon
           v-if="checkLiked(article)"
-                @click.stop="changeLiked(article)"
+          @click.stop="changeLiked(article)"
         >
           <v-icon middle color="red accent-4">mdi-heart</v-icon>
         </v-btn>
@@ -320,10 +320,10 @@ export default {
       else return false;
     },
 
-    changeLiked(article) {
+    async changeLiked(article) {
       if (this.loggedIn !== null) {
         if (!this.checkLiked(article)) {
-          axios
+          await axios
             .post(
               process.env.VUE_APP_LIKE + "regist",
               {
@@ -338,7 +338,7 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-                  axios
+                await axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
                       {
@@ -352,7 +352,7 @@ export default {
                     });
             });
         } else {
-          axios
+          await axios
             .delete(
               `${process.env.VUE_APP_LIKE}delete/${this.user.id}/${article.articleid}`,
               {
@@ -364,7 +364,7 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-                  axios
+                  await axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
                       {
