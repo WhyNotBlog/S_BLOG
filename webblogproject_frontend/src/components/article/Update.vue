@@ -85,6 +85,7 @@
 
             <div id="content">
               <editor
+                v-if="this.content"
                 :value="editorText"
                 :options="editorOptions"
                 :html="editorHtml"
@@ -153,7 +154,7 @@ import axios from "axios";
 export default {
   value: true,
   name: "Post",
-  props: ["articleId"],
+
   data() {
     return {
       user: new Object(),
@@ -257,7 +258,7 @@ export default {
         .put(
           process.env.VUE_APP_ARTICLE + "update",
           {
-            articleid: this.article.articleid,
+            articleid: this.updateArticleId,
             title: this.title,
             content: this.editorMarkdown,
             editornickname: this.loggedIn,
@@ -278,7 +279,6 @@ export default {
           let data = res.data.data;
           this.article = data;
 
-          this.setCurrentArticle(this.article);
           if (this.thumbnail.name != null) this.addItem();
 
           axios
@@ -301,7 +301,7 @@ export default {
               setTimeout(() => {
                 this.$router.push({
                   name: "Article",
-                  params: { articleId: this.articleId },
+                  params: { articleId: this.updateArticleId },
                 });
               }, 1000);
             });
@@ -370,14 +370,14 @@ export default {
     editor: Editor,
   },
   created() {
-    if (this.loggedIn == null) {
+    if (this.userId == null) {
       alert("비정상적인 접근입니다!");
       this.$router.push("/");
       return;
     }
 
     axios
-      .get(process.env.VUE_APP_ARTICLE + "detail/" + this.articleId)
+      .get(process.env.VUE_APP_ARTICLE + "detail/" + this.updateArticleId)
       .then((response) => {
         this.article = response.data.data;
         this.categoryInt = this.article.category;
@@ -385,8 +385,8 @@ export default {
         const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
         const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
         const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
-
         this.bigCategories = this.$store.state.bigCategories;
+<<<<<<< HEAD
         this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
         this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
 
@@ -398,6 +398,17 @@ export default {
         this.middleCategory = this.middleCategories[
           middleCategoryIndex
         ];
+=======
+        this.middleCategories = this.$store.state.middleCategories[
+          bigCategoryIndex
+        ];
+        this.smallCategories = this.$store.state.smallCategories[
+          bigCategoryIndex
+        ][middleCategoryIndex];
+
+        this.bigCategory = this.bigCategories[bigCategoryIndex];
+        this.middleCategory = this.middleCategories[middleCategoryIndex];
+>>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
         this.smallCategory = this.smallCategories[smallCategoryIndex];
 
         this.title = this.article.title;
@@ -408,8 +419,13 @@ export default {
         this.thumbnailB = this.article.thumbnail;
         console.log(this.article);
 
+<<<<<<< HEAD
         axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid, {
+=======
+    axios
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
+>>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
         },
@@ -450,6 +466,15 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setUserId", value);
+      },
+    },
+
+    updateArticleId: {
+      get() {
+        return this.$store.getters.updateArticleId;
+      },
+      set(value) {
+        this.$store.dispatch("setUpdateArticleId", value);
       },
     },
   },

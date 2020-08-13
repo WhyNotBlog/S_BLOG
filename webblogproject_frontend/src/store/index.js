@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     loginModal: false,
     loggedIn: null,
     userId: null,
+    updateArticleId: null,
     profile: `${require("@/assets/profile.svg")}`,
     jwtAuthToken: null,
 
@@ -65,6 +66,10 @@ const store = new Vuex.Store({
     ],
   },
   mutations: {
+    setUpdateArticleId(state, payload) {
+      state.updateArticleId = payload;
+    },
+
     setFollowingList(state, payload) {
       state.followingList = payload;
     },
@@ -96,6 +101,10 @@ const store = new Vuex.Store({
     },
   },
   getters: {
+    updateArticleId(state) {
+      return state.updateArticleId;
+    },
+
     followerList(state) {
       return state.followerList;
     },
@@ -127,6 +136,10 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    setUpdateArticleId({ commit }, payload) {
+      commit("setUpdateArticleId", payload);
+    },
+
     setFollowerList({ commit }, payload) {
       commit("setFollowerList", payload);
     },

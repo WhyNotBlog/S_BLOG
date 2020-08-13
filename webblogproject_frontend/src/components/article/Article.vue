@@ -37,7 +37,10 @@
         </v-btn>
         | 작성일 :
         {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
+        <div
+          class="d-inline-block"
+          v-if="loggedIn !== null && userId === article.writerid"
+        >
           <v-btn color="black accent-4" icon @click="updateArticle()">
             <v-icon middle color="black accent-4"
               >mdi-file-document-edit</v-icon
@@ -228,6 +231,15 @@ export default {
         this.$store.dispatch("setFollowingList", value);
       },
     },
+
+    updateArticleId: {
+      get() {
+        return this.$store.getters.updateArticleId;
+      },
+      set(value) {
+        this.$store.dispatch("setUpdateArticleId", value);
+      },
+    },
   },
   methods: {
     checkFollow() {
@@ -293,7 +305,16 @@ export default {
       this.$router.push("/search/tag/" + tag);
     },
     updateArticle() {
+<<<<<<< HEAD
       this.$router.push({ name: "Update", params : { articleId : this.article.articleid } });
+=======
+      this.updateArticleId = this.articleId;
+
+      this.$router.push({
+        name: "Update",
+        props: { articleId: this.articleId },
+      });
+>>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
     },
     deleteArticle() {
       axios
