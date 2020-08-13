@@ -402,6 +402,7 @@ export default {
     if (this.loggedIn == null) {
       this.$router.push("/");
       this.loginModal = true;
+      return;
     }
 
     this.bigCategories = this.$store.state.bigCategories;
