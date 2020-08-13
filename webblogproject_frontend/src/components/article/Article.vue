@@ -320,10 +320,10 @@ export default {
       else return false;
     },
 
-    async changeLiked(article) {
+    changeLiked(article) {
       if (this.loggedIn !== null) {
         if (!this.checkLiked(article)) {
-          await axios
+          axios
             .post(
               process.env.VUE_APP_LIKE + "regist",
               {
@@ -338,7 +338,7 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-                await axios
+                  axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
                       {
@@ -352,7 +352,7 @@ export default {
                     });
             });
         } else {
-          await axios
+          axios
             .delete(
               `${process.env.VUE_APP_LIKE}delete/${this.user.id}/${article.articleid}`,
               {
@@ -364,7 +364,7 @@ export default {
             )
             .then((res) => {
               article.likecount = res.data.data;
-                  await axios
+                  axios
                     .get(
                       process.env.VUE_APP_LIKE + `userlike/${this.user.id}`,
                       {
