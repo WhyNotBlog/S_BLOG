@@ -172,14 +172,14 @@ export default {
     const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
     const bigCategories = this.$store.state.bigCategories;
-    const middleCategories = this.$store.state.middleCategories;
-    const smallCategories = this.$store.state.smallCategories;
+    const middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+    const smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
 
     this.bigCategory = bigCategories[bigCategoryIndex];
     this.middleCategory =
-      middleCategories[bigCategoryIndex][middleCategoryIndex];
+      middleCategories[middleCategoryIndex];
     this.smallCategory =
-      smallCategories[bigCategoryIndex][middleCategoryIndex][
+      smallCategories[
         smallCategoryIndex
       ].name;
 
@@ -305,16 +305,12 @@ export default {
       this.$router.push("/search/tag/" + tag);
     },
     updateArticle() {
-<<<<<<< HEAD
-      this.$router.push({ name: "Update", params : { articleId : this.article.articleid } });
-=======
       this.updateArticleId = this.articleId;
 
       this.$router.push({
         name: "Update",
         props: { articleId: this.articleId },
       });
->>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
     },
     deleteArticle() {
       axios

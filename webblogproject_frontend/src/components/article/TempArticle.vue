@@ -89,12 +89,13 @@
 
             <div id="content">
               <editor
+                v-if="content"
                 :value="editorText"
                 :options="editorOptions"
                 :html="editorHtml"
                 :visible="editorVisible"
                 previewStyle="vertical"
-                :initialValue="this.content"
+                :initialValue="content"
                 initialEditType="wysiwyg"
                 :plugins="editorPlugin"
                 ref="tuiEditor"
@@ -167,7 +168,7 @@ import { mapActions } from "vuex";
 
 export default {
   value: true,
-  name: "Post",
+  name: "Post", 
   data() {
     return {
       user: new Object(),
@@ -202,6 +203,7 @@ export default {
       ],
       title: "",
       thumbnail: new Object(),
+      thumbnailB : new Object(),
       content: "",
       editornickname: "",
       bigCategories: new Array(),
@@ -315,8 +317,8 @@ export default {
             .then(() => {
               axios
                 .delete(
-                  process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
-                  { data: { articletempid: this.articleid } },
+                  process.env.VUE_APP_ARTICLETEMP + `delete/${this.$route.params.articleId}`,
+                  { data: { articletempid: this.$route.params.articleId } },
                   {
                     headers: {
                       "jwt-auth-token": this.jwtAuthToken,
@@ -353,8 +355,8 @@ export default {
                   axios
                     .delete(
                       process.env.VUE_APP_ARTICLETEMP +
-                        `delete/${this.articleid}`,
-                      { data: { articletempid: this.articleid } },
+                        `delete/${this.$route.params.articleId}`,
+                      { data: { articletempid: this.$route.params.articleId } },
                       {
                         headers: {
                           "jwt-auth-token": this.jwtAuthToken,
@@ -436,9 +438,9 @@ export default {
     deleteTempArticle() {
       axios
         .delete(
-          process.env.VUE_APP_ARTICLETEMP + `delete/${this.articleid}`,
+          process.env.VUE_APP_ARTICLETEMP + `delete/${this.$route.params.articleId}`,
           {
-            data: { articleid: this.articleid },
+            data: { articleid: this.$route.params.articleId },
           },
           {
             headers: {
@@ -469,7 +471,6 @@ export default {
       ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
@@ -495,52 +496,44 @@ export default {
     editor: Editor,
   },
   created() {
-    this.categories = this.$store.state.categories;
-    this.category = this.categories[0];
-
-    this.article = this.$store.state.currentTempArticle;
-
-    this.articleid = this.article.articleid;
-    this.title = this.article.title;
-    this.content = this.article.content;
-    this.editornickname = this.article.editornickname;
-    this.categoryInt = this.article.category;
-    this.editdate = this.article.editdate;
-    this.modify = this.article.modify;
-    this.category = this.categories[this.categoryInt];
-    this.writerid = this.article.writerid;
-    this.thumbnailB = this.article.thumbnail;
-
-    let bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-    let middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-    let smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
-
-    this.bigCategories = this.$store.state.bigCategories;
-    this.bigCategory = this.bigCategories[bigCategoryIndex];
-    this.middleCategories = this.$store.state.middleCategories[
-      bigCategoryIndex
-    ];
-    this.middleCategory = this.middleCategories[middleCategoryIndex];
-    this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
-      middleCategoryIndex
-    ];
-    this.smallCategory = this.smallCategories[smallCategoryIndex];
+    if (this.userId === null) {
+      alert("비정상적인 접근입니다!");
+      this.$router.push("/");
+      return;
+    }
 
     axios
-      .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
-        headers: {
-          "jwt-auth-token": this.jwtAuthToken,
-        },
-      })
-      .then((res) => {
-        if (res.status) {
-          let data = res.data.data;
-          this.user = data;
-        }
-      });
+      .get(process.env.VUE_APP_ARTICLETEMP + this.$route.params.articleId, 
+      {     headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          })
+      .then((response) => {
+        this.article = response.data.data;
+        console.log(this.article);
+
+        this.title = this.article.title;
+        this.content = this.article.content;
+        this.editornickname = this.article.editornickname;
+        this.thumbnail = this.article.thumbnail;
+        this.categoryInt = this.article.category;
+
+        const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+        const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+        const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+
+        this.bigCategories = this.$store.state.bigCategories;
+        this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
+        this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
+
+        this.bigCategory = this.bigCategories[bigCategoryIndex];
+        this.middleCategory =
+          this.middleCategories[middleCategoryIndex];
+        this.smallCategory =
+          this.smallCategories[smallCategoryIndex].value;
 
     axios
-      .get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.articleid, {
+      .get(process.env.VUE_APP_TAGTEMP + "taglist/" + this.$route.params.articleId, {
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
         },
@@ -551,6 +544,10 @@ export default {
           this.tags.push(obj.tagname);
           this.tagsSelected.push(true);
         });
+      });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   },
   computed: {

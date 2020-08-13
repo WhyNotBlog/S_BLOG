@@ -386,19 +386,6 @@ export default {
         const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
         const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
         this.bigCategories = this.$store.state.bigCategories;
-<<<<<<< HEAD
-        this.middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
-        this.smallCategories = this.$store.state.smallCategories[bigCategoryIndex][middleCategoryIndex];
-
-        console.log(this.bigCategories);
-        console.log(this.middleCategories);
-        console.log(this.smallCategories);
-
-        this.bigCategory = this.bigCategories[bigCategoryIndex];
-        this.middleCategory = this.middleCategories[
-          middleCategoryIndex
-        ];
-=======
         this.middleCategories = this.$store.state.middleCategories[
           bigCategoryIndex
         ];
@@ -408,7 +395,6 @@ export default {
 
         this.bigCategory = this.bigCategories[bigCategoryIndex];
         this.middleCategory = this.middleCategories[middleCategoryIndex];
->>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
         this.smallCategory = this.smallCategories[smallCategoryIndex];
 
         this.title = this.article.title;
@@ -419,13 +405,8 @@ export default {
         this.thumbnailB = this.article.thumbnail;
         console.log(this.article);
 
-<<<<<<< HEAD
-        axios
-      .get(process.env.VUE_APP_TAG + "taglist/" + this.article.articleid, {
-=======
     axios
       .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
->>>>>>> 63508ffddae85d834b4ce3d810f78e0778eaef4d
         headers: {
           "jwt-auth-token": this.jwtAuthToken,
         },
