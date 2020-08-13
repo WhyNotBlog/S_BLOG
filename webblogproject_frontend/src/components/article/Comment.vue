@@ -139,16 +139,11 @@ export default {
           )
           .then(() => {
             axios
-              .get(
-                process.env.VUE_APP_COMMENT +
-                  "article/" +
-                  this.$store.state.currentArticle.articleid,
-                {
-                  headers: {
-                    "jwt-auth-token": this.jwtAuthToken,
-                  },
-                }
-              )
+              .get(process.env.VUE_APP_COMMENT + "article/" + this.articleId, {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              })
               .then((res) => {
                 this.comments = res.data.data;
                 this.comment = "";
@@ -173,16 +168,11 @@ export default {
           this.text = "댓글 삭제에 성공했습니다.";
           this.snackbar = true;
           axios
-            .get(
-              process.env.VUE_APP_COMMENT +
-                "article/" +
-                this.$store.state.currentArticle.articleid,
-              {
-                headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
-              }
-            )
+            .get(process.env.VUE_APP_COMMENT + "article/" + this.articleId, {
+              headers: {
+                "jwt-auth-token": this.jwtAuthToken,
+              },
+            })
             .then((res) => {
               this.comments = res.data.data;
             });
