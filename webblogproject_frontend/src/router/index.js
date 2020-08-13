@@ -18,7 +18,7 @@ import UserUpdate from "@/components/user/Update";
 import Email from "@/components/user/Email";
 import SNSRegist from "@/components/user/SNSRegist";
 import SNSCombine from "@/components/user/SNSCombine";
-import Test from "@/components/article/test";
+import Survey from "@/components/Survey";
 import Card from "@/components/article/Card";
 import Category from "@/components/article/Category";
 
@@ -31,9 +31,9 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/test",
-    name: "Test",
-    component: Test,
+    path: "/survey",
+    name: "Survey",
+    component: Survey,
   },
   {
     path: "/category/:category",

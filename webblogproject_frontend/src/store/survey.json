@@ -1,0 +1,35 @@
+{
+  "title": "make survey with Vue.js and SurveyJS!",
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question1",
+          "choices": ["item1", "item2", "item3"]
+        }
+      ]
+    },
+    {
+      "name": "page2",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question1",
+          "choices": ["sgsag", "gasg", "sgasg"]
+        }
+      ]
+    },
+    {
+      "name": "page3",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question1",
+          "choices": ["123", "35", "35"]
+        }
+      ]
+    }
+  ]
+}
