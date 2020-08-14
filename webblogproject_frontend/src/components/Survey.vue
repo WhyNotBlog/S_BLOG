@@ -33,7 +33,7 @@ var json = {
         {
           type: "image",
           name: "banner2",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey02.png"),
           imageWidth: "200",
         },
 
@@ -52,7 +52,7 @@ var json = {
         {
           type: "image",
           name: "banner3",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey03.png"),
           imageWidth: "200",
         },
 
@@ -72,7 +72,7 @@ var json = {
         {
           type: "image",
           name: "banner4",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey04.png"),
           imageWidth: "200",
         },
 
@@ -90,7 +90,7 @@ var json = {
         {
           type: "image",
           name: "banner5",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey05.png"),
           imageWidth: "200",
         },
 
@@ -112,7 +112,7 @@ var json = {
         {
           type: "image",
           name: "banner6",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey06.png"),
           imageWidth: "200",
         },
 
@@ -131,7 +131,7 @@ var json = {
         {
           type: "image",
           name: "banner7",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey07.png"),
           imageWidth: "200",
         },
 
@@ -150,7 +150,7 @@ var json = {
         {
           type: "image",
           name: "banner8",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey08.png"),
           imageWidth: "200",
         },
 
@@ -159,7 +159,10 @@ var json = {
           name: "Quality",
           isRequired: true,
           title: "둘 중 한가지를 만들수 있다면?",
-          choices: ["아이언맨 수트", "자비스"],
+          choices: [
+            "전세계 컴퓨터에 침입하여 세계를 정복할 수 있는 AI 바이러스",
+            "온천을 터뜨려 세계를 정복할 수 있는 거대로봇",
+          ],
         },
       ],
     },
@@ -169,7 +172,7 @@ var json = {
         {
           type: "image",
           name: "banner9",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey09.png"),
           imageWidth: "200",
         },
 
@@ -188,7 +191,7 @@ var json = {
         {
           type: "image",
           name: "banner10",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey10.png"),
           imageWidth: "200",
         },
 
@@ -206,7 +209,7 @@ var json = {
         {
           type: "image",
           name: "banner11",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey11.png"),
           imageWidth: "200",
         },
 
@@ -225,7 +228,7 @@ var json = {
         {
           type: "image",
           name: "banner12",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey12.png"),
           imageWidth: "200",
         },
 
@@ -244,7 +247,7 @@ var json = {
         {
           type: "image",
           name: "banner13",
-          imageLink: require("@/assets/survey01.png"),
+          imageLink: require("@/assets/survey13.png"),
           imageWidth: "200",
         },
 
