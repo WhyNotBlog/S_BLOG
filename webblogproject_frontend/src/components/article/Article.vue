@@ -21,7 +21,9 @@
     <div
       class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
       id="title"
-    >{{ article.title }}</div>
+    >
+      {{ article.title }}
+    </div>
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
@@ -30,7 +32,9 @@
       </div>
       <div class="font-weight-bold text-center">
         작성자 :
-        <span @click="goProfile(article.writerid)">{{ article.editornickname }}</span>
+        <v-btn text @click="goProfile(article.writerid)">
+          <strong>{{ article.editornickname }}</strong></v-btn
+        >
         <v-avatar>
           <img :src="writerProfile" @error="imgError" />
         </v-avatar>
@@ -40,9 +44,14 @@
         </v-btn>
         | 작성일 :
         {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
+        <div
+          class="d-inline-block"
+          v-if="loggedIn !== null && userId === article.writerid"
+        >
           <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
+            <v-icon middle color="black accent-4"
+              >mdi-file-document-edit</v-icon
+            >
           </v-btn>
           <v-btn color="black accent-4" icon @click="deleteArticle()">
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
@@ -71,7 +80,8 @@
           v-for="tag in tags"
           :key="tag.tagid"
           @click="searchTag(tag.tagname)"
-        >#{{ tag.tagname }}</v-chip>
+          >#{{ tag.tagname }}</v-chip
+        >
       </div>
       <div
         class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"

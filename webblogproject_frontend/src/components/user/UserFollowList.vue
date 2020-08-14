@@ -20,9 +20,14 @@
 
             <v-flex sm7 xs7 md7>
               <v-list>
-                <v-list-item v-for="(item) in person" :key="item.id" class="list">
+                <v-list-item v-for="item in person" :key="item.id" class="list">
                   <v-list-item-content>
-                    <v-list-item-title>{{ item.nickname }}</v-list-item-title>
+                    <v-list-item-title>
+                      <v-avatar style="margin-right:10px;">
+                        <img :src="imgSrc(item.id, item.picture)" />
+                      </v-avatar>
+                      {{ item.nickname }}
+                    </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -38,6 +43,12 @@
 export default {
   props: ["type", "nickname", "followingList", "followerList"],
   methods: {
+    imgSrc(id, flag) {
+      //console.log(flag);
+      return flag
+        ? process.env.VUE_APP_ACCOUNT + "downloadFile/" + id + ".jpg"
+        : require("@/assets/profile.svg");
+    },
     closeModal() {
       this.$emit("close-modal");
     },
