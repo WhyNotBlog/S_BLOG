@@ -12,7 +12,7 @@
               <br />
 
               <div class="logo">
-                <img src="@/assets/logo.png" />
+                <img class="image" src="@/assets/logo.png" />
                 <h3 style="color:white;">{{ title }}</h3>
               </div>
               <br />
@@ -26,7 +26,13 @@
                   class="list"
                 >
                   <v-list-item-content>
-                    <v-list-item-title>{{ item.nickname }}</v-list-item-title>
+                    <v-list-item-title>
+                      <v-avatar style="margin-right:10px;">
+                        <img :src="imgSrc(item.id, item.picture)" />
+                      </v-avatar>
+
+                      {{ item.nickname }}
+                    </v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -50,6 +56,12 @@ import axios from "axios";
 export default {
   props: ["type", "id"],
   methods: {
+    imgSrc(id, flag) {
+      //console.log(flag);
+      return flag
+        ? process.env.VUE_APP_ACCOUNT + "downloadFile/" + id + ".jpg"
+        : require("@/assets/profile.svg");
+    },
     closeModal() {
       this.$emit("close-modal");
     },
@@ -127,7 +139,7 @@ export default {
       this.person = this.followingList;
     }
 
-    //console.log(this.followingList);
+    console.log(this.followerList);
   },
 
   computed: {
@@ -172,7 +184,7 @@ export default {
   float: right;
 }
 
-img {
+.image {
   width: 200px;
 }
 
@@ -189,7 +201,7 @@ img {
   h3 {
     font-size: 14px;
   }
-  img {
+  .image {
     width: 150px;
   }
 }
@@ -199,7 +211,7 @@ img {
     font-size: 12px;
   }
 
-  img {
+  .image {
     width: 110px;
   }
 }
