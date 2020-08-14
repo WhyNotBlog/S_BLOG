@@ -67,6 +67,7 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 	    		  "/account/findNickname/**",
 	    		  "/account/findEmail/**", 
 	    		  "/account/delete/**", 
+	    		  "/account/getUserInfoById/**", 
 	    		  "/account/getSNSData/**",
 	    		  "/account/snsRegist", 
 	    		  "/account/getProfile", 
