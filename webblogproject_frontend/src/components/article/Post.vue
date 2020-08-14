@@ -136,7 +136,6 @@ import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
-import { mapActions } from "vuex";
 
 export default {
   value: true,
@@ -185,6 +184,7 @@ export default {
       middleCategory: new String(),
       smallCategory: new Object(),
       categoryInt: 111,
+      userId : new String(),
       modify: 0,
 
       editorText: "",
@@ -258,7 +258,7 @@ export default {
             editornickname: this.loggedIn,
             category: this.categoryInt,
             modify: this.modify,
-            writerid: this.user.id,
+            writerid: this.userId,
             thumbnail: this.thumbnail.name != null ? true : false,
           },
           {
@@ -270,7 +270,6 @@ export default {
         .then((res) => {
           let data = res.data.data;
           this.article = data;
-          this.setCurrentArticle(this.article);
           this.articleid = data.articleid;
           //console.log(this.articleid);
           if (this.thumbnail.name != null) this.addItem();
@@ -305,7 +304,7 @@ export default {
             editornickname: this.loggedIn,
             category: this.categoryInt,
             modify: this.modify,
-            writerid: this.user.id,
+            writerid: this.userId,
             thumbnail: this.thumbnail.name != null ? true : false,
           },
           {
@@ -336,7 +335,6 @@ export default {
             });
         });
     },
-    ...mapActions(["setCurrentArticle"]),
     mdChange() {
       let html = this.$refs.tuiEditor.invoke("getHtml");
       let markdown = this.$refs.tuiEditor.invoke("getMarkdown");
@@ -404,6 +402,8 @@ export default {
       this.loginModal = true;
       return;
     }
+
+    this.userId = this.$store.state.userId;
 
     this.bigCategories = this.$store.state.bigCategories;
     this.bigCategory = this.bigCategories[0];

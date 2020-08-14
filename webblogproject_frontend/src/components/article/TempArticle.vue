@@ -226,6 +226,7 @@ export default {
       snackbar: false,
       text: "",
       timeout: 5000,
+      userId : new String(),
       x: null,
       y: "top",
       mode: "",
@@ -285,7 +286,7 @@ export default {
             editornickname: this.loggedIn,
             category: this.categoryInt,
             modify: this.modify,
-            writerid: this.user.id,
+            writerid: this.userId,
             thumbnail: this.thumbnail.name != null ? true : false,
           },
           {
@@ -306,12 +307,12 @@ export default {
               {
                 articleid: data.articleid,
                 tags: String(this.tags),
-              },
-              {
-                headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
                 },
-              }
+                {
+                  headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                  }
+                },
             )
             .then(() => {
               axios
@@ -323,44 +324,15 @@ export default {
                     },
                   }
                 )
-            .then(() => {
-
-              axios
-                .post(
-                  process.env.VUE_APP_TAG + "regist",
-                  {
-                    articleid: this.$route.params.articleId,
-                    tags: String(this.tags),
-                  },
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then(() => {
-                  axios
-                    .delete(
-                      process.env.VUE_APP_ARTICLETEMP +
-                        `delete/${this.$route.params.articleId}`,
-                      { data: { articletempid: this.$route.params.articleId } },
-                      {
-                        headers: {
-                          "jwt-auth-token": this.jwtAuthToken,
-                        },
-                      }
-                    )
                     .then(() => {
                       this.$router.push({
                         name: "Article",
-                        params: { articleId: this.$route.params.articleId },
+                        params: { articleId: data.articleid },
                       });
                     });
                 });
             });
-          });
-        });
-    },
+          },
     saveTempArticle() {
       axios
         .put(
@@ -372,7 +344,7 @@ export default {
             editornickname: this.loggedIn,
             category: this.categoryInt,
             modify: this.modify,
-            writerid: this.user.id,
+            writerid: this.userId,
             thumbnail: this.thumbnail.name != null ? true : false,
           },
           {
@@ -386,39 +358,20 @@ export default {
           axios
             .put(
               process.env.VUE_APP_TAGTEMP + "update",
-              { data : {
+             {
                 articletempid: data.articleid,
                 tagtemps: String(this.tags),
-                },  
+            },
+            { 
                headers: {
                 "jwt-auth-token": this.jwtAuthToken,
                },
               }
             )
             .then(() => {
-              alert("임시저장에 성공했습니다.");
+              this.text = "임시저장에 성공했습니다.";
+              this.snackbar = true;
               this.$router.push({ name: "TempList" });
-            })
-            .then((res) => {
-              let data = res.data.data;
-              axios
-                .put(
-                  process.env.VUE_APP_TAGTEMP + "update",
-                  {
-                    articletempid: data.articleid,
-                    tagtemps: String(this.tags),
-                  },
-                  {
-                    headers: {
-                      "jwt-auth-token": this.jwtAuthToken,
-                    },
-                  }
-                )
-                .then(() => {
-                  this.text = "임시저장에 성공했습니다.";
-                  this.snackbar = true;
-                  this.$router.push({ name: "TempList" });
-                });
             });
         });
     },
@@ -487,6 +440,8 @@ export default {
       return;
     }
 
+    this.userId = this.$store.state.userId;
+
     axios
       .get(process.env.VUE_APP_ARTICLETEMP + this.$route.params.articleId, 
       {     headers: {
@@ -495,7 +450,6 @@ export default {
           })
       .then((response) => {
         this.article = response.data.data;
-        console.log(this.article);
 
         this.title = this.article.title;
         this.content = this.article.content;
