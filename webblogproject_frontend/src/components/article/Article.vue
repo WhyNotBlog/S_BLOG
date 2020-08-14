@@ -21,9 +21,7 @@
     <div
       class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
       id="title"
-    >
-      {{ article.title }}
-    </div>
+    >{{ article.title }}</div>
     <hr class="my-5" />
     <div id="body">
       <div class="font-weight-bold text-center">
@@ -32,19 +30,18 @@
       </div>
       <div class="font-weight-bold text-center">
         작성자 : {{ article.editornickname }}
+        <v-avatar>
+          <img :src="writerProfile" @error="imgError" />
+        </v-avatar>
+
         <v-btn text @click="checkFollow" v-if="userId != article.writerid">
           <v-icon>{{ followOrUnfollow }}</v-icon>
         </v-btn>
         | 작성일 :
         {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <div
-          class="d-inline-block"
-          v-if="loggedIn !== null && userId === article.writerid"
-        >
+        <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
           <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4"
-              >mdi-file-document-edit</v-icon
-            >
+            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
           </v-btn>
           <v-btn color="black accent-4" icon @click="deleteArticle()">
             <v-icon middle color="black accent-4">mdi-delete</v-icon>
@@ -73,8 +70,7 @@
           v-for="tag in tags"
           :key="tag.tagid"
           @click="searchTag(tag.tagname)"
-          >#{{ tag.tagname }}</v-chip
-        >
+        >#{{ tag.tagname }}</v-chip>
       </div>
       <div
         class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
@@ -126,6 +122,7 @@ export default {
       x: null,
       y: "top",
       mode: "",
+      writerProfile: `${require("@/assets/profile.svg")}`,
     };
   },
   components: {
@@ -166,6 +163,11 @@ export default {
 
     this.article = response.data.data;
     this.categoryInt = this.article.category;
+    this.writerProfile =
+      process.env.VUE_APP_ACCOUNT +
+      "downloadFile/" +
+      this.article.writerid +
+      ".jpg";
 
     const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
     const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
@@ -242,6 +244,10 @@ export default {
     },
   },
   methods: {
+    imgError() {
+      //console.log("err");
+      this.writerProfile = `${require("@/assets/profile.svg")}`;
+    },
     checkFollow() {
       if (this.loggedIn == null) {
         this.text = "로그인시 팔로우 가능합니다!";
