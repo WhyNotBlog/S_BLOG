@@ -23,7 +23,7 @@
         <v-layout column>
           <div class="profile">
             <v-avatar>
-              <img :src="profile" @error="imgError" />
+              <img :src="imgSrc" @error="imgError" />
             </v-avatar>
           </div>
           <br />
@@ -117,7 +117,7 @@
         <v-layout column>
           <div class="profile">
             <v-avatar>
-              <img :src="profile" @error="imgError" />
+              <img :src="imgSrc" @error="imgError" />
             </v-avatar>
           </div>
           <br />
@@ -262,6 +262,8 @@ export default {
       this.$router.push("/");
     }
 
+    this.imgSrc = this.profile;
+
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
         headers: {
@@ -318,7 +320,7 @@ export default {
 
     imgError() {
       //console.log("err");
-      this.profile = `${require("@/assets/profile.svg")}`;
+      this.imgSrc = `${require("@/assets/profile.svg")}`;
     },
     update() {
       axios
@@ -354,7 +356,7 @@ export default {
     },
     fileUpload(file) {
       this.selectedFile = file;
-      this.profile = URL.createObjectURL(file);
+      this.imgSrc = URL.createObjectURL(file);
     },
     addItem() {
       const data = new FormData(); // 서버로 전송할 폼데이터
