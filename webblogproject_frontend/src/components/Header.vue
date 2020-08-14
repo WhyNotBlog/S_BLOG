@@ -11,7 +11,14 @@
 
       <v-tooltip bottom color="secondary">
         <template #activator="{ on}">
-          <v-btn class="icons" text fab slot="activator" @click="moveSearch" min-width="56px">
+          <v-btn
+            class="icons"
+            text
+            fab
+            slot="activator"
+            @click="moveSearch"
+            min-width="56px"
+          >
             <v-icon v-on="on">search</v-icon>
           </v-btn>
         </template>
@@ -30,7 +37,13 @@
               height="35px"
               min-width="35px"
             >
-              <img class="myprofile" v-on="on" :src="profile" @error="imgError" width="35px" />
+              <img
+                class="myprofile"
+                v-on="on"
+                :src="profile"
+                @error="imgError"
+                width="35px"
+              />
             </v-avatar>
           </template>
           <span>내 정보</span>
@@ -38,7 +51,14 @@
 
         <v-tooltip bottom color="secondary">
           <template #activator="{ on}">
-            <v-btn class="icon2" text fab slot="activator" @click="movePost" min-width="56px">
+            <v-btn
+              class="icon2"
+              text
+              fab
+              slot="activator"
+              @click="movePost"
+              min-width="56px"
+            >
               <v-icon v-on="on">mdi-pencil</v-icon>
             </v-btn>
           </template>
@@ -75,14 +95,23 @@
           <template #activator="{ on: dialog, attrs}">
             <v-tooltip bottom color="secondary">
               <template #activator="{ on: tooltip }">
-                <v-btn text fab slot="activator" v-bind="attrs" v-on="{ ...dialog, ...tooltip }">
+                <v-btn
+                  text
+                  fab
+                  slot="activator"
+                  v-bind="attrs"
+                  v-on="{ ...dialog, ...tooltip }"
+                >
                   <v-icon>person_add</v-icon>
                 </v-btn>
               </template>
               <span>회원가입</span>
             </v-tooltip>
           </template>
-          <register @close-modal="closeModal2" @email-success="closeModal2"></register>
+          <register
+            @close-modal="closeModal2"
+            @email-success="closeModal2"
+          ></register>
         </v-dialog>
       </div>
     </v-toolbar>
@@ -97,14 +126,17 @@
             <br />
             <br />
             <span>
-              <strong>{{ loggedIn }}</strong>님 환영합니다.
+              <strong>{{ loggedIn }}</strong
+              >님 환영합니다.
             </span>
           </div>
           <div v-else>
             <img src="@/assets/logo.png" width="130px" />
             <br />
 
-            <v-btn text color="white" @click="loginModal = true">S_Blog 시작하기</v-btn>
+            <v-btn text color="white" @click="loginModal = true"
+              >S_Blog 시작하기</v-btn
+            >
             <br />
           </div>
         </v-list>
@@ -114,9 +146,17 @@
         <br />
 
         <v-list>
-          <v-list-item v-for="item in links" :key="item.text" :to="item.route" style="color:white">
+          <v-list-item
+            v-for="item in links"
+            :key="item.text"
+            :to="item.route"
+            style="color:white"
+          >
             <v-list-item-content>
-              <v-list-item-title v-html="item.text" style="color:white"></v-list-item-title>
+              <v-list-item-title
+                v-html="item.text"
+                style="color:white"
+              ></v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-action>
