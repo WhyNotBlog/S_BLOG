@@ -109,7 +109,7 @@ public class RestFollowController {
 				Map<String, Object> tempUserInfo = new HashMap<String, Object>();
 				tempUserInfo.put("id", id);
 				tempUserInfo.put("nickname", user.getNickname());
-				tempUserInfo.put("picture", user.getPicture()!="");
+				tempUserInfo.put("picture", user.getPicture());
 				result.add(tempUserInfo);
 			}
 			entity = handleSuccess(result);
@@ -134,7 +134,7 @@ public class RestFollowController {
 				Map<String, Object> tempUserInfo = new HashMap<String, Object>();
 				tempUserInfo.put("id", id);
 				tempUserInfo.put("nickname", user.getNickname());
-				tempUserInfo.put("picture", user.getPicture()!="");
+				tempUserInfo.put("picture", user.getPicture());
 				result.add(tempUserInfo);
 			}
 			// logic end ----
