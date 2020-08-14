@@ -27,7 +27,7 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title>
-                      <v-avatar style="margin-right:10px;margin-top:10px">
+                      <v-avatar style="margin-right:10px">
                         <img :src="imgSrc(item.id, item.picture)" />
                       </v-avatar>
 

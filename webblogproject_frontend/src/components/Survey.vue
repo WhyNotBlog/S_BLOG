@@ -100,8 +100,8 @@ var json = {
           isRequired: true,
           title: "이 중에서 운명적인 이끌림이 느껴지는것은? ",
           choices: [
-            "컬러풀한 화면에 편리하게 정보 배치하기",
-            "흑백 DB에서 원하는 정보 정리하기",
+            "컬러풀한 화면을 보며 사용자가 보기 좋고 편리하게 정보 배치하기",
+            "흑백으로 이루어진 데이터베이스에서 원하는 정보만 쏙 뽑아내서 정리하기",
           ],
         },
       ],
@@ -283,7 +283,7 @@ export default {
       this.survey.getQuestionByName("banner" + index).imageWidth = "100%";
       this.survey.getQuestionByName("banner" + index).imageHeight = "100%";
     }
-    this.survey.setd;
+
     this.survey.render();
   },
   components: { Survey },
@@ -293,5 +293,9 @@ export default {
 <style>
 .sv_custom_header {
   background: none !important;
+}
+
+.sv_main {
+  background: none;
 }
 </style>
