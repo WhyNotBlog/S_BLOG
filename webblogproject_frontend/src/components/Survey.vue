@@ -21,7 +21,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "1",
           isRequired: true,
           title: "배가아파서 화장실에 간 당신 눈앞에 보이는 문고리의 모습",
           choices: ["이게 왜? 잠기기만 하면 된다", "신경쓰인다"],
@@ -39,7 +39,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "2",
           isRequired: true,
           title: "조별과제에서 당신의 역할은?",
           choices: ["자료조사 및 정리", "정리된 자료로 ppt 만들기"],
@@ -58,7 +58,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "3",
           isRequired: true,
           title:
             "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
@@ -78,7 +78,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "4",
           isRequired: true,
           title: "무슨 색인가요?",
           choices: ["빨강", "초록"],
@@ -96,7 +96,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "5",
           isRequired: true,
           title: "이 중에서 운명적인 이끌림이 느껴지는것은? ",
           choices: [
@@ -118,7 +118,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "6",
           isRequired: true,
           title: "밴드에 들어가고 싶어요",
           choices: ["베이스기타 할래", "보컬할래"],
@@ -137,7 +137,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "7",
           isRequired: true,
           title: "이 화면을 보고 드는 생각은?",
           choices: ["잘 모르겠다 얼른 닫는다", "해커 빙의한다 나 좀 멋있는듯"],
@@ -156,7 +156,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "8",
           isRequired: true,
           title: "둘 중 한가지를 만들수 있다면?",
           choices: [
@@ -178,7 +178,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "9",
           isRequired: true,
           title: "1더하기1 은?",
           choices: ["2", "귀요미"],
@@ -197,7 +197,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "10",
           isRequired: true,
           title: "SNS에 글 사진을 올리면?",
           choices: ["알람을 수시로 확인한다", "올리고 끝"],
@@ -215,7 +215,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "11",
           isRequired: true,
           title: "고민하는 친구가 있을때 당신은?",
           choices: ["공감해준다", "해답을 찾아준다"],
@@ -234,7 +234,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "12",
           isRequired: true,
           title: "미적감각이 있다는 이야기를 종종 듣는다",
           choices: ["Yes", "No"],
@@ -253,7 +253,7 @@ var json = {
 
         {
           type: "radiogroup",
-          name: "Quality",
+          name: "13",
           isRequired: true,
           title: "사람들이 주목할때",
           choices: ["솔직히 즐긴다. 짜릿해", "으으 부담스러워"],
@@ -274,7 +274,7 @@ export default {
       survey: model,
     };
   },
-  created() {
+  async created() {
     this.survey.pageNextText = "다음";
     this.survey.pagePrevText = "이전";
     this.survey.completeText = "결과보기";
@@ -285,6 +285,31 @@ export default {
     }
 
     this.survey.render();
+    await this.survey.onComplete.add(function(result) {
+      let front = 0;
+      let back = 0;
+      for (let key in result.data) {
+        if (
+          json.pages[Number(key) - 1].questions[1].choices[0] ==
+          result.data[key]
+        ) {
+          front++;
+        } else {
+          back++;
+        }
+      }
+
+      if (front - back > 3) {
+        console.log("front");
+      } else if (back - front > 3) {
+        console.log("back");
+      } else {
+        console.log("full");
+      }
+
+      console.log(front);
+      console.log(back);
+    });
   },
   components: { Survey },
 };
