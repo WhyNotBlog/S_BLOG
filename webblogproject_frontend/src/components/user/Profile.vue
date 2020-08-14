@@ -46,7 +46,9 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >{{ userFollowerList.length }}</div>
+              >
+                {{ userFollowerList.length }}
+              </div>
             </template>
             <Follow
               @close-modal="closeModal"
@@ -66,7 +68,9 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >{{ userFollowingList.length }}</div>
+              >
+                {{ userFollowingList.length }}
+              </div>
             </template>
 
             <Follow
@@ -156,7 +160,6 @@ export default {
           this.imgSrc =
             process.env.VUE_APP_ACCOUNT + "downloadFile/" + this.id + ".jpg";
           this.introduce = data.introduce;
-          this.loggedIn = data.nickname;
         }
       });
   },

@@ -12,7 +12,7 @@
               <br />
 
               <div class="logo">
-                <img src="@/assets/logo.png" />
+                <img class="image" src="@/assets/logo.png" />
                 <h3 style="color:white;">{{ title }}</h3>
               </div>
               <br />
@@ -104,7 +104,7 @@ export default {
   float: right;
 }
 
-img {
+.image {
   width: 200px;
 }
 
@@ -121,7 +121,7 @@ img {
   h3 {
     font-size: 14px;
   }
-  img {
+  .image {
     width: 150px;
   }
 }
@@ -131,7 +131,7 @@ img {
     font-size: 12px;
   }
 
-  img {
+  .image {
     width: 110px;
   }
 }
