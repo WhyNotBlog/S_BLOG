@@ -400,13 +400,16 @@ public class RestAccountController {
     }
 
 	@GetMapping("/getUserInfoById/{id}")
-	@ApiOperation(value = "이메일중복확인")
+	@ApiOperation(value = "다른 사용자 정보 조회")
 	public ResponseEntity<Map<String, Object>> getUserInfoById(@PathVariable int id) throws AddressException, MessagingException{		
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			User result = userAccountService.getUserById(id);
 			Map<String, Object> resultMap = new HashMap<>();
-			entity = handleSuccess(result);
+			resultMap.put("nickname", result.getNickname());
+			resultMap.put("introduce", result.getIntroduce());
+			resultMap.put("giturl", result.getGiturl());
+			entity = handleSuccess(resultMap);
 		} catch (Exception e) {
 			entity = handleException(e);
 		}
