@@ -14,6 +14,7 @@
               <div class="logo">
                 <img class="image" src="@/assets/logo.png" />
                 <h3 style="color:white;">{{ title }}</h3>
+                <h3 style="color:white;">팔로우한 친구들</h3>
               </div>
               <br />
             </v-flex>
@@ -62,10 +63,10 @@ export default {
 
   created() {
     if (this.type == "Follower") {
-      this.title = this.nickname + "님을 팔로우한 친구들";
+      this.title = this.nickname + "님을";
       this.person = this.userFollowerList;
     } else {
-      this.title = this.nickname + "님이 팔로우한 친구들";
+      this.title = this.nickname + "님이";
       this.person = this.userFollowingList;
     }
 
@@ -111,7 +112,7 @@ export default {
 .list {
   max-width: 100%;
   height: 0px;
-  max-height: 0px;
+  min-height: 58px;
   border: solid;
   border-color: rgba(0, 0, 0, 0.12);
   border-width: 0 0 thin 0;

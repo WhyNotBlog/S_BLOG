@@ -27,7 +27,7 @@
                 >
                   <v-list-item-content>
                     <v-list-item-title>
-                      <v-avatar style="margin-right:10px;">
+                      <v-avatar style="margin-right:10px;margin-top:10px">
                         <img :src="imgSrc(item.id, item.picture)" />
                       </v-avatar>
 
@@ -190,8 +190,7 @@ export default {
 
 .list {
   max-width: 100%;
-  height: 0px;
-  max-height: 0px;
+  min-height: 58px;
   border: solid;
   border-color: rgba(0, 0, 0, 0.12);
   border-width: 0 0 thin 0;
