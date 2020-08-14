@@ -64,9 +64,7 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler"
-                >로그인</v-btn
-              >
+              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
             </v-card-actions>
             <br />
           </v-card>
@@ -184,7 +182,6 @@ export default {
               ".jpg";
 
             this.getFollowingList();
-
             this.jwtAuthToken = res.headers["jwt-auth-token"];
 
             this.$emit("login-success");
@@ -192,7 +189,6 @@ export default {
           }
         })
         .catch(() => {
-          //console.log(err);
           this.text = "아이디 또는 비밀번호를 다시 확인해주세요!";
           this.snackbar = true;
         });
