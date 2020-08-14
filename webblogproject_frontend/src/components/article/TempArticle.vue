@@ -164,7 +164,6 @@ import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/vue-editor";
 import axios from "axios";
-import { mapActions } from "vuex";
 
 export default {
   value: true,
@@ -275,8 +274,8 @@ export default {
         this.tagsSelected.splice(tagIndex, 1);
       }
     },
-    ...mapActions(["setCurrentArticle"]),
-    postArticle() {
+     postArticle() {
+      // console.log(this.thumbnail.name);
       axios
         .post(
           process.env.VUE_APP_ARTICLE + "regist",
@@ -287,7 +286,7 @@ export default {
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.user.id,
-            thumbnail: this.thumbnailB.name != null ? true : false,
+            thumbnail: this.thumbnail.name != null ? true : false,
           },
           {
             headers: {
@@ -297,10 +296,10 @@ export default {
         )
         .then((res) => {
           let data = res.data.data;
-          let postedArticleId = data.articleid;
           this.article = data;
-          this.setCurrentArticle(this.article);
-
+          this.articleid = data.articleid;
+          //console.log(this.articleid);
+          if (this.thumbnail.name != null) this.addItem();
           axios
             .post(
               process.env.VUE_APP_TAG + "regist",
@@ -318,31 +317,19 @@ export default {
               axios
                 .delete(
                   process.env.VUE_APP_ARTICLETEMP + `delete/${this.$route.params.articleId}`,
-                  { data: { articletempid: this.$route.params.articleId } },
-                  {
+                  { data: { articletempid: this.$route.params.articleId },
                     headers: {
                       "jwt-auth-token": this.jwtAuthToken,
                     },
                   }
                 )
-                .then(() => {
-                  this.$router.push({
-                    name: "Article",
-                    params: { articleId: postedArticleId },
-                  });
-                });
-            })
-            .then((res) => {
-              let data = res.data.data;
-              let postedArticleId = data.articleid;
-              this.article = data;
-              this.setCurrentArticle(this.article);
+            .then(() => {
 
               axios
                 .post(
                   process.env.VUE_APP_TAG + "regist",
                   {
-                    articleid: data.articleid,
+                    articleid: this.$route.params.articleId,
                     tags: String(this.tags),
                   },
                   {
@@ -366,11 +353,12 @@ export default {
                     .then(() => {
                       this.$router.push({
                         name: "Article",
-                        params: { articleId: postedArticleId },
+                        params: { articleId: this.$route.params.articleId },
                       });
                     });
                 });
             });
+          });
         });
     },
     saveTempArticle() {
@@ -398,14 +386,13 @@ export default {
           axios
             .put(
               process.env.VUE_APP_TAGTEMP + "update",
-              {
+              { data : {
                 articletempid: data.articleid,
                 tagtemps: String(this.tags),
-              },
-              {
-                headers: {
-                  "jwt-auth-token": this.jwtAuthToken,
-                },
+                },  
+               headers: {
+                "jwt-auth-token": this.jwtAuthToken,
+               },
               }
             )
             .then(() => {
@@ -441,8 +428,6 @@ export default {
           process.env.VUE_APP_ARTICLETEMP + `delete/${this.$route.params.articleId}`,
           {
             data: { articleid: this.$route.params.articleId },
-          },
-          {
             headers: {
               "jwt-auth-token": this.jwtAuthToken,
             },
