@@ -5,7 +5,7 @@
       <v-flex xs12 sm12 md3 lg3 xl3>
         <div class="profile">
           <v-avatar>
-            <img :src="profile" />
+            <img :src="imgSrc" @error="imgError" />
           </v-avatar>
         </div>
       </v-flex>
@@ -46,9 +46,14 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >{{ followerList.length }}</div>
+              >{{ userFollowerList.length }}</div>
             </template>
-            <Follow @close-modal="closeModal" type="Follower" :id="this.userId"></Follow>
+            <Follow
+              @close-modal="closeModal"
+              type="Follower"
+              :nickname="this.nickname"
+              :followerList="this.userFollowerList"
+            ></Follow>
           </v-dialog>
         </v-flex>
         <v-flex xs3 sm3 md3 lg3 xl3>
@@ -61,16 +66,19 @@
                 slot="activator"
                 v-bind="attrs"
                 v-on="{ ...dialog }"
-              >{{ followingList.length }}</div>
+              >{{ userFollowingList.length }}</div>
             </template>
 
-            <Follow @close-modal="closeModal2" type="Following" :id="this.userId"></Follow>
+            <Follow
+              @close-modal="closeModal2"
+              type="Following"
+              :nickname="this.nickname"
+              :followingList="this.userFollowingList"
+            ></Follow>
           </v-dialog>
         </v-flex>
       </v-layout>
-      <br />
     </div>
-    <br />
     <br />
 
     <div class="post" style="margin-left:10px; margin-right:10px">
@@ -83,7 +91,7 @@
 <script>
 import axios from "axios";
 import PostView from "@/components/PostView";
-import Follow from "@/components/user/FollowList";
+import Follow from "@/components/user/UserFollowList";
 import Card from "@/components/article/Card";
 
 export default {
@@ -145,6 +153,8 @@ export default {
           this.nickname = data.nickname;
           this.email = data.email;
           this.gitUrl = data.giturl;
+          this.imgSrc =
+            process.env.VUE_APP_ACCOUNT + "downloadFile/" + this.id + ".jpg";
           this.introduce = data.introduce;
           this.loggedIn = data.nickname;
         }
@@ -152,6 +162,10 @@ export default {
   },
 
   methods: {
+    imgError() {
+      //console.log("err");
+      this.imgSrc = `${require("@/assets/profile.svg")}`;
+    },
     moveGit() {
       location.href = this.gitUrl;
     },
@@ -165,13 +179,13 @@ export default {
       axios
         .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.id)
         .then((res) => {
-          this.followingList = res.data.data;
+          this.userFollowingList = res.data.data;
         });
 
       axios
         .get(process.env.VUE_APP_FOLLOW + "followList/" + this.id)
         .then((res) => {
-          this.followerList = res.data.data;
+          this.userFollowerList = res.data.data;
         });
     },
   },
@@ -193,6 +207,8 @@ export default {
       followerModal: false,
       followingModal: false,
       page: 0,
+      userFollowerList: new Array(),
+      userFollowingList: new Array(),
     };
   },
 };
@@ -216,7 +232,7 @@ export default {
 }
 
 .backImg {
-  width: 96%;
+  width: 80%;
   margin: auto;
   background-color: #b7b4da;
   border-radius: 2rem;

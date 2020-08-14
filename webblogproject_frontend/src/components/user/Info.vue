@@ -79,28 +79,22 @@
         >프로필 편집</v-btn>
       </div>
     </div>
-    <br />
-    <br />
 
     <div class="post" style="margin-left:10px; margin-right:10px">
       <Card :data="this.articles" v-if="isCard" />
     </div>
   </div>
 </template>
-<script src="https://unpkg.com/vue-infinite-loading@2.4.4/dist/vue-infinite-loading.js"></script>
+
 
 <script>
 import axios from "axios";
-import PostView from "@/components/PostView";
 import Follow from "@/components/user/FollowList";
-import InfiniteLoading from "vue-infinite-loading";
 import Card from "@/components/article/Card";
-
-const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
 
 export default {
   name: "info",
-  components: { PostView, Follow, InfiniteLoading, Card },
+  components: { Follow, Card },
   computed: {
     jwtAuthToken: {
       get() {
@@ -125,9 +119,6 @@ export default {
       set(value) {
         this.$store.dispatch("setLoginModal", value);
       },
-    },
-    mobileView() {
-      return window.innerWidth <= 500;
     },
     userId: {
       get() {
@@ -271,7 +262,7 @@ export default {
 }
 
 .backImg {
-  width: 96%;
+  width: 80%;
   margin: auto;
   background-color: #b7b4da;
   border-radius: 2rem;

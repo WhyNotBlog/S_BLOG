@@ -29,7 +29,8 @@
         {{ smallCategory }}
       </div>
       <div class="font-weight-bold text-center">
-        작성자 : {{ article.editornickname }}
+        작성자 :
+        <span @click="goProfile(article.writerid)">{{ article.editornickname }}</span>
         <v-avatar>
           <img :src="writerProfile" @error="imgError" />
         </v-avatar>
@@ -244,6 +245,9 @@ export default {
     },
   },
   methods: {
+    goProfile(writerid) {
+      this.$router.push("/user/profile/" + writerid);
+    },
     imgError() {
       //console.log("err");
       this.writerProfile = `${require("@/assets/profile.svg")}`;
