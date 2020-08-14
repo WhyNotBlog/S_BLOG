@@ -405,6 +405,7 @@ public class RestAccountController {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			User result = userAccountService.getUserById(id);
+			Map<String, Object> resultMap = new HashMap<>();
 			entity = handleSuccess(result);
 		} catch (Exception e) {
 			entity = handleException(e);
