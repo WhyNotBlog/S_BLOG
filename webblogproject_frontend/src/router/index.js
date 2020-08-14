@@ -38,19 +38,6 @@ VueRouter.prototype.push = function push(location) {
 Vue.use(VueRouter);
 
 const routes = [
-  //기본
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-
-  {
-    path: "/*",
-    name: "Error",
-    component: Error,
-  },
-
   //포스팅
   {
     path: "/search/:type/:word",
@@ -163,6 +150,19 @@ const routes = [
     path: "/survey",
     name: "Survey",
     component: Survey,
+  },
+
+  //기본
+  {
+    path: "/",
+    name: "Home",
+    component: Home,
+  },
+
+  {
+    path: "/*",
+    name: "Error",
+    component: Error,
   },
 ];
 
