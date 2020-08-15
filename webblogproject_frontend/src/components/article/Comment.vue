@@ -35,7 +35,7 @@
             |
             <!-- <v-btn color="black accent-4" icon @click="changeComment(comment)">
               <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
-            </v-btn> -->
+            </v-btn>-->
             <v-btn color="red accent-4" icon @click="deleteComment(comment)">
               <v-icon middle color="red accent-4">mdi-alpha-x-box-outline</v-icon>
             </v-btn>
@@ -62,7 +62,7 @@
             <v-btn class="d-inline mx-1 my-auto" color="secondary">댓글 수정</v-btn>
             <v-btn class="d-inline mx-1 my-auto" color="secondary">취소</v-btn>
           </v-form>
-        </div> -->
+      </div>-->
     </div>
     <v-form
       ref="form"
@@ -180,13 +180,13 @@ export default {
     },
     changeComment(currentComment) {
       if (this.needUpdate[currentComment.commentid] === false) {
-      this.needUpdate[currentComment.commentid] = true;
-      this.willUpdatedCommentCopy = currentComment;
-      // currentComment = this.willUpdatedComment();  )
+        this.needUpdate[currentComment.commentid] = true;
+        this.willUpdatedCommentCopy = currentComment;
+        // currentComment = this.willUpdatedComment();  )
       }
     },
     updateComment() {
-      axios.post()
+      axios.post();
     },
   },
   component: {},
@@ -217,8 +217,8 @@ export default {
         this.comments.forEach(
           (comment) => (this.needUpdate[comment.commentid] = false)
         );
-        console.log(this.needUpdate);
-        console.log(this.comments);
+        //console.log(this.needUpdate);
+        //console.log(this.comments);
       });
   },
   filters: {

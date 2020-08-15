@@ -58,16 +58,17 @@
             dark
             color="#9FA9D8"
             @click="tagSearch(item.tagname)"
-            >#{{ item.tagname }}</v-btn
           >
+            <b>#{{ item.tagname }}</b>
+          </v-btn>
         </span>
       </v-list>
       <br />
     </v-list>
 
-    <v-btn text style="float:right" @click="hide"
-      ><v-icon>{{ icon }}</v-icon></v-btn
-    >
+    <v-btn text style="float:right" @click="hide">
+      <v-icon>{{ icon }}</v-icon>
+    </v-btn>
   </div>
 </template>
 

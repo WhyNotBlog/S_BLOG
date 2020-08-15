@@ -19,44 +19,41 @@
 
     <v-layout row justify-start style="margin:auto">
       <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
-        <div class="content" @click="moveToArticle(article)">
+        <!-- <v-hover>
+        <template v-slot:default="{ hover }">-->
+        <div class="content">
           <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="270px">
-            <div style="background-color:white">
-              <v-img
-                contain
-                class="white--text align-end"
-                height="168px"
-                style="margin-top:16px;margin-left:16px;margin-right:16px; "
-                :src="imgSrc(article.articleid, article.thumbnail)"
-              ></v-img>
-            </div>
-            <v-card-title
-              class="card-title justify-center"
-            >{{ article.title ? article.title.slice(0, 10) : "제목없음" }}</v-card-title>
+            <a @click="moveToArticle(article)">
+              <div style="background-color:white">
+                <v-img
+                  contain
+                  class="white--text align-end"
+                  height="168px"
+                  style="margin-top:16px;margin-left:16px;margin-right:16px; "
+                  :src="imgSrc(article.articleid, article.thumbnail)"
+                ></v-img>
+              </div>
+              <v-card-title
+                class="card-title justify-center"
+              >{{ article.title ? (article.title.length >10? article.title.slice(0, 10)+"...":article.title.slice(0, 10)) : "제목없음" }}</v-card-title>
+            </a>
 
-            <v-card-text class="card-text text--primary"></v-card-text>
             <v-footer class="d-flex justify-space-around">
-              <div>
-                <b>{{ article.editdate | dateToString }}</b>
-              </div>
-              <div>
-                <b>|</b>
-              </div>
-              <div>
-                <b>{{ article.editornickname }}</b>
-              </div>
-              <div>
-                <b>|</b>
-              </div>
-              <div>
-                <b>조회수 : {{ article.hits }}</b>
-              </div>
+              <div style="font-family: Jua;">{{ article.editdate | dateToString }}</div>
+
+              <div style="font-family: Jua;">조회수 : {{ article.hits }}</div>
             </v-footer>
 
-            <v-card-actions class="justify-space-around">
-              <v-btn color="orange" icon @click.stop="copyLink(article)">
-                <v-icon middle color>mdi-share</v-icon>
-              </v-btn>
+            <v-card-actions>
+              <div style="margin-left:8px">
+                <v-avatar style="margin-right:10px; min-width:30px; width:30px; height:30px">
+                  <img :src="imgSrc2(article.articleid, article.picture)" />
+                </v-avatar>
+                <span
+                  style="font-family:Nanum Gothic Coding;font-size:17px"
+                >{{ article.editornickname }}</span>
+              </div>
+              <v-spacer></v-spacer>
               <v-btn
                 color="red accent-4"
                 icon
@@ -64,14 +61,25 @@
                 @click.stop="changeLiked(article)"
               >
                 <v-icon middle color="red accent-4" icon>mdi-heart</v-icon>
+                <span class="like">{{ article.likecount }}</span>
               </v-btn>
               <v-btn color="red accent-4" icon v-else @click.stop="changeLiked(article)">
                 <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+                <span class="like">{{ article.likecount }}</span>
               </v-btn>
-              {{ article.likecount }} 명이 좋아합니다.
+
+              <v-btn color="orange" icon @click.stop="copyLink(article)" style="margin-right:8px">
+                <v-icon middle color>mdi-share</v-icon>
+              </v-btn>
             </v-card-actions>
+            <!-- 
+                <v-fade-transition>
+                  <v-overlay v-if="hover" absolute color="#595959"></v-overlay>
+            </v-fade-transition>-->
           </v-card>
         </div>
+        <!-- </template>
+        </v-hover>-->
       </v-flex>
     </v-layout>
   </div>
@@ -168,13 +176,26 @@ export default {
   filters: {
     dateToString(date) {
       try {
-        return date.slice(0, 10);
+        return (
+          date.slice(0, 4) +
+          "년 " +
+          date.slice(5, 7) +
+          "월 " +
+          date.slice(8, 10) +
+          "일"
+        );
       } catch (e) {
         console.log("");
       }
     },
   },
   methods: {
+    imgSrc2(id, flag) {
+      //console.log(flag);
+      return flag
+        ? process.env.VUE_APP_ACCOUNT + "downloadFile/" + id + ".jpg"
+        : require("@/assets/profile.svg");
+    },
     imgSrc(id, flag) {
       //console.log(flag);
 
@@ -291,6 +312,8 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css?family=Jua:400");
+@import url("https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:700");
 .content {
   width: calc(100% - 2rem);
   transition-duration: 0.6s;
@@ -300,8 +323,14 @@ export default {
 }
 
 .content:hover {
-  transform: translate3d(-4px, -4px, -4px);
+  transform: translateY(-8px);
   box-shadow: rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+}
+.v-application a {
+  color: black;
+}
+
+.like {
+  font-family: Jua;
 }
 </style>
