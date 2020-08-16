@@ -18,7 +18,7 @@
     </v-snackbar>
 
     <v-layout row justify-start style="margin:auto">
-      <v-flex v-for="article in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
+      <v-flex v-for="(article) in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
         <!-- <v-hover>
         <template v-slot:default="{ hover }">-->
         <div class="content">
@@ -46,9 +46,7 @@
 
             <v-card-actions>
               <div style="margin-left:8px">
-                <v-avatar style="margin-right:10px; min-width:30px; width:30px; height:30px">
-                  <img :src="imgSrc2(article.articleid, article.picture)" />
-                </v-avatar>
+                <v-icon style="margin-right:8px;color:black">face</v-icon>
                 <span
                   style="font-family:Nanum Gothic Coding;font-size:17px"
                 >{{ article.editornickname }}</span>
@@ -190,12 +188,6 @@ export default {
     },
   },
   methods: {
-    imgSrc2(id, flag) {
-      //console.log(flag);
-      return flag
-        ? process.env.VUE_APP_ACCOUNT + "downloadFile/" + id + ".jpg"
-        : require("@/assets/profile.svg");
-    },
     imgSrc(id, flag) {
       //console.log(flag);
 
@@ -241,7 +233,6 @@ export default {
         params: { articleId: article.articleid },
       });
     },
-
     checkLiked(article) {
       if (this.loggedIn !== null)
         return this.userLiked.includes(article.articleid);

@@ -29,7 +29,7 @@
 
     <v-divider style="margin:5px auto; width:96%"></v-divider>
 
-    <div style="text-align:center">
+    <div style="text-align:center;">
       <v-layout row wrap justify-space-around>
         <v-flex xs3 sm3 md3 lg3 xl3>
           <h4>게시물</h4>
@@ -39,7 +39,7 @@
           <h4>팔로워</h4>
 
           <v-dialog v-model="followerModal" width="650px">
-            <template #activator="{ on: dialog, attrs}">
+            <template #activator="{ on: dialog , attrs}">
               <div
                 text
                 fab
@@ -70,19 +70,45 @@
       </v-layout>
       <br />
       <div>
-        <v-btn
-          class="editBtn"
-          color="#9fa9d8"
-          dark
-          @click="moveUpdate"
-          style="margin-right:10px"
-        >프로필 편집</v-btn>
+        <v-btn class="editBtn" color="#9fa9d8" dark @click="moveUpdate" style="margin-right:10px">
+          <b>프로필 편집</b>
+        </v-btn>
       </div>
     </div>
+    <br />
+    <br />
 
-    <div class="post" style="margin-left:10px; margin-right:10px">
-      <Card :data="this.articles" v-if="isCard" />
-    </div>
+    <v-card width="80%" height="100%" style="margin:auto">
+      <v-tabs background-color="#f1f3f5" color="black">
+        <v-tab>최근 게시물</v-tab>
+        <v-tab>임시저장 글</v-tab>
+        <v-tab>좋아요한 글</v-tab>
+
+        <v-tab-item style="background-color:#f1f3f5">
+          <br />
+          <div class="post" style="margin-left:10px; margin-right:10px">
+            <Card :data="this.articles" v-if="isCard" />
+          </div>
+          <br />
+        </v-tab-item>
+
+        <v-tab-item style="background-color:#f1f3f5">
+          <br />
+          <div class="post" style="margin-left:10px; margin-right:10px">
+            <Card :data="this.tempArticles" v-if="isCard" />
+          </div>
+          <br />
+        </v-tab-item>
+
+        <v-tab-item style="background-color:#f1f3f5">
+          <br />
+          <div class="post" style="margin-left:10px; margin-right:10px">
+            <Card :data="this.articles" v-if="isCard" />
+          </div>
+          <br />
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
   </div>
 </template>
 
@@ -189,6 +215,17 @@ export default {
           this.loggedIn = data.nickname;
         }
       });
+
+    axios
+      .get(process.env.VUE_APP_ARTICLETEMP + "user/" + this.userId, {
+        headers: {
+          "jwt-auth-token": this.jwtAuthToken,
+        },
+      })
+      .then((res) => {
+        this.tempArticles = res.data.data;
+        console.log(this.tempArticles);
+      });
   },
 
   methods: {
@@ -239,12 +276,16 @@ export default {
       followerModal: false,
       followingModal: false,
       page: 0,
+      tempArticles: new Array(),
     };
   },
 };
 </script>
 
 <style scoped>
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none;
+}
 .v-avatar {
   width: 150px !important;
   height: 150px !important;

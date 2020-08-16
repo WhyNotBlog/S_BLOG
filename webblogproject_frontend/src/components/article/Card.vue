@@ -10,36 +10,25 @@
             onRight: rightIndex >= 0,
           }"
         >
-          <v-card class="content" @click="goPost(isCurrent,article.articleid)">
-            <v-img
-              contain
-              class="white--text align-end"
-              height="135px"
-              style="margin:15px"
-              :src="imgSrc(article.articleid, article.thumbnail)"
-            ></v-img>
+          <v-card class="content">
+            <a @click="goPost(isCurrent,article.articleid)" style="color:black">
+              <v-img
+                contain
+                height="135px"
+                style="margin:15px"
+                :src="imgSrc(article.articleid, article.thumbnail)"
+              ></v-img>
 
-            <v-card-title class="card-title justify-center">
-              {{ article.title.slice(0, 10)
-              }}{{ article.title.length > 10 ? "..." : "" }}
-            </v-card-title>
+              <v-card-title class="card-title justify-center">
+                {{ article.title.slice(0, 10)
+                }}{{ article.title.length > 10 ? "..." : "" }}
+              </v-card-title>
+            </a>
 
             <v-footer class="d-flex justify-space-around">
-              <div>
-                <b>{{ article.editdate | dateToString }}</b>
-              </div>
-              <div>
-                <b>|</b>
-              </div>
-              <div>
-                <b>{{ article.editornickname }}</b>
-              </div>
-              <div>
-                <b>|</b>
-              </div>
-              <div>
-                <b>조회수 : {{ article.hits }}</b>
-              </div>
+              <div style="font-family: Jua;">{{ article.editdate | dateToString }}</div>
+
+              <div style="font-family: Jua;">조회수 : {{ article.hits }}</div>
             </v-footer>
           </v-card>
         </div>
@@ -77,7 +66,14 @@ export default {
   filters: {
     dateToString(date) {
       try {
-        return date.slice(0, 10);
+        return (
+          date.slice(0, 4) +
+          "년 " +
+          date.slice(5, 7) +
+          "월 " +
+          date.slice(8, 10) +
+          "일"
+        );
       } catch (e) {
         console.log("");
       }
@@ -95,10 +91,6 @@ export default {
   border-radius: 4px;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-}
-
-.card:hover {
-  cursor: pointer;
 }
 
 .v-sheet.v-card:not(.v-sheet--outlined) {
