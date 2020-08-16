@@ -51,6 +51,7 @@
                   color="black"
                   v-model="password"
                   :rules="[rules.passwordRequired]"
+                  @keyup.enter="loginHandler"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -64,7 +65,9 @@
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn text @click="joinModalOpen">아직 회원이 아니신가요?</v-btn>
-              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">로그인</v-btn>
+              <v-btn class="loginBtn" color="#9fa9d8" dark @click="loginHandler">
+                <b>로그인</b>
+              </v-btn>
             </v-card-actions>
             <br />
           </v-card>

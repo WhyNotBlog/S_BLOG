@@ -8,11 +8,16 @@
     <br />
     <br />
     <br />
+    <br />
     <v-footer
       absolute
       class="font-weight-medium"
-      style="background-color:#595959;color:white;z-index:2"
+      style="background-color:#595959;color:white;z-index:2;display: flex;justify-content: center;"
     >
+      <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
+        <v-icon size="24px">{{ icon }}</v-icon>
+      </v-btn>
+
       <v-col class="text-center" cols="12">
         {{ new Date().getFullYear() }},
         <v-icon color="white" size="16px">copyright</v-icon>
@@ -32,6 +37,11 @@ export default {
   components: {
     Header,
     Sidebar,
+  },
+  data() {
+    return {
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"],
+    };
   },
 };
 </script>

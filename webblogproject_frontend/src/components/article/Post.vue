@@ -184,7 +184,7 @@ export default {
       middleCategory: new String(),
       smallCategory: new Object(),
       categoryInt: 111,
-      userId : new String(),
+      userId: new String(),
       modify: 0,
 
       editorText: "",
@@ -331,7 +331,9 @@ export default {
             .then(() => {
               this.text = "임시저장에 성공했습니다.";
               this.snackbar = true;
-              this.$router.push({ name: "TempList" });
+              setTimeout(() => {
+                this.$router.push({ name: "Home" });
+              }, 1000);
             });
         });
     },

@@ -281,7 +281,7 @@ export default {
   width: 220px;
   position: fixed;
   z-index: 1;
-  top: 75px;
+  top: 80px;
   right: 5px;
   bottom: 40px;
   overflow-x: hidden;

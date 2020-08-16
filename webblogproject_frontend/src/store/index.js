@@ -26,8 +26,8 @@ const store = new Vuex.Store({
     bigCategories: ["알고리즘", "웹 개발자", "어플 개발자"],
     middleCategories: [
       ["기본 문제", "기출 문제"],
-      ["프론트엔드", "백엔드"],
-      ["안드로이드", "IOS"],
+      ["FrontEnd", "BackEnd"],
+      ["Android", "IOS"],
     ],
     smallCategories: [
       [

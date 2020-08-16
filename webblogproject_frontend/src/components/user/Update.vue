@@ -18,6 +18,7 @@
     </v-snackbar>
 
     <br />
+    <br />
     <div v-show="mobileView">
       <div class="backImg">
         <v-layout column>
@@ -112,7 +113,7 @@
       </div>
     </div>
 
-    <v-layout row justify-space-around v-show="!mobileView">
+    <v-layout row justify-center v-show="!mobileView">
       <v-flex xs8 sm8 md4 lg4 xl4 class="backImg">
         <v-layout column>
           <div class="profile">
@@ -204,7 +205,9 @@
         <div class="btns">
           <v-btn text color="black" @click="dropHandler">계정 탈퇴를 원하시나요?</v-btn>
           <br />
-          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">수정하기</v-btn>
+          <v-btn class="changeBtn" color="#9FA9D8" dark @click="updateHandler">
+            <b>수정하기</b>
+          </v-btn>
         </div>
       </v-flex>
     </v-layout>
@@ -502,6 +505,12 @@ export default {
   }
 }
 
+@media screen and (max-width: 960px) {
+  .backImg {
+    margin-right: 0 !important;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .v-text-field {
     width: 340px;
@@ -548,5 +557,7 @@ export default {
   background-size: 152vh;
   padding: 20px;
   box-shadow: 3px 3px 5px 1px #595959;
+  max-width: 390px;
+  margin-right: 60px;
 }
 </style>
