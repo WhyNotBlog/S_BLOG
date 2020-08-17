@@ -23,7 +23,7 @@
     </v-layout>
 
     <div>
-      <span v-show="isSearch" style="margin-left:5%;font-size:18px">
+      <span v-show="isSearch" style="width:95%;margin-left:5%;font-size:18px">
         총
         <strong>{{ count }}</strong>개의 게시물이 있습니다!
       </span>
@@ -161,6 +161,6 @@ export default {
 
 <style scoped>
 .v-text-field {
-  max-width: 95%;
+  width: 95%;
 }
 </style>
