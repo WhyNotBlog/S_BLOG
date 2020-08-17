@@ -424,5 +424,10 @@ export default {
 
 .tui-editor-contents {
   font-size: 18px !important;
+  border: 1px solid #b3b3b3;
+  border-radius: 4px;
+  margin: auto;
+  width: 90%;
+  background-color: white;
 }
 </style>
