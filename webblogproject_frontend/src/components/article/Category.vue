@@ -68,7 +68,7 @@ export default {
     $route() {
       this.articles = new Array();
       this.page = 0;
-      this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
+      this.$refs.infiniteLoading.stateChanger.reset();
       this.categoryInt = this.$route.params.category;
       this.categorySelect();
     },

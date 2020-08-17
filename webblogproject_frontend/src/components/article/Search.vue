@@ -3,13 +3,7 @@
     <br />
     <v-layout row wrap justify-center>
       <v-flex xs3 sm3 md3 lg3 xl3>
-        <v-select
-          :items="types"
-          label="유형"
-          solo
-          v-model="typeBox"
-          style="margin-left:5px"
-        ></v-select>
+        <v-select :items="types" label="유형" solo v-model="typeBox" style="margin-left:5px"></v-select>
       </v-flex>
       <v-flex xs8 sm8 md8 lg8 xl8>
         <v-text-field
@@ -28,13 +22,13 @@
       </v-flex>
     </v-layout>
 
-    <span v-show="isSearch" style="margin-left:10px">
-      총
-      <strong>{{ count }}</strong
-      >개의 게시물이 있습니다!
-    </span>
-    <PostView :data="this.articles" />
-
+    <div>
+      <span v-show="isSearch" style="margin-left:5%;font-size:18px">
+        총
+        <strong>{{ count }}</strong>개의 게시물이 있습니다!
+      </span>
+      <SearchView :data="this.articles" />
+    </div>
     <infinite-loading
       ref="infiniteLoading"
       @infinite="infiniteHandler"
@@ -55,7 +49,7 @@
 
 <script>
 import axios from "axios";
-import PostView from "@/components/PostView";
+import SearchView from "@/components/SearchView";
 import InfiniteLoading from "vue-infinite-loading";
 
 const api = "http://hn.algolia.com/api/v1/search_by_date?tags=story";
@@ -67,7 +61,7 @@ export default {
       this.isSearch = false;
       this.articles = new Array();
       this.page = 0;
-      this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
+      this.$refs.infiniteLoading.stateChanger.reset();
       //console.log(this.$route.params);
       this.type2 = this.$route.params.type;
       this.word2 = this.$route.params.word;
@@ -114,7 +108,7 @@ export default {
     this.type2 = this.type;
     this.word2 = this.word;
   },
-  components: { PostView, InfiniteLoading },
+  components: { SearchView, InfiniteLoading },
   props: ["type", "word"],
   methods: {
     searchRoute() {
