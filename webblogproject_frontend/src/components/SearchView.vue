@@ -18,7 +18,16 @@
     </v-snackbar>
 
     <v-layout row justify-center style="align-items: center;flex-direction: column;">
-      <v-flex v-for="(article) in articles" :key="article.articleid" xl12 lg12 md12 sm12 xs12>
+      <v-flex
+        v-for="(article) in articles"
+        :key="article.articleid"
+        xl12
+        lg12
+        md12
+        sm12
+        xs12
+        style="width:100%"
+      >
         <!-- <v-hover>
         <template v-slot:default="{ hover }">-->
         <div class="content">
