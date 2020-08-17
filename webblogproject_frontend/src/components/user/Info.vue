@@ -84,7 +84,7 @@
         <v-tab>임시저장 글</v-tab>
         <v-tab>좋아요한 글</v-tab>
 
-        <v-tab-item style="background-color:#f1f3f5">
+        <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
             <Card :data="this.articles" v-if="isCard" />
@@ -92,7 +92,7 @@
           <br />
         </v-tab-item>
 
-        <v-tab-item style="background-color:#f1f3f5">
+        <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
             <Card :data="this.tempArticles" v-if="isCard" />
@@ -100,7 +100,7 @@
           <br />
         </v-tab-item>
 
-        <v-tab-item style="background-color:#f1f3f5">
+        <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
             <Card :data="this.articles" v-if="isCard" />
@@ -314,5 +314,13 @@ export default {
 
 .infoBox {
   color: black;
+}
+
+.tab {
+  border: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: thin thin thin thin;
+  background-color: #f1f3f5;
+  border-radius: 4px;
 }
 </style>
