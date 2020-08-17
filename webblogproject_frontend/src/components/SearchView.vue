@@ -26,7 +26,7 @@
         md12
         sm12
         xs12
-        style="width:100%;display:flex;justify-content: center;"
+        class="search"
       >
         <!-- <v-hover>
         <template v-slot:default="{ hover }">-->
@@ -325,6 +325,10 @@ export default {
   display: flex;
   max-width: 960px;
   justify-content: center;
+  border: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 0 0 thin 0;
+  padding-bottom: 15px;
 }
 
 .move:hover {
@@ -333,5 +337,12 @@ export default {
 
 .like {
   font-family: Jua;
+}
+
+.search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 </style>
