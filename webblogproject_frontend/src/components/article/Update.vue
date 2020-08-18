@@ -78,6 +78,8 @@
             <v-file-input label="썸네일" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
           </div>
 
+          <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
+
           <div id="content">
             <editor
               v-if="this.content"
@@ -195,6 +197,7 @@ export default {
       x: null,
       y: "top",
       mode: "",
+      imgSrc: "",
     };
   },
   methods: {
@@ -398,6 +401,7 @@ export default {
               this.updateArticleId +
               ".jpg"
           );
+          this.imgSrc = this.thumbnail;
           console.log(this.thumbnail);
         }
         axios
