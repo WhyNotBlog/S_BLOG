@@ -1,5 +1,6 @@
 package com.ssafy.webblog.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.webblog.model.dto.Article;
+import com.ssafy.webblog.model.dto.Likearticle;
+import com.ssafy.webblog.model.dto.Tag;
 import com.ssafy.webblog.model.repo.ArticleDao;
+import com.ssafy.webblog.model.repo.LikearticleDao;
 
 @Service
 @Transactional
@@ -74,6 +78,23 @@ public class ArticleService {
 	
 	public Page<Article> getArticleListByWriterid(int writerid, int page){
 		Page<Article> result = artiDao.getArticleByWriterid(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), writerid);
+		return result;
+	}
+	
+	@Autowired
+	LikearticleDao lDao;
+	
+	public List<Article> getLikedArticleListByUserId(int userid, int page) {
+		Page<Likearticle> searchingLikedList = lDao.getLikearticleByUserid(PageRequest.of(page, 6, Sort.Direction.DESC, "likekey"), userid);
+		List<Article> result = new ArrayList<Article>();
+		Article temp = null;
+		for (Likearticle likearticle : searchingLikedList) {
+			temp = artiDao.getArticleByArticleid(likearticle.getArticleid());
+			result.add(temp);
+		}
+		if(result.size() == 0) {
+			return null;
+		}
 		return result;
 	}
 	
