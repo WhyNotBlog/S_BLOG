@@ -28,7 +28,7 @@
             <v-footer class="d-flex justify-space-around">
               <div style="font-family: Jua;">{{ article.editdate | dateToString }}</div>
 
-              <div style="font-family: Jua;">조회수 : {{ article.hits }}</div>
+              <div v-show="isShow" style="font-family: Jua;">조회수 : {{ article.hits }}</div>
             </v-footer>
           </v-card>
         </div>
@@ -48,6 +48,9 @@ export default {
   computed: {
     articles() {
       return this.data;
+    },
+    isShow() {
+      return !this.isTemp;
     },
   },
 
