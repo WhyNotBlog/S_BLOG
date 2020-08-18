@@ -57,6 +57,7 @@ export default {
     return {
       articles: new Array(),
       articles2: new Array(),
+      articles3: new Array(),
       page: 0,
       active: 0,
     };
