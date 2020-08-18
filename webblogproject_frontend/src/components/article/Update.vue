@@ -270,7 +270,7 @@ export default {
             hits: this.article.hits,
             likecount: this.article.likecount,
             thumbnail:
-              this.thumbnail.name != null || this.thumbnailB ? true : false,
+              this.thumbnail.size != null || this.thumbnailB ? true : false,
           },
           {
             headers: {

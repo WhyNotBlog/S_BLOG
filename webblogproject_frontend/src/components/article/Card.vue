@@ -58,7 +58,10 @@ export default {
     imgSrc(id, flag) {
       return flag
         ? this.isTemp
-          ? process.env.VUE_APP_ARTICLETEMP + "downloadThumbnail/" + id + ".jpg"
+          ? process.env.VUE_APP_ARTICLE +
+            "downloadThumbnail/temp_" +
+            id +
+            ".jpg"
           : process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },

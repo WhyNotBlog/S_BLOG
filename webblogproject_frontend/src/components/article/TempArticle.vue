@@ -279,7 +279,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             thumbnail:
-              this.thumbnail.name != null || this.thumbnailB ? true : false,
+              this.thumbnail.size != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -499,8 +499,8 @@ export default {
         if (this.article.thumbnail) {
           this.thumbnail = new File([""], "업로드한 이미지.jpg");
           this.imgSrc =
-            process.env.VUE_APP_ARTICLETEMP +
-            "downloadThumbnail/" +
+            process.env.VUE_APP_ARTICLE +
+            "downloadThumbnail/temp_" +
             this.$route.params.articleId +
             ".jpg";
         } else {
