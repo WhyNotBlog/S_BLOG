@@ -24,7 +24,7 @@
     >{{ article.title }}</div>
     <hr class="my-5" />
     <div id="body">
-      <div class="font-weight-bold text-center">
+      <div class="font-weight-bold text-center" v-show="article.category!=1 && article.category!=2">
         카테고리 : {{ bigCategory }} - {{ middleCategory }} -
         {{ smallCategory }}
       </div>

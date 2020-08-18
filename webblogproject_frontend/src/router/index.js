@@ -16,6 +16,7 @@ import Update from "@/components/article/Update";
 import MDEditor from "@/components/article/MDEditor";
 import CKEditor from "@/components/article/CKEditor";
 import Card from "@/components/article/Card";
+import Introduce from "@/components/Introduce";
 
 //사용자
 import SNSLogin from "@/components/user/SNSLogin";
@@ -97,6 +98,12 @@ const routes = [
     path: "/card",
     name: "Card",
     component: Card,
+  },
+  {
+    path: "/introduce/:category",
+    name: "Introduce",
+    props: true,
+    component: Introduce,
   },
 
   //사용자

@@ -49,7 +49,7 @@
               <v-card-title
                 @click="moveToArticle(article)"
                 class="card-title justify-center move"
-              >{{ article.title ? (article.title.length >10? article.title.slice(0, 10)+"...":article.title.slice(0, 10)) : "제목없음" }}</v-card-title>
+              >{{ article.title }}</v-card-title>
 
               <div class="d-flex justify-space-around">
                 <div style="font-family: Jua;">{{ article.editdate | dateToString }}</div>

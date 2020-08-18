@@ -266,9 +266,13 @@ export default {
         },
       ],
       guide: [
-        { icon: "record_voice_over", text: "직무소개" },
+        {
+          icon: "record_voice_over",
+          text: "직무소개",
+          route: "/introduce/position",
+        },
         { icon: "create", text: "적성검사", route: "/survey" },
-        { icon: "emoji_people", text: "로드맵" },
+        { icon: "emoji_people", text: "로드맵", route: "/introduce/roadmap" },
       ],
       tag: [],
     };
