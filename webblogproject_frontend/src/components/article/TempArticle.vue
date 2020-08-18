@@ -16,125 +16,122 @@
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
     </v-snackbar>
-    <v-container fluid>
-      <v-row>
-        <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
-            <div class="d-flex" id="title">
-              <v-text-field
-                class="mx-3"
-                color="secondary"
-                style="width:60%;"
-                v-model="title"
-                :rules="titleRules"
-                :counter="30"
-                label="Title"
-                data-vv-name="title"
-                required
-                autofocus
-              ></v-text-field>
-            </div>
 
-            <div class="d-flex" id="category">
+    <v-row style="margin:0 10px 10px 10px">
+      <v-col style="padding:0">
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <div id="title">
+            <v-text-field
+              color="secondary"
+              v-model="title"
+              :rules="titleRules"
+              :counter="30"
+              label="제목"
+              data-vv-name="title"
+              required
+              autofocus
+            ></v-text-field>
+          </div>
+          <br />
+
+          <v-layout justify-space-between id="category">
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedBigCategory"
                 :items="bigCategories"
-                item-text="name"
-                label="BigCategory"
+                label="대분류"
                 color="secondary"
                 outlined
                 v-model="bigCategory"
                 @change="changeBigCategory"
               ></v-select>
+            </v-flex>
 
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedMiddleCategory"
                 :items="middleCategories"
-                label="MiddleCategory"
+                label="중분류"
                 color="secondary"
                 outlined
                 v-model="middleCategory"
                 @change="changeMiddleCategory"
               ></v-select>
+            </v-flex>
 
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedSmallCategory"
                 :items="smallCategories"
                 item-text="name"
                 item-value="value"
-                label="SmallCategory"
+                label="소분류"
                 color="secondary"
                 outlined
                 v-model="smallCategory"
                 @change="changeSmallCategory"
               ></v-select>
-            </div>
-
-            <div id="thumbnail">
-              <v-file-input label="Thumbnail" filled prepend-icon="mdi-camera" v-model="thumbnailB"></v-file-input>
-            </div>
-
-            <div id="content">
-              <editor
-                v-if="content"
-                :value="editorText"
-                :options="editorOptions"
-                :html="editorHtml"
-                :visible="editorVisible"
-                previewStyle="vertical"
-                :initialValue="content"
-                initialEditType="wysiwyg"
-                :plugins="editorPlugin"
-                ref="tuiEditor"
-                height="500px"
-                mode="wysiwyg"
-                @change="mdChange"
-              />
-            </div>
-
-            <div class="text-center" id="tags">
-              <v-chip
-                class="ma-2 text-button chip-btn"
-                color="secondary"
-                v-for="tag in tags"
-                :key="selectIndex(tag)"
-                v-show="tagsSelected[selectIndex(tag)]"
-                close
-                @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
-            </div>
-
-            <div class="text-center" id="tag">
-              <v-text-field
-                id="tagInput"
-                class="d-inline-block mx-2"
-                v-model="tag"
-                label="Tag"
-                :rules="tagsRules"
-                data-vv-name="tag"
-                color="secondary"
-                style="width:50%; height:5%;"
-              ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
-            </div>
-          </v-form>
-
-          <div class="text-center" id="btn">
-            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
-            <v-btn color="success" class="mr-4" @click="validateSubmit">글 작성</v-btn>
-            <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
-            <v-btn
-              style="background-color:red; color:white;"
-              class="mr-4"
-              @click="deleteTempArticle"
-            >Delete</v-btn>
+            </v-flex>
+          </v-layout>
+          <div id="thumbnail">
+            <v-file-input label="썸네일" v-model="thumbnailB" filled prepend-icon="mdi-camera"></v-file-input>
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
+          <div id="content">
+            <editor
+              v-if="content"
+              :value="editorText"
+              :options="editorOptions"
+              :html="editorHtml"
+              :visible="editorVisible"
+              previewStyle="vertical"
+              :initialValue="content"
+              initialEditType="wysiwyg"
+              :plugins="editorPlugin"
+              ref="tuiEditor"
+              height="500px"
+              mode="wysiwyg"
+              @change="mdChange"
+            />
+          </div>
+
+          <div class="text-center" id="tags">
+            <v-chip
+              class="ma-2 text-button chip-btn"
+              color="secondary"
+              v-for="tag in tags"
+              :key="selectIndex(tag)"
+              v-show="tagsSelected[selectIndex(tag)]"
+              close
+              @click:close="closeTag(selectIndex(tag))"
+            >#{{ tag }}</v-chip>
+          </div>
+
+          <div class="text-center" id="tag">
+            <v-text-field
+              id="tagInput"
+              class="d-inline-block mx-2"
+              v-model="tag"
+              :rules="tagsRules"
+              data-vv-name="tag"
+              color="secondary"
+              style="width:50%; height:5%;"
+            ></v-text-field>
+            <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+          </div>
+        </v-form>
+
+        <div class="text-center" id="btn">
+          <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
+          <v-btn color="success" class="mr-4" @click="validateSubmit">글 작성</v-btn>
+          <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
+          <v-btn
+            style="background-color:red; color:white;"
+            class="mr-4"
+            @click="deleteTempArticle"
+          >삭제</v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -373,7 +370,9 @@ export default {
         .then(() => {
           this.text = "임시글을 삭제했습니다.";
           this.snackbar = true;
-          this.$router.push({ name: "TempList" });
+          setTimeout(() => {
+            this.$router.push({ name: "Info" });
+          }, 1000);
         });
     },
     mdChange() {
@@ -502,4 +501,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-select,
+.v-text-field {
+  margin-left: 10px;
+}
+</style>
+
