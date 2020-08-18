@@ -229,6 +229,11 @@ export default {
         this.postArticle();
       }
     },
+    validateTempSave() {
+      if (this.$refs.form.validate()) {
+        this.saveTempArticle();
+      }
+    },
     reset() {
       this.tags = new Array();
       this.$refs.form.reset();

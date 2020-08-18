@@ -224,6 +224,11 @@ export default {
         this.postArticle();
       }
     },
+    validateTempSave() {
+      if (this.$refs.form.validate()) {
+        this.saveTempArticle();
+      }
+    },
     reset() {
       this.tags = new Array();
       this.$refs.form.reset();
@@ -236,9 +241,18 @@ export default {
       if (this.tag && !regExp.test(this.tag)) {
         if (!this.tags.includes(this.tag)) {
           if (this.tags.length < 5) {
-            this.tagsSelected.push(true);
-            this.tags.push(this.tag);
-            this.tag = "";
+            if (this.tag.length < 11) {
+              this.tagsSelected.push(true);
+              this.tags.push(this.tag);
+              this.tag = "";
+            } else {
+              this.text = "태그는 10글자 이하만 추가 가능합니다.";
+              this.snackbar = true;
+              setTimeout(() => {
+                this.snackbar = false;
+                this.text = '';
+              }, 1500);
+            }
           } else {
             if (this.tags.length === 5) {
               this.tags.push("limiter");
