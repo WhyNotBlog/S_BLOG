@@ -73,9 +73,24 @@
               ></v-select>
             </v-flex>
           </v-layout>
-          <div id="thumbnail">
-            <v-file-input label="썸네일" v-model="thumbnail" filled prepend-icon="mdi-camera"></v-file-input>
-          </div>
+          <v-layout justify-space-between>
+            <v-flex sm12 md7>
+              <div id="thumbnail">
+                <v-file-input
+                  label="썸네일"
+                  filled
+                  prepend-icon="mdi-camera"
+                  v-model="thumbnail"
+                  @change="editThumbnail"
+                ></v-file-input>
+              </div>
+            </v-flex>
+
+            <v-flex sm12 md4>
+              <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
+            </v-flex>
+          </v-layout>
+          <br />
 
           <div id="content">
             <editor
@@ -185,7 +200,7 @@ export default {
       categoryInt: 111,
       userId: new String(),
       modify: 0,
-
+      imgSrc: "",
       editorText: "",
       editorOptions: {
         hideModeSwitch: true,
@@ -398,6 +413,10 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    editThumbnail() {
+      this.imgSrc = URL.createObjectURL(this.thumbnail);
     },
   },
   components: {
