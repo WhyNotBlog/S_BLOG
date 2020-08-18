@@ -172,22 +172,23 @@ export default {
       this.article.writerid +
       ".jpg";
 
-    const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
-    const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
-    const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
+    if (this.categoryInt != 1 && this.categoryInt != 2) {
+      const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
+      const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
+      const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
-    const bigCategories = this.$store.state.bigCategories;
-    const middleCategories = this.$store.state.middleCategories[
-      bigCategoryIndex
-    ];
-    const smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
-      middleCategoryIndex
-    ];
+      const bigCategories = this.$store.state.bigCategories;
+      const middleCategories = this.$store.state.middleCategories[
+        bigCategoryIndex
+      ];
+      const smallCategories = this.$store.state.smallCategories[
+        bigCategoryIndex
+      ][middleCategoryIndex];
 
-    this.bigCategory = bigCategories[bigCategoryIndex];
-    this.middleCategory = middleCategories[middleCategoryIndex];
-    this.smallCategory = smallCategories[smallCategoryIndex].name;
-
+      this.bigCategory = bigCategories[bigCategoryIndex];
+      this.middleCategory = middleCategories[middleCategoryIndex];
+      this.smallCategory = smallCategories[smallCategoryIndex].name;
+    }
     this.followingList.forEach((element, index) => {
       if (element.id == this.article.writerid) {
         this.followOrUnfollow = "mdi-account-remove";
