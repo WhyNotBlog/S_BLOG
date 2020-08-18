@@ -202,7 +202,8 @@ public class RestArticleController {
 	
 	@GetMapping("/searchBy/Liked/{userid}/{page}")
 	@ApiOperation(value = "좋아요한 아티클검색")
-	public ResponseEntity<Map<String, Object>> getArticleListByLiked(HttpServletRequest req, HttpServletResponse res, @PathVariable int userid, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>>
+	getArticleListByLiked(HttpServletRequest req, HttpServletResponse res, @PathVariable int userid, @PathVariable int page)
 			throws JsonProcessingException, IOException {
 		logger.debug("Searching liked article by userid : " + userid);
 		Map<String, Object> resultMap = new HashMap<>();

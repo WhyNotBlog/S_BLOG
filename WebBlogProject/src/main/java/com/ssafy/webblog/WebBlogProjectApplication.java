@@ -22,21 +22,9 @@ import com.ssafy.webblog.model.service.ThumbnailUploadProperties;
 })
 
 public class WebBlogProjectApplication implements WebMvcConfigurer{
-	
-	@Value("${backurl}")
-	private static String backurl;
-	@Value("${fronturl}")
-	private static String fronturl;
-	@Value("${profileUrl}")
-	private static String profileUrl;	
-	
 
 	public static void main(String[] args) {
 		SpringApplication.run(WebBlogProjectApplication.class, args);
-		System.out.println(backurl);
-		System.out.println(fronturl);
-		System.out.println(profileUrl);
-		
 	}
 
 	@Autowired
