@@ -23,7 +23,7 @@
       class="d-block text-center"
       id="comment-list"
     >
-      <div class="d-flex justify-space-around" :id="'comment' + comment.commentid">
+      <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
         <div>{{ comment.commentcontent }}</div>
         <div>
           {{ comment.commentornickname }} |
@@ -42,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div v-show="needUpdate[comment.commentid]">
+      <div v-else>
           <v-form
             ref="form"
             v-model="valid"
@@ -52,15 +52,14 @@
             <v-textarea
               prepend-inner-icon="mdi-comment"
               class="mx-2"
-              :rules="commentRules"
               rows="1"
               color="secondary"
               auto-grow
               v-model="willUpdatedComment"
             ></v-textarea>
 
-            <v-btn class="d-inline mx-1 my-auto" color="secondary">댓글 수정</v-btn>
-            <v-btn class="d-inline mx-1 my-auto" color="secondary">취소</v-btn>
+            <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="updateComment(comment)">댓글 수정</v-btn>
+            <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="cancleUpdateComment(comment)">취소</v-btn>
           </v-form>
       </div>
     </div>
@@ -101,7 +100,7 @@ export default {
       comments: new Object(),
       needUpdate: new Array(),
       willUpdatedComment: "",
-      willUpdatedCommentCopy: new Object(),
+      willUpdatedCommentCopy: "",
       snackbar: false,
       text: "",
       timeout: 5000,
@@ -146,6 +145,9 @@ export default {
               })
               .then((res) => {
                 this.comments = res.data.data;
+                this.comments.forEach(
+                (comment) => (this.needUpdate[comment.commentid] = false)
+                 );
                 this.comment = "";
               });
           });
@@ -175,18 +177,57 @@ export default {
             })
             .then((res) => {
               this.comments = res.data.data;
+              this.comments.forEach(
+              (comment) => (this.needUpdate[comment.commentid] = false)
+                 );
             });
         });
     },
     changeComment(currentComment) {
       if (this.needUpdate[currentComment.commentid] === false) {
-        this.needUpdate[currentComment.commentid] = true;
-        this.willUpdatedCommentCopy = currentComment;
-        // currentComment = this.willUpdatedComment();  )
+        let tempList = [...this.needUpdate];
+        tempList.splice(currentComment.commentid, 1, true);
+        this.needUpdate = tempList;
+        this.willUpdatedComment = currentComment.commentcontent;
+        this.willUpdatedCommentCopy = currentComment.commentcontent;
       }
     },
-    updateComment() {
-      axios.post();
+    cancleUpdateComment(currentComment) {
+      let tempList = [...this.needUpdate];
+      tempList.splice(currentComment.commentid, 1, false);
+      this.needUpdate = tempList;
+    },
+    updateComment(comment) {
+      axios
+        .put(
+          process.env.VUE_APP_COMMENT + "update",
+          {
+            articleid: comment.articleid,
+            commentid : comment.commentid,
+            commentcontent: this.willUpdatedComment,
+            commentornickname: comment.commentornickname,
+          },
+          {
+            headers: {
+              "jwt-auth-token": this.jwtAuthToken,
+            },
+          }
+        )
+        .then(() => {
+            axios
+              .get(process.env.VUE_APP_COMMENT + "article/" + this.articleId, {
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              })
+              .then((res) => {
+                this.comments = res.data.data;
+                this.comments.forEach(
+                (comment) => (this.needUpdate[comment.commentid] = false)
+                 );
+                this.comment = "";
+              });
+          });
     },
   },
   component: {},
