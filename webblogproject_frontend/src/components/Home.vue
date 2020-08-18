@@ -10,7 +10,7 @@
         <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
       </v-tab>
       <v-tab>
-        <v-icon style="margin-right:5px">schedule</v-icon>최근 게시물
+        <v-icon style="margin-right:5px">schedule</v-icon>최근
       </v-tab>
       <v-tab>
         <v-icon style="margin-right:5px">favorite</v-icon>좋아요
@@ -136,5 +136,19 @@ export default {
 <style>
 .tab {
   background-color: #f1f3f5;
+}
+
+@media screen and (max-width: 400px) {
+  .v-tabs:not(.v-tabs--vertical).v-tabs--right
+    > .v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes)
+    .v-slide-group__next,
+  .v-tabs:not(.v-tabs--vertical):not(.v-tabs--right)
+    > .v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes)
+    .v-slide-group__prev,
+  .v-tabs:not(.v-tabs--vertical):not(.v-tabs--right)
+    > .v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes)
+    .v-slide-group__prev {
+    display: none !important;
+  }
 }
 </style>
