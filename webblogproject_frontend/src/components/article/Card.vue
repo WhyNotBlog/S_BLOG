@@ -44,7 +44,7 @@ export default {
     Carousel3d,
     Slide,
   },
-  props: { data: Array },
+  props: { data: Array, isTemp: Boolean },
   computed: {
     articles() {
       return this.data;
@@ -59,7 +59,8 @@ export default {
     },
     goPost(isCurrent, id) {
       if (isCurrent) {
-        this.$router.push("/article/detail/" + id);
+        if (this.isTemp) this.$router.push("/article/temp/" + id);
+        else this.$router.push("/article/detail/" + id);
       }
     },
   },
