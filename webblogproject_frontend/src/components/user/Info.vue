@@ -95,7 +95,7 @@
         <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
-            <Card :data="this.tempArticles" v-if="isCard" :isTemp="false" />
+            <Card :data="this.tempArticles" v-if="isCard" :isTemp="true" />
           </div>
           <br />
         </v-tab-item>
@@ -103,7 +103,7 @@
         <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
-            <Card :data="this.articles" v-if="isCard" :isTemp="true" />
+            <Card :data="this.articles" v-if="isCard" :isTemp="false" />
           </div>
           <br />
         </v-tab-item>
