@@ -94,8 +94,4 @@ export default {
 .tab {
   background-color: #f1f3f5;
 }
-
-.v-tabs-slider-wrapper {
-  width: 103px !important;
-}
 </style>
