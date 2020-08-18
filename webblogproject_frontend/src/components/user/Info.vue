@@ -78,7 +78,7 @@
     <br />
     <br />
 
-    <v-card height="100%" style="margin:auto; margin-left:15px; margin-right:15px">
+    <v-card height="100%" style="margin:auto; width:80%">
       <v-tabs background-color="#f1f3f5" color="black">
         <v-tab>최근 게시물</v-tab>
         <v-tab>임시저장 글</v-tab>
