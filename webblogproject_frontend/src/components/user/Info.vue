@@ -87,7 +87,7 @@
         <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
-            <Card :data="this.articles" v-if="isCard" />
+            <Card :data="this.articles" v-if="isCard" :isTemp="false" />
           </div>
           <br />
         </v-tab-item>
@@ -95,7 +95,7 @@
         <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
-            <Card :data="this.tempArticles" v-if="isCard" />
+            <Card :data="this.tempArticles" v-if="isCard" :isTemp="true" />
           </div>
           <br />
         </v-tab-item>
@@ -103,7 +103,7 @@
         <v-tab-item class="tab">
           <br />
           <div class="post" style="margin-left:10px; margin-right:10px">
-            <Card :data="this.articles" v-if="isCard" />
+            <Card :data="this.likeArticles" v-if="isCard" :isTemp="false" />
           </div>
           <br />
         </v-tab-item>
@@ -226,6 +226,20 @@ export default {
         this.tempArticles = res.data.data;
         console.log(this.tempArticles);
       });
+
+    axios
+      .get(
+        process.env.VUE_APP_ARTICLE + "searchBy/Liked/" + this.userId + "/0",
+        {
+          headers: {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        }
+      )
+      .then((res) => {
+        this.likeArticles = res.data.data.content;
+        console.log(this.likeArticles);
+      });
   },
 
   methods: {
@@ -277,6 +291,7 @@ export default {
       followingModal: false,
       page: 0,
       tempArticles: new Array(),
+      likeArticles: new Array(),
     };
   },
 };

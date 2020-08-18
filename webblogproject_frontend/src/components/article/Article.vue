@@ -337,7 +337,9 @@ export default {
             this.text = "게시글 삭제에 성공했습니다!";
             this.snackbar = true;
 
-            this.$router.push({ name: "Home" });
+            setTimeout(() => {
+              this.$router.push({ name: "Home" });
+            }, 1000);
           }
         });
     },
@@ -422,7 +424,7 @@ export default {
   cursor: pointer;
 }
 
-.tui-editor-contents {
+#markdown-viewer {
   font-size: 18px !important;
   border: 1px solid #b3b3b3;
   border-radius: 4px;

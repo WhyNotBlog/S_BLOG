@@ -46,5 +46,9 @@ public class LikeService {
 		Likearticle result = lDao.getDistinctLikeByUseridAndArticleid(userid, articleid);
 		return result.getLikekey();
 	}
+	
+	public int countByUserid(int userid) {
+		return lDao.countByUserid(userid);
+	}
 
 }

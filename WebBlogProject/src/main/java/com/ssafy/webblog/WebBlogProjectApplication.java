@@ -81,6 +81,8 @@ public class WebBlogProjectApplication implements WebMvcConfigurer{
 	    		  "/article/uploadThumbnail/**",
 	    		  "/article/detail/**",
 	    		  "/article/visit/**",
+	    		  "/articletemp/renameThumbnail/**",
+	    		  "/articletemp/uploadThumbnail",
 	    		  "/comment/article/**",
 	    		  "/tagtemp/taglist/**",
 	    		  "/tag/tentaglist",

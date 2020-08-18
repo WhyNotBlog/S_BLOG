@@ -28,7 +28,7 @@
             <v-footer class="d-flex justify-space-around">
               <div style="font-family: Jua;">{{ article.editdate | dateToString }}</div>
 
-              <div style="font-family: Jua;">조회수 : {{ article.hits }}</div>
+              <div v-show="isShow" style="font-family: Jua;">조회수 : {{ article.hits }}</div>
             </v-footer>
           </v-card>
         </div>
@@ -44,22 +44,28 @@ export default {
     Carousel3d,
     Slide,
   },
-  props: { data: Array },
+  props: { data: Array, isTemp: Boolean },
   computed: {
     articles() {
       return this.data;
+    },
+    isShow() {
+      return !this.isTemp;
     },
   },
 
   methods: {
     imgSrc(id, flag) {
       return flag
-        ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
+        ? this.isTemp
+          ? process.env.VUE_APP_ARTICLETEMP + "downloadThumbnail/" + id + ".jpg"
+          : process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },
     goPost(isCurrent, id) {
       if (isCurrent) {
-        this.$router.push("/article/detail/" + id);
+        if (this.isTemp) this.$router.push("/article/temp/" + id);
+        else this.$router.push("/article/detail/" + id);
       }
     },
   },

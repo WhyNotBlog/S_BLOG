@@ -41,6 +41,7 @@ import com.ssafy.webblog.model.dto.Tagkind;
 import com.ssafy.webblog.model.service.ArticleService;
 import com.ssafy.webblog.model.service.FileUploadDownloadService;
 import com.ssafy.webblog.model.service.FileUploadResponse;
+import com.ssafy.webblog.model.service.LikeService;
 import com.ssafy.webblog.model.service.TagService;
 import com.ssafy.webblog.model.service.TagkindService;
 import com.ssafy.webblog.model.service.ThumbnailUploadDownloadService;
@@ -56,6 +57,9 @@ public class RestArticleController {
 
 	@Autowired
 	ArticleService artiService;
+	
+	@Autowired
+	LikeService lService;
 
 	@Autowired
 	TagService tService;
@@ -187,6 +191,25 @@ public class RestArticleController {
 		try {
 			List<Article> result = tService.getArticleListByTagname(tagname, page);	
 			int size = tService.countByTagname(tagname);
+			resultMap.put("content", result);
+			resultMap.put("totalElements", size);
+			entity = handleSuccess(resultMap);
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	@GetMapping("/searchBy/Liked/{userid}/{page}")
+	@ApiOperation(value = "좋아요한 아티클검색")
+	public ResponseEntity<Map<String, Object>> getArticleListByLiked(HttpServletRequest req, HttpServletResponse res, @PathVariable int userid, @PathVariable int page)
+			throws JsonProcessingException, IOException {
+		logger.debug("Searching liked article by userid : " + userid);
+		Map<String, Object> resultMap = new HashMap<>();
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			List<Article> result = artiService.getLikedArticleListByUserId(userid, page);
+			int size = lService.countByUserid(userid);
 			resultMap.put("content", result);
 			resultMap.put("totalElements", size);
 			entity = handleSuccess(resultMap);

@@ -16,125 +16,137 @@
         <v-btn dark text v-bind="attrs" @click="snackbar = false">닫기</v-btn>
       </template>
     </v-snackbar>
-    <v-container fluid>
-      <v-row>
-        <v-col>
-          <v-form class="mx-10 full-width" ref="form" v-model="valid" lazy-validation>
-            <div class="d-flex" id="title">
-              <v-text-field
-                class="mx-3"
-                color="secondary"
-                style="width:60%;"
-                v-model="title"
-                :rules="titleRules"
-                :counter="30"
-                label="Title"
-                data-vv-name="title"
-                required
-                autofocus
-              ></v-text-field>
-            </div>
 
-            <div class="d-flex" id="category">
+    <v-row style="margin:0 10px 10px 10px">
+      <v-col style="padding:0">
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <div id="title">
+            <v-text-field
+              color="secondary"
+              v-model="title"
+              :rules="titleRules"
+              :counter="30"
+              label="제목"
+              data-vv-name="title"
+              required
+              autofocus
+            ></v-text-field>
+          </div>
+          <br />
+
+          <v-layout justify-space-between id="category">
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedBigCategory"
                 :items="bigCategories"
-                item-text="name"
-                label="BigCategory"
+                label="대분류"
                 color="secondary"
                 outlined
                 v-model="bigCategory"
                 @change="changeBigCategory"
               ></v-select>
+            </v-flex>
 
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedMiddleCategory"
                 :items="middleCategories"
-                label="MiddleCategory"
+                label="중분류"
                 color="secondary"
                 outlined
                 v-model="middleCategory"
                 @change="changeMiddleCategory"
               ></v-select>
+            </v-flex>
 
+            <v-flex sm4 md4>
               <v-select
-                class="d-inline-block mx-3"
                 id="selectedSmallCategory"
                 :items="smallCategories"
                 item-text="name"
                 item-value="value"
-                label="SmallCategory"
+                label="소분류"
                 color="secondary"
                 outlined
                 v-model="smallCategory"
                 @change="changeSmallCategory"
               ></v-select>
-            </div>
+            </v-flex>
+          </v-layout>
+          <v-layout justify-space-between>
+            <v-flex sm12 md7>
+              <div id="thumbnail">
+                <v-file-input
+                  label="썸네일"
+                  filled
+                  prepend-icon="mdi-camera"
+                  v-model="thumbnail"
+                  @change="editThumbnail"
+                ></v-file-input>
+              </div>
+            </v-flex>
 
-            <div id="thumbnail">
-              <v-file-input label="Thumbnail" filled prepend-icon="mdi-camera" v-model="thumbnailB"></v-file-input>
-            </div>
-
-            <div id="content">
-              <editor
-                v-if="content"
-                :value="editorText"
-                :options="editorOptions"
-                :html="editorHtml"
-                :visible="editorVisible"
-                previewStyle="vertical"
-                :initialValue="content"
-                initialEditType="wysiwyg"
-                :plugins="editorPlugin"
-                ref="tuiEditor"
-                height="500px"
-                mode="wysiwyg"
-                @change="mdChange"
-              />
-            </div>
-
-            <div class="text-center" id="tags">
-              <v-chip
-                class="ma-2 text-button chip-btn"
-                color="secondary"
-                v-for="tag in tags"
-                :key="selectIndex(tag)"
-                v-show="tagsSelected[selectIndex(tag)]"
-                close
-                @click:close="closeTag(selectIndex(tag))"
-              >#{{ tag }}</v-chip>
-            </div>
-
-            <div class="text-center" id="tag">
-              <v-text-field
-                id="tagInput"
-                class="d-inline-block mx-2"
-                v-model="tag"
-                label="Tag"
-                :rules="tagsRules"
-                data-vv-name="tag"
-                color="secondary"
-                style="width:50%; height:5%;"
-              ></v-text-field>
-              <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
-            </div>
-          </v-form>
-
-          <div class="text-center" id="btn">
-            <v-btn color="secondary" class="mr-4" @click="validateTempSave">Save</v-btn>
-            <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
-            <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
-            <v-btn
-              style="background-color:red; color:white;"
-              class="mr-4"
-              @click="deleteTempArticle"
-            >Delete</v-btn>
+            <v-flex sm12 md4>
+              <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
+            </v-flex>
+          </v-layout>
+          <br />
+          <div id="content">
+            <editor
+              v-if="content"
+              :value="editorText"
+              :options="editorOptions"
+              :html="editorHtml"
+              :visible="editorVisible"
+              previewStyle="vertical"
+              :initialValue="content"
+              initialEditType="wysiwyg"
+              :plugins="editorPlugin"
+              ref="tuiEditor"
+              height="500px"
+              mode="wysiwyg"
+              @change="mdChange"
+            />
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
+
+          <div class="text-center" id="tags">
+            <v-chip
+              class="ma-2 text-button chip-btn"
+              color="secondary"
+              v-for="tag in tags"
+              :key="selectIndex(tag)"
+              v-show="tagsSelected[selectIndex(tag)]"
+              close
+              @click:close="closeTag(selectIndex(tag))"
+            >#{{ tag }}</v-chip>
+          </div>
+
+          <div class="text-center" id="tag">
+            <v-text-field
+              id="tagInput"
+              class="d-inline-block mx-2"
+              v-model="tag"
+              :rules="tagsRules"
+              data-vv-name="tag"
+              color="secondary"
+              style="width:50%; height:5%;"
+            ></v-text-field>
+            <v-btn color="secondary" class="d-inline-block mx-2 mr-4" @click="addTag">태그 추가</v-btn>
+          </div>
+        </v-form>
+
+        <div class="text-center" id="btn">
+          <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
+          <v-btn color="success" class="mr-4" @click="validateSubmit">글 작성</v-btn>
+          <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
+          <v-btn
+            style="background-color:red; color:white;"
+            class="mr-4"
+            @click="deleteTempArticle"
+          >삭제</v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -181,7 +193,7 @@ export default {
       ],
       title: "",
       thumbnail: new Object(),
-      thumbnailB: new Object(),
+      thumbnailB: "",
       content: "",
       editornickname: "",
       bigCategories: new Array(),
@@ -192,7 +204,7 @@ export default {
       smallCategory: new Object(),
       categoryInt: 0,
       modify: 0,
-
+      imgSrc: "",
       editorText: "",
       editorOptions: {
         hideModeSwitch: true,
@@ -271,7 +283,8 @@ export default {
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.userId,
-            thumbnail: this.thumbnail.name != null ? true : false,
+            thumbnail:
+              this.thumbnail.name != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -284,7 +297,9 @@ export default {
           this.article = data;
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          if (this.thumbnail.name != null) this.addItem();
+          if (this.thumbnail.name != null) {
+            this.addItem(false);
+          }
           axios
             .post(
               process.env.VUE_APP_TAG + "regist",
@@ -324,14 +339,15 @@ export default {
         .put(
           process.env.VUE_APP_ARTICLETEMP + "update",
           {
-            articleid: this.articleid,
+            articleid: this.$route.params.articleId,
             title: this.title,
             content: this.editorMarkdown,
             editornickname: this.loggedIn,
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.userId,
-            thumbnail: this.thumbnail.name != null ? true : false,
+            thumbnail:
+              this.thumbnail.size != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -341,6 +357,10 @@ export default {
         )
         .then((res) => {
           let data = res.data.data;
+          this.articleId = data.articleid;
+          if (this.thumbnail.size != null) {
+            this.addItem(true);
+          }
           axios
             .put(
               process.env.VUE_APP_TAGTEMP + "update",
@@ -378,7 +398,9 @@ export default {
         .then(() => {
           this.text = "임시글을 삭제했습니다.";
           this.snackbar = true;
-          this.$router.push({ name: "TempList" });
+          setTimeout(() => {
+            this.$router.push({ name: "Info" });
+          }, 1000);
         });
     },
     mdChange() {
@@ -418,6 +440,38 @@ export default {
     changeFile() {
       console.log(this.thumbnail);
     },
+
+    addItem(isTemp) {
+      const data = new FormData(); // 서버로 전송할 폼데이터
+      const file = this.thumbnail; // 선택된 파일객체
+      data.append("file", file); // 폼데이터에 파일을 추가
+      console.log(data);
+      //   데이터를 서버로 전송하는 코드 추가
+
+      console.log(this.articleid);
+
+      var go = process.env.VUE_APP_ARTICLE;
+
+      if (isTemp) go = process.env.VUE_APP_ARTICLETEMP;
+      axios
+        .post(go + "uploadThumbnail", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            articleNum: this.articleid,
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    editThumbnail() {
+      this.imgSrc = URL.createObjectURL(this.thumbnail);
+    },
   },
   components: {
     editor: Editor,
@@ -446,6 +500,18 @@ export default {
         this.editornickname = this.article.editornickname;
         this.thumbnail = this.article.thumbnail;
         this.categoryInt = this.article.category;
+
+        if (this.article.thumbnail) {
+          this.thumbnail = new File([""], "업로드한 이미지.jpg");
+          this.imgSrc =
+            process.env.VUE_APP_ARTICLETEMP +
+            "downloadThumbnail/" +
+            this.$route.params.articleId +
+            ".jpg";
+        } else {
+          this.thumbnail = new File([""], "기본 이미지.jpg");
+          this.imgSrc = require("@/assets/basic.jpg");
+        }
 
         const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
         const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
@@ -507,4 +573,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-select,
+.v-text-field {
+  margin-left: 10px;
+}
+</style>
+

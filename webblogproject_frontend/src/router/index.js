@@ -113,7 +113,7 @@ const routes = [
   },
   {
     path: "/user/info",
-    name: "info",
+    name: "Info",
     component: Info,
   },
   {
