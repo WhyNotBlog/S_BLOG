@@ -123,7 +123,7 @@
           <div class="text-center" id="btn">
             <v-btn color="warning" class="mr-4" @click="reset">초기화</v-btn>
             <v-btn color="secondary" class="mr-4" @click="saveTempArticle">임시저장</v-btn>
-            <v-btn color="success" class="mr-4" @click="validateSubmit">글 쓰기</v-btn>
+            <v-btn color="success" class="mr-4" @click="validateSubmit">글 작성</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -272,7 +272,7 @@ export default {
           this.article = data;
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          if (this.thumbnail.name != null) this.addItem();
+          if (this.thumbnail.name != null) this.addItem(false);
           axios
             .post(
               process.env.VUE_APP_TAG + "regist",
@@ -329,6 +329,7 @@ export default {
               }
             )
             .then(() => {
+              if (this.thumbnail.name != null) this.addItem(true);
               this.text = "임시저장에 성공했습니다.";
               this.snackbar = true;
               setTimeout(() => {
@@ -373,14 +374,18 @@ export default {
       console.log(this.categoryInt);
     },
 
-    addItem() {
+    addItem(isTemp) {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
       console.log(data);
       //   데이터를 서버로 전송하는 코드 추가
+
+      var go = process.env.VUE_APP_ARTICLE;
+
+      if (isTemp) go = process.env.VUE_APP_ARTICLETEMP;
       axios
-        .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
+        .post(go + "uploadThumbnail", data, {
           headers: {
             "Content-Type": "multipart/form-data",
             articleNum: this.articleid,
