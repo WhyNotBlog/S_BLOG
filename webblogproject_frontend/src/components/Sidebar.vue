@@ -282,7 +282,7 @@ export default {
 
 <style scoped>
 .side {
-  width: 220px;
+  width: 215px;
   position: fixed;
   z-index: 1;
   top: 80px;
@@ -293,7 +293,7 @@ export default {
   background-color: #f1f3f5;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1020px) {
   .side {
     width: 98%;
     position: inherit;

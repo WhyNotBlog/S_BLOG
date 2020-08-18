@@ -23,15 +23,15 @@
         :key="article.articleid"
         v-show="article.category!=1 && article.category!=2"
         xl3
-        lg4
-        md6
+        lg3
+        md4
         sm6
         xs12
       >
         <!-- <v-hover>
         <template v-slot:default="{ hover }">-->
         <div class="content">
-          <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="270px">
+          <v-card class="d-inline-block my-3" :width="moblieWidth" min-width="240px">
             <a @click="moveToArticle(article)">
               <div style="background-color:white">
                 <v-img
