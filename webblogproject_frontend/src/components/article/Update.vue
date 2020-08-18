@@ -393,6 +393,7 @@ export default {
         //console.log(this.article);
         if (this.article.thumbnail) {
           this.thumbnail = new File(
+            [""],
             "/home/ubuntu / dist / server / thumbnail / " +
               this.articleId +
               ".jpg"
