@@ -4,7 +4,7 @@
       v-model="active"
       background-color="#f1f3f5"
       color="black"
-      style="margin-left:10px;margin-top:10px;"
+      style="margin-left:10px;margin-top:10px;margin-right:5px"
     >
       <v-tab>
         <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
@@ -93,9 +93,5 @@ export default {
 <style>
 .tab {
   background-color: #f1f3f5;
-}
-
-.v-tabs-slider-wrapper {
-  width: 103px !important;
 }
 </style>

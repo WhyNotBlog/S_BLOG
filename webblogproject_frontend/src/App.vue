@@ -57,7 +57,7 @@ export default {
   margin-right: 230px;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1020px) {
   .main2 {
     margin-top: 10px;
     margin-right: 0;
