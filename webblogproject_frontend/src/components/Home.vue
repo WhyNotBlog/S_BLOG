@@ -4,7 +4,7 @@
       v-model="active"
       background-color="#f1f3f5"
       color="black"
-      style="margin-left:10px;margin-top:10px;margin-right:5px"
+      style="margin-left:5px;margin-top:10px;margin-right:5px"
     >
       <v-tab>
         <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
@@ -59,26 +59,13 @@ export default {
       articles2: new Array(),
       articles3: new Array(),
       page: 0,
+      page2: 0,
+      page3: 0,
       active: 0,
     };
   },
 
   components: { PostView, InfiniteLoading },
-  // methods: {
-  // changeLiked(id) {
-  //   // axios.post 추가
-  //   this.articles.filter((article) => {
-  //     if (article.id === id) {
-  //       article.isLiked = !article.isLiked;
-  //     }
-  //   });
-  // },
-  // addArticles() {
-  //   axios.get()
-  //   .then((res) => this.articles.push())
-  //   .catch(e => console.log(e));
-  // },
-  //},
 
   methods: {
     infiniteHandler($state) {
@@ -100,12 +87,12 @@ export default {
 
         axios
           .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page2
           )
           .then((res) => {
             //console.log(res.data.data);
             if (!res.data.data.empty) {
-              this.page += 1;
+              this.page2 += 1;
               this.articles2.push(...res.data.data.content);
               $state.loaded();
             } else {
@@ -115,12 +102,12 @@ export default {
 
         axios
           .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/2/" + this.page
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/2/" + this.page3
           )
           .then((res) => {
             //console.log(res.data.data);
             if (!res.data.data.empty) {
-              this.page += 1;
+              this.page3 += 1;
               this.articles3.push(...res.data.data.content);
               $state.loaded();
             } else {
