@@ -391,7 +391,13 @@ export default {
         this.modify = this.article.modify;
         this.thumbnailB = this.article.thumbnail;
         //console.log(this.article);
-
+        if (this.article.thumbnail) {
+          this.thumbnail = new File(
+            "/home/ubuntu / dist / server / thumbnail / " +
+              this.articleId +
+              ".jpg"
+          );
+        }
         axios
           .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
             headers: {
