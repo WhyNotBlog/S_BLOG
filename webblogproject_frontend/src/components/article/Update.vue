@@ -394,7 +394,9 @@ export default {
         if (this.article.thumbnail) {
           this.thumbnail = new File(
             [""],
-            "/home/ubuntu/dist/server/thumbnail/" + this.articleId + ".jpg"
+            "/home/ubuntu/dist/server/thumbnail/" +
+              this.updateArticleId +
+              ".jpg"
           );
           console.log(this.thumbnail);
         }
