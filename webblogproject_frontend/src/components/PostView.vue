@@ -18,7 +18,16 @@
     </v-snackbar>
 
     <v-layout row justify-start style="margin:auto">
-      <v-flex v-for="(article) in articles" :key="article.articleid" xl3 lg4 md6 sm6 xs12>
+      <v-flex
+        v-for="(article) in articles"
+        :key="article.articleid"
+        v-show="article.category!=1 && article.category!=2"
+        xl3
+        lg4
+        md6
+        sm6
+        xs12
+      >
         <!-- <v-hover>
         <template v-slot:default="{ hover }">-->
         <div class="content">
