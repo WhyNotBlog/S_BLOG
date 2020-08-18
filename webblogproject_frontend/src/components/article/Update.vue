@@ -401,7 +401,7 @@ export default {
               this.updateArticleId +
               ".jpg"
           );
-          this.imgSrc = this.thumbnail;
+          this.imgSrc = URL.createObjectURL(this.thumbnail);
           console.log(this.thumbnail);
         }
         axios
