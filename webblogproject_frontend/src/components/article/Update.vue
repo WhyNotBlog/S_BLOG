@@ -74,12 +74,18 @@
             </v-flex>
           </v-layout>
 
-          <div id="thumbnail">
-            <v-file-input label="썸네일" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
-          </div>
+          <v-layout justify-space-between>
+            <v-flex sm12 md7>
+              <div id="thumbnail">
+                <v-file-input label="썸네일" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
+              </div>
+            </v-flex>
 
-          <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
-
+            <v-flex sm12 md4>
+              <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
+            </v-flex>
+          </v-layout>
+          <br />
           <div id="content">
             <editor
               v-if="this.content"
@@ -97,6 +103,7 @@
               @change="mdChange"
             />
           </div>
+          <br />
 
           <div class="text-center" id="tags">
             <v-chip
@@ -395,15 +402,17 @@ export default {
         this.thumbnailB = this.article.thumbnail;
         //console.log(this.article);
         if (this.article.thumbnail) {
-          this.thumbnail = new File(
-            [""],
-            "/home/ubuntu/dist/server/thumbnail/" +
-              this.updateArticleId +
-              ".jpg"
-          );
-          this.imgSrc = this.thumbnail;
-          console.log(this.thumbnail);
+          this.thumbnail = new File([""], "기존 이미지.jpg");
+
+          this.imgSrc =
+            process.env.VUE_APP_ARTICLE +
+            "downloadThumbnail/" +
+            this.updateArticleId +
+            ".jpg";
+        } else {
+          this.imgSrc = require("@/assets/basic.jpg");
         }
+
         axios
           .get(process.env.VUE_APP_TAG + "taglist/" + this.updateArticleId, {
             headers: {

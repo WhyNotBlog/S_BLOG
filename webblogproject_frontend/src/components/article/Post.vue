@@ -378,6 +378,7 @@ export default {
       const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
       console.log(data);
+      console.log(file);
       //   데이터를 서버로 전송하는 코드 추가
 
       var go = process.env.VUE_APP_ARTICLE;
