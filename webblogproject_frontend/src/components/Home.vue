@@ -75,7 +75,7 @@ export default {
       setTimeout(() => {
         axios
           .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/1/" + this.page
           )
           .then((res) => {
             //console.log(res.data.data);
@@ -90,7 +90,7 @@ export default {
 
         axios
           .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/1/" + this.page
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page
           )
           .then((res) => {
             //console.log(res.data.data);
