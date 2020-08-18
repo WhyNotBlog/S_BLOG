@@ -334,7 +334,7 @@ export default {
         .put(
           process.env.VUE_APP_ARTICLETEMP + "update",
           {
-            articleid: this.articleid,
+            articleid: this.$route.params.articleId,
             title: this.title,
             content: this.editorMarkdown,
             editornickname: this.loggedIn,
@@ -342,7 +342,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             thumbnail:
-              this.thumbnail.name != null || this.thumbnailB ? true : false,
+              this.thumbnail.size != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -353,7 +353,7 @@ export default {
         .then((res) => {
           let data = res.data.data;
           this.articleId = data.articleid;
-          if (this.thumbnailB.name != null) {
+          if (this.thumbnail.size != null) {
             this.addItem(true);
           }
           axios
@@ -438,10 +438,12 @@ export default {
 
     addItem(isTemp) {
       const data = new FormData(); // 서버로 전송할 폼데이터
-      const file = this.thumbnailB; // 선택된 파일객체
+      const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
       console.log(data);
       //   데이터를 서버로 전송하는 코드 추가
+
+      console.log(this.articleid);
 
       var go = process.env.VUE_APP_ARTICLE;
 
@@ -497,9 +499,9 @@ export default {
         if (this.article.thumbnail) {
           this.thumbnail = new File([""], "업로드한 이미지.jpg");
           this.imgSrc =
-            process.env.VUE_APP_ARTICLE +
+            process.env.VUE_APP_ARTICLETEMP +
             "downloadThumbnail/" +
-            this.updateArticleId +
+            this.$route.params.articleId +
             ".jpg";
         } else {
           this.thumbnail = new File([""], "기본 이미지.jpg");

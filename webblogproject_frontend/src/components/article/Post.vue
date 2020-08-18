@@ -329,6 +329,7 @@ export default {
         )
         .then((res) => {
           let data = res.data.data;
+          this.articleid = res.data.data.articleid;
           axios
             .post(
               process.env.VUE_APP_TAGTEMP + "regist",
@@ -398,6 +399,7 @@ export default {
 
       var go = process.env.VUE_APP_ARTICLE;
 
+      console.log(this.articleid);
       if (isTemp) go = process.env.VUE_APP_ARTICLETEMP;
       axios
         .post(go + "uploadThumbnail", data, {
