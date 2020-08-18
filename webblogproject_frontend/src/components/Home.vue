@@ -19,7 +19,7 @@
 
       <v-tab-item class="tab">
         <br />
-        <PostView :data="this.articles" />
+        <PostView :data="this.articles2" />
       </v-tab-item>
     </v-tabs>
 
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       articles: new Array(),
+      articles2: new Array(),
       page: 0,
       active: 0,
     };
@@ -73,12 +74,29 @@ export default {
     infiniteHandler($state) {
       setTimeout(() => {
         axios
-          .get(process.env.VUE_APP_ARTICLE + "searchBy/allarticle/" + this.page)
+          .get(
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page
+          )
           .then((res) => {
             //console.log(res.data.data);
             if (!res.data.data.empty) {
               this.page += 1;
               this.articles.push(...res.data.data.content);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+
+        axios
+          .get(
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/1/" + this.page
+          )
+          .then((res) => {
+            //console.log(res.data.data);
+            if (!res.data.data.empty) {
+              this.page += 1;
+              this.articles2.push(...res.data.data.content);
               $state.loaded();
             } else {
               $state.complete();
