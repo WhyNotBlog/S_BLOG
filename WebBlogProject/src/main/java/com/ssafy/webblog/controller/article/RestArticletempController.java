@@ -1,5 +1,6 @@
 package com.ssafy.webblog.controller.article;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -190,7 +191,30 @@ public class RestArticletempController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
-
+	
+	@GetMapping("/renameThumbnail/{fileName}/{newFilename}")
+	public ResponseEntity<Map<String, Object>> renameFile(@PathVariable String fileName, @PathVariable String newFilename, HttpServletRequest request) throws MalformedURLException, FileUploadException{
+		// Load file as Resource
+		Resource resource = service.loadFileAsResource("temp_" + fileName + ".jpg");
+		// Try to determine file's content type
+		String contentType = null;
+		File file = null;
+		try {
+			file = resource.getFile();
+			service.rename(file, fileName, newFilename);
+			System.out.println(resource.getFile().getAbsolutePath());
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			logger.info("Could not determine file type.");
+		}
+		
+		// Fallback to the default content type if type could not be determined
+		if(contentType == null) {
+			contentType = "application/octet-stream";
+		}
+		ResponseEntity<Map<String, Object>> entity = null;
+		return entity;
+	}
 
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {

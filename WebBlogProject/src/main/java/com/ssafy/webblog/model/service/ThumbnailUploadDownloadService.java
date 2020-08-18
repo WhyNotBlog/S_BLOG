@@ -1,4 +1,5 @@
 package com.ssafy.webblog.model.service;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,7 +61,25 @@ public class ThumbnailUploadDownloadService {
 	        }
 			return null;
 	    }
-
+	    public String rename(File file, String articleNum, String newArticleNum) throws FileUploadException {
+//	        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	        String fileName = articleNum + ".jpg";
+	        System.out.println(fileName);
+	        try {
+	            // 파일명에 부적합 문자가 있는지 확인한다.
+	            if(fileName.contains(".."))
+	                throw new FileUploadException("파일명에 부적합 문자가 포함되어 있습니다. " + fileName);
+	            
+	            Path targetLocation = this.fileLocation.resolve(fileName);
+	            System.out.println("파일이름 : " + targetLocation.getFileName());
+	            System.out.println(targetLocation.getParent());
+	            file.renameTo(new File(targetLocation.getParent() + "/" + newArticleNum + ".jpg"));
+	            
+	            return fileName;
+	        }catch(Exception e) {
+	            throw new FileUploadException("["+fileName+"] 파일 업로드에 실패하였습니다. 다시 시도하십시오.",e);
+	        }
+	    }
 
 
 }
