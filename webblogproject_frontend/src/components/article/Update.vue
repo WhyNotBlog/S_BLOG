@@ -77,7 +77,13 @@
           <v-layout justify-space-between>
             <v-flex sm12 md7>
               <div id="thumbnail">
-                <v-file-input label="썸네일" filled prepend-icon="mdi-camera" v-model="thumbnail"></v-file-input>
+                <v-file-input
+                  label="썸네일"
+                  filled
+                  prepend-icon="mdi-camera"
+                  v-model="thumbnail"
+                  @change="editThumbnail"
+                ></v-file-input>
               </div>
             </v-flex>
 
@@ -362,6 +368,10 @@ export default {
           console.log(err);
         });
     },
+
+    editThumbnail() {
+      this.imgSrc = URL.createObjectURL(this.thumbnail);
+    },
   },
   components: {
     editor: Editor,
@@ -402,14 +412,14 @@ export default {
         this.thumbnailB = this.article.thumbnail;
         //console.log(this.article);
         if (this.article.thumbnail) {
-          this.thumbnail = new File([""], "기존 이미지.jpg");
-
+          this.thumbnail = new File([""], "업로드한 이미지.jpg");
           this.imgSrc =
             process.env.VUE_APP_ARTICLE +
             "downloadThumbnail/" +
             this.updateArticleId +
             ".jpg";
         } else {
+          this.thumbnail = new File([""], "기본 이미지.jpg");
           this.imgSrc = require("@/assets/basic.jpg");
         }
 
