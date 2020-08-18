@@ -221,14 +221,14 @@ public class RestArticleController {
 
 
 
-	@GetMapping("/searchBy/allarticle/{page}")
+	@GetMapping("/searchBy/allarticle/{sort}/{page}")
 	@ApiOperation(value = "전체 게시글 조회")
-	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletRequest req, HttpServletResponse res, @PathVariable int page)
+	public ResponseEntity<Map<String, Object>> getAllArticleList(HttpServletRequest req, HttpServletResponse res, @PathVariable int page, @PathVariable int sort)
 			throws IOException {
 		logger.debug("Searching all article ");
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			Page<Article> result = artiService.searchAll(page);
+			Page<Article> result = artiService.searchAll(sort, page);
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
