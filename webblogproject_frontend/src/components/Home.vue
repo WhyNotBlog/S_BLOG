@@ -1,18 +1,24 @@
 <template>
   <div>
-    <v-tabs background-color="#f1f3f5" color="black" style="margin-left:10px;margin-top:10px;">
-      <v-tab>
-        <v-icon style="margin-right:5px">schedule</v-icon>최근 게시물
-      </v-tab>
+    <v-tabs
+      v-model="active"
+      background-color="#f1f3f5"
+      color="black"
+      style="margin-left:10px;margin-top:10px;"
+    >
       <v-tab>
         <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
       </v-tab>
-
+      <v-tab>
+        <v-icon style="margin-right:5px">schedule</v-icon>최근 게시물
+      </v-tab>
       <v-tab-item class="tab">
+        <br />
         <PostView :data="this.articles" />
       </v-tab-item>
 
       <v-tab-item class="tab">
+        <br />
         <PostView :data="this.articles" />
       </v-tab-item>
     </v-tabs>
@@ -42,8 +48,10 @@ export default {
     return {
       articles: new Array(),
       page: 0,
+      active: 0,
     };
   },
+
   components: { PostView, InfiniteLoading },
   // methods: {
   // changeLiked(id) {
@@ -82,8 +90,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .tab {
   background-color: #f1f3f5;
+}
+
+.v-tabs-slider-wrapper {
+  width: 103px !important;
 }
 </style>

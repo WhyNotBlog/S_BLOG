@@ -9,7 +9,7 @@
             :items="bigCategories"
             label="대분류"
             color="secondary"
-            outlined
+            solo
             v-model="bigCategory"
             @change="changeBigCategory"
           ></v-select>
@@ -21,7 +21,7 @@
             :items="middleCategories"
             label="중분류"
             color="secondary"
-            outlined
+            solo
             v-model="middleCategory"
             @change="changeMiddleCategory"
           ></v-select>
@@ -35,7 +35,7 @@
             item-value="value"
             label="소분류"
             color="secondary"
-            outlined
+            solo
             v-model="smallCategory"
             @change="changeSmallCategory"
           ></v-select>
