@@ -277,7 +277,7 @@ export default {
           this.articleid = data.articleid;
           //console.log(this.articleid);
           if (this.thumbnailB.name != null) {
-            this.addItem();
+            this.addItem(false);
           }
           axios
             .post(
@@ -338,7 +338,7 @@ export default {
           let data = res.data.data;
           this.articleId = data.articleid;
           if (this.thumbnailB.name != null) {
-            this.addItem();
+            this.addItem(true);
           }
           axios
             .put(
@@ -420,14 +420,18 @@ export default {
       console.log(this.thumbnail);
     },
 
-    addItem() {
+    addItem(isTemp) {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnailB; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
       console.log(data);
       //   데이터를 서버로 전송하는 코드 추가
+
+      var go = process.env.VUE_APP_ARTICLE;
+
+      if (isTemp) go = process.env.VUE_APP_ARTICLETEMP;
       axios
-        .post(process.env.VUE_APP_ARTICLETEMP + "uploadThumbnail", data, {
+        .post(go + "uploadThumbnail", data, {
           headers: {
             "Content-Type": "multipart/form-data",
             articleNum: this.articleid,
