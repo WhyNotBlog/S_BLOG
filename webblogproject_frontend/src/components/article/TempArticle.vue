@@ -123,7 +123,7 @@
           </v-form>
 
           <div class="text-center" id="btn">
-            <v-btn color="secondary" class="mr-4" @click="saveTempArticle">Save</v-btn>
+            <v-btn color="secondary" class="mr-4" @click="validateTempSave">Save</v-btn>
             <v-btn color="success" class="mr-4" @click="validateSubmit">Submit</v-btn>
             <v-btn color="warning" class="mr-4" @click="reset">Reset</v-btn>
             <v-btn
@@ -215,6 +215,11 @@ export default {
     validateSubmit() {
       if (this.$refs.form.validate()) {
         this.postArticle();
+      }
+    },
+    validateTempSave() {
+      if (this.$refs.form.validate()) {
+        this.saveTempArticle();
       }
     },
     reset() {

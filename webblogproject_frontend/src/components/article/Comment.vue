@@ -33,16 +33,16 @@
             v-if="loggedIn != null && loggedIn === comment.commentornickname"
           >
             |
-            <!-- <v-btn color="black accent-4" icon @click="changeComment(comment)">
+            <v-btn color="black accent-4" icon @click="changeComment(comment)">
               <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
-            </v-btn>-->
+            </v-btn>
             <v-btn color="red accent-4" icon @click="deleteComment(comment)">
               <v-icon middle color="red accent-4">mdi-alpha-x-box-outline</v-icon>
             </v-btn>
           </div>
         </div>
       </div>
-      <!-- <div v-show="needUpdate[comment.commentid]">
+      <div v-show="needUpdate[comment.commentid]">
           <v-form
             ref="form"
             v-model="valid"
@@ -62,7 +62,7 @@
             <v-btn class="d-inline mx-1 my-auto" color="secondary">댓글 수정</v-btn>
             <v-btn class="d-inline mx-1 my-auto" color="secondary">취소</v-btn>
           </v-form>
-      </div>-->
+      </div>
     </div>
     <v-form
       ref="form"
