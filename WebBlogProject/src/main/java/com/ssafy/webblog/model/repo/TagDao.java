@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ssafy.webblog.model.dto.Likearticle;
 import com.ssafy.webblog.model.dto.Tag;
 
 public interface TagDao extends JpaRepository<Tag, String> {
