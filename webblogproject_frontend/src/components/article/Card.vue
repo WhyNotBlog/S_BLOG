@@ -57,7 +57,12 @@ export default {
   methods: {
     imgSrc(id, flag) {
       return flag
-        ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
+        ? this.isTemp
+          ? process.env.VUE_APP_ARTICLETEMP +
+            "downloadThumbnail/temp_" +
+            id +
+            ".jpg"
+          : process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },
     goPost(isCurrent, id) {
