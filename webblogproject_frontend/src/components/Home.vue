@@ -12,6 +12,10 @@
       <v-tab>
         <v-icon style="margin-right:5px">schedule</v-icon>최근 게시물
       </v-tab>
+      <v-tab>
+        <v-icon style="margin-right:5px">favorite</v-icon>좋아요
+      </v-tab>
+
       <v-tab-item class="tab">
         <br />
         <PostView :data="this.articles" />
@@ -20,6 +24,11 @@
       <v-tab-item class="tab">
         <br />
         <PostView :data="this.articles2" />
+      </v-tab-item>
+
+      <v-tab-item class="tab">
+        <br />
+        <PostView :data="this.articles3" />
       </v-tab-item>
     </v-tabs>
 
@@ -97,6 +106,21 @@ export default {
             if (!res.data.data.empty) {
               this.page += 1;
               this.articles2.push(...res.data.data.content);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+
+        axios
+          .get(
+            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/2/" + this.page
+          )
+          .then((res) => {
+            //console.log(res.data.data);
+            if (!res.data.data.empty) {
+              this.page += 1;
+              this.articles3.push(...res.data.data.content);
               $state.loaded();
             } else {
               $state.complete();
