@@ -73,9 +73,24 @@
               ></v-select>
             </v-flex>
           </v-layout>
-          <div id="thumbnail">
-            <v-file-input label="썸네일" v-model="thumbnailB" filled prepend-icon="mdi-camera"></v-file-input>
-          </div>
+          <v-layout justify-space-between>
+            <v-flex sm12 md7>
+              <div id="thumbnail">
+                <v-file-input
+                  label="썸네일"
+                  filled
+                  prepend-icon="mdi-camera"
+                  v-model="thumbnail"
+                  @change="editThumbnail"
+                ></v-file-input>
+              </div>
+            </v-flex>
+
+            <v-flex sm12 md4>
+              <v-img contain class="white--text align-end" height="168px" :src="imgSrc"></v-img>
+            </v-flex>
+          </v-layout>
+          <br />
           <div id="content">
             <editor
               v-if="content"
@@ -178,7 +193,7 @@ export default {
       ],
       title: "",
       thumbnail: new Object(),
-      thumbnailB: new Object(),
+      thumbnailB: "",
       content: "",
       editornickname: "",
       bigCategories: new Array(),
@@ -189,7 +204,7 @@ export default {
       smallCategory: new Object(),
       categoryInt: 0,
       modify: 0,
-
+      imgSrc: "",
       editorText: "",
       editorOptions: {
         hideModeSwitch: true,
@@ -263,7 +278,8 @@ export default {
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.userId,
-            thumbnail: this.thumbnailB.name != null ? true : false,
+            thumbnail:
+              this.thumbnail.name != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -276,7 +292,7 @@ export default {
           this.article = data;
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          if (this.thumbnailB.name != null) {
+          if (this.thumbnail.name != null) {
             this.addItem(false);
           }
           axios
@@ -326,7 +342,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             thumbnail:
-              this.thumbnailB.name != null || this.thumbnail ? true : false,
+              this.thumbnail.name != null || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -445,6 +461,10 @@ export default {
           console.log(err);
         });
     },
+
+    editThumbnail() {
+      this.imgSrc = URL.createObjectURL(this.thumbnail);
+    },
   },
   components: {
     editor: Editor,
@@ -473,6 +493,18 @@ export default {
         this.editornickname = this.article.editornickname;
         this.thumbnail = this.article.thumbnail;
         this.categoryInt = this.article.category;
+
+        if (this.article.thumbnail) {
+          this.thumbnail = new File([""], "업로드한 이미지.jpg");
+          this.imgSrc =
+            process.env.VUE_APP_ARTICLE +
+            "downloadThumbnail/" +
+            this.updateArticleId +
+            ".jpg";
+        } else {
+          this.thumbnail = new File([""], "기본 이미지.jpg");
+          this.imgSrc = require("@/assets/basic.jpg");
+        }
 
         const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
         const middleCategoryIndex = parseInt(String(this.categoryInt)[1]) - 1;
