@@ -352,7 +352,7 @@ export default {
         )
         .then((res) => {
           let data = res.data.data;
-          this.articleId = data.articleid;
+          this.articleid = data.articleid;
           if (this.thumbnail.size != null) {
             this.addItem(true);
           }
