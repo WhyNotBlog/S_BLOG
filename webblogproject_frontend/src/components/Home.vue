@@ -40,6 +40,24 @@
         </div>
       </div>
     </infinite-loading>
+
+    <infinite-loading @infinite="infiniteHandler2" spinner="waveDots">
+      <div slot="no-more"></div>
+      <div slot="no-results">
+        <div class="no_result">
+          <span>조회 결과가 없습니다.</span>
+        </div>
+      </div>
+    </infinite-loading>
+
+    <infinite-loading @infinite="infiniteHandler3" spinner="waveDots">
+      <div slot="no-more"></div>
+      <div slot="no-results">
+        <div class="no_result">
+          <span>조회 결과가 없습니다.</span>
+        </div>
+      </div>
+    </infinite-loading>
   </div>
 </template>
 
@@ -84,7 +102,11 @@ export default {
               $state.complete();
             }
           });
+      }, 200);
+    },
 
+    infiniteHandler2($state) {
+      setTimeout(() => {
         axios
           .get(
             process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page2
@@ -99,7 +121,11 @@ export default {
               $state.complete();
             }
           });
+      }, 200);
+    },
 
+    infiniteHandler3($state) {
+      setTimeout(() => {
         axios
           .get(
             process.env.VUE_APP_ARTICLE + "searchBy/allarticle/2/" + this.page3
