@@ -263,7 +263,7 @@ export default {
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.userId,
-            thumbnail: this.thumbnail.name != null ? true : false,
+            thumbnail: this.thumbnailB.name != null ? true : false,
           },
           {
             headers: {
@@ -276,7 +276,9 @@ export default {
           this.article = data;
           this.articleid = data.articleid;
           //console.log(this.articleid);
-          if (this.thumbnail.name != null) this.addItem();
+          if (this.thumbnailB.name != null) {
+            this.addItem();
+          }
           axios
             .post(
               process.env.VUE_APP_TAG + "regist",
@@ -323,7 +325,8 @@ export default {
             category: this.categoryInt,
             modify: this.modify,
             writerid: this.userId,
-            thumbnail: this.thumbnail.name != null ? true : false,
+            thumbnail:
+              this.thumbnailB.name != null || this.thumbnail ? true : false,
           },
           {
             headers: {
@@ -333,6 +336,10 @@ export default {
         )
         .then((res) => {
           let data = res.data.data;
+          this.articleId = data.articleid;
+          if (this.thumbnailB.name != null) {
+            this.addItem();
+          }
           axios
             .put(
               process.env.VUE_APP_TAGTEMP + "update",
@@ -411,6 +418,28 @@ export default {
     },
     changeFile() {
       console.log(this.thumbnail);
+    },
+
+    addItem() {
+      const data = new FormData(); // 서버로 전송할 폼데이터
+      const file = this.thumbnailB; // 선택된 파일객체
+      data.append("file", file); // 폼데이터에 파일을 추가
+      console.log(data);
+      //   데이터를 서버로 전송하는 코드 추가
+      axios
+        .post(process.env.VUE_APP_ARTICLETEMP + "uploadThumbnail", data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            articleNum: this.articleid,
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   components: {
