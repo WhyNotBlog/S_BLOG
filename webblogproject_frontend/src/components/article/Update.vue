@@ -270,7 +270,7 @@ export default {
             hits: this.article.hits,
             likecount: this.article.likecount,
             thumbnail:
-              this.thumbnail.size != null || this.thumbnailB ? true : false,
+              this.thumbnail.size > 0 || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -282,7 +282,9 @@ export default {
           let data = res.data.data;
           this.article = data;
 
-          if (this.thumbnail.name != null) this.addItem();
+          if (this.thumbnail.size > 0) {
+            this.addItem();
+          }
 
           axios
             .put(
@@ -353,6 +355,7 @@ export default {
       const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
       console.log(data);
+      console.log(this.thumbnail);
       //   데이터를 서버로 전송하는 코드 추가
       axios
         .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
@@ -406,7 +409,7 @@ export default {
 
         this.title = this.article.title;
         this.content = this.article.content;
-        this.editorMarkdown = this.content;
+        this.editorMarkdown = this.article.content;
         this.editornickname = this.article.editornickname;
         this.editdate = this.article.editdate;
         this.modify = this.article.modify;

@@ -33,4 +33,5 @@ public class Comment {
 	private String commentornickname;
 	@Column(insertable = false, updatable = false)
 	private LocalDateTime commentdate;
+	private int commentorid;
 }
