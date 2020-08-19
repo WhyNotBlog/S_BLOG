@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h1 style="text-align:center; margin-bottom:10px">개발자 성향 테스트</h1>
-    <survey :survey="survey" style="display:flex;justify-content: center;" />
+    <br />
+    <h1>개발자 성향 테스트</h1>
+    <v-container>
+      <survey :survey="survey" style="display:flex;justify-content: center;" />
+    </v-container>
   </div>
 </template>
 
@@ -91,7 +94,8 @@ var json = {
           type: "radiogroup",
           name: "3",
           isRequired: true,
-          title: "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
+          title:
+            "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
           choices: ["시작 요일", "중복된 날짜"],
         },
       ],
@@ -315,7 +319,7 @@ export default {
     }
 
     this.survey.render();
-    await this.survey.onComplete.add(function(result) {
+    await this.survey.onComplete.add(function (result) {
       let front = 0;
       let back = 0;
       for (let key in result.data) {
@@ -343,8 +347,9 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Sunflower:wght@300&display=swap");
 .sv_custom_header {
-  background: none !important;
+  display: none;
 }
 
 .sv_main {
@@ -379,5 +384,26 @@ export default {
     width: 90vw;
     height: 100%;
   }
+}
+
+.sv_main .sv_container .sv_body .sv_p_root .sv_q {
+  padding: 1em;
+}
+
+h1 {
+  font-family: "Sunflower";
+  margin-bottom: 10px;
+  margin-left: 5%;
+}
+
+.sv_body {
+  border-top: 3px solid #726a95 !important;
+}
+
+.sv_main input[type="button"],
+.sv_main button,
+.sv_main input[type="button"]:hover,
+.sv_main button:hover {
+  background-color: #726a95;
 }
 </style>

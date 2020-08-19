@@ -1,47 +1,50 @@
 <template>
   <div>
     <br />
-    <v-layout row wrap justify-center>
-      <v-flex xs3 sm3 md3 lg3 xl3>
-        <v-select :items="types" label="유형" solo v-model="typeBox" style="margin-left:5px"></v-select>
-      </v-flex>
-      <v-flex xs8 sm8 md8 lg8 xl8>
-        <v-text-field
-          id="search"
-          name="search"
-          type="text"
-          color="black"
-          placeholder="검색어를 입력하세요"
-          v-model="search"
-          @keyup.enter="searchRoute"
-          style="margin-left:5px"
-          solo
-          clearable
-          single-line
-        ></v-text-field>
-      </v-flex>
-    </v-layout>
+    <h1>검색</h1>
+    <v-container>
+      <v-layout row wrap justify-center>
+        <v-flex xs3 sm3 md3 lg3 xl3>
+          <v-select :items="types" label="유형" solo v-model="typeBox" style="margin-left:5px"></v-select>
+        </v-flex>
+        <v-flex xs8 sm8 md8 lg8 xl8>
+          <v-text-field
+            id="search"
+            name="search"
+            type="text"
+            color="black"
+            placeholder="검색어를 입력하세요"
+            v-model="search"
+            @keyup.enter="searchRoute"
+            style="margin-left:5px"
+            solo
+            clearable
+            single-line
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
 
-    <div>
-      <span v-show="isSearch" style="width:95%;margin-left:5%;font-size:18px">
-        총
-        <strong>{{ count }}</strong>개의 게시물이 있습니다!
-      </span>
-      <SearchView :data="this.articles" />
-    </div>
-    <infinite-loading
-      ref="infiniteLoading"
-      @infinite="infiniteHandler"
-      spinner="waveDots"
-      v-show="infinite"
-    >
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
-        </div>
+      <div>
+        <span v-show="isSearch" style="width:95%;margin-left:5%;font-size:18px">
+          총
+          <strong>{{ count }}</strong>개의 게시물이 있습니다!
+        </span>
+        <SearchView :data="this.articles" />
       </div>
-    </infinite-loading>
+      <infinite-loading
+        ref="infiniteLoading"
+        @infinite="infiniteHandler"
+        spinner="waveDots"
+        v-show="infinite"
+      >
+        <div slot="no-more"></div>
+        <div slot="no-results">
+          <div class="no_result">
+            <span>조회 결과가 없습니다.</span>
+          </div>
+        </div>
+      </infinite-loading>
+    </v-container>
   </div>
 </template>
 

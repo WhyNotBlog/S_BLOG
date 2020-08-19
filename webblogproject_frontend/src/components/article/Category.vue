@@ -1,9 +1,10 @@
 <template>
   <div>
     <br />
+    <h1>카테고리</h1>
     <v-container>
-      <v-layout justify-space-between id="category">
-        <v-flex sm4 md4>
+      <v-layout justify-center id="category">
+        <v-flex xs3 md3 xl3>
           <v-select
             id="selectedBigCategory"
             :items="bigCategories"
@@ -15,7 +16,7 @@
           ></v-select>
         </v-flex>
 
-        <v-flex sm4 md4>
+        <v-flex xs3 md3 xl3>
           <v-select
             id="selectedMiddleCategory"
             :items="middleCategories"
@@ -27,7 +28,7 @@
           ></v-select>
         </v-flex>
 
-        <v-flex sm4 md4>
+        <v-flex xs3 sm3 md3 xl3>
           <v-select
             id="selectedSmallCategory"
             :items="smallCategories"
@@ -41,17 +42,17 @@
           ></v-select>
         </v-flex>
       </v-layout>
-    </v-container>
 
-    <PostView :data="this.articles" />
-    <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
+      <PostView :data="this.articles" />
+      <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
+        <div slot="no-more"></div>
+        <div slot="no-results">
+          <div class="no_result">
+            <span>조회 결과가 없습니다.</span>
+          </div>
         </div>
-      </div>
-    </infinite-loading>
+      </infinite-loading>
+    </v-container>
   </div>
 </template>
 
@@ -174,6 +175,7 @@ export default {
 
 <style scoped>
 .v-select {
-  margin-left: 15px;
+  max-width: 330px;
+  margin-left: 20px;
 }
 </style>

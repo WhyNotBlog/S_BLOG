@@ -1,18 +1,20 @@
 <template>
   <div>
+    <br />
     <h1 v-if="categoryInt==1" style="width:95%;margin-left:5%">직무 소개</h1>
     <h1 v-else style="width:95%;margin-left:5%">로드맵</h1>
+    <v-container>
+      <SearchView :data="this.articles" />
 
-    <SearchView :data="this.articles" />
-
-    <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
+      <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
+        <div slot="no-more"></div>
+        <div slot="no-results">
+          <div class="no_result">
+            <span>조회 결과가 없습니다.</span>
+          </div>
         </div>
-      </div>
-    </infinite-loading>
+      </infinite-loading>
+    </v-container>
   </div>
 </template>
 <script src="https://unpkg.com/vue-infinite-loading@2.4.4/dist/vue-infinite-loading.js"></script>
