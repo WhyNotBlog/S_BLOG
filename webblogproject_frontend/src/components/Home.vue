@@ -5,6 +5,7 @@
       background-color="#f1f3f5"
       color="black"
       style="margin-left:5px;margin-top:10px;margin-right:5px"
+      @change="changeEvent($event)"
     >
       <v-tab>
         <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
@@ -23,34 +24,16 @@
 
       <v-tab-item class="tab">
         <br />
-        <PostView :data="this.articles2" />
+        <PostView :data="this.articles" />
       </v-tab-item>
 
       <v-tab-item class="tab">
         <br />
-        <PostView :data="this.articles3" />
+        <PostView :data="this.articles" />
       </v-tab-item>
     </v-tabs>
 
-    <infinite-loading @infinite="infiniteHandler" spinner="waveDots">
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
-        </div>
-      </div>
-    </infinite-loading>
-
-    <infinite-loading @infinite="infiniteHandler2" spinner="waveDots">
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
-        </div>
-      </div>
-    </infinite-loading>
-
-    <infinite-loading @infinite="infiniteHandler3" spinner="waveDots">
+    <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
       <div slot="no-more"></div>
       <div slot="no-results">
         <div class="no_result">
@@ -74,11 +57,7 @@ export default {
   data() {
     return {
       articles: new Array(),
-      articles2: new Array(),
-      articles3: new Array(),
       page: 0,
-      page2: 0,
-      page3: 0,
       active: 0,
     };
   },
@@ -86,55 +65,27 @@ export default {
   components: { PostView, InfiniteLoading },
 
   methods: {
+    changeEvent() {
+      //console.log(this.active);
+      this.page = 0;
+      this.articles = new Array();
+      this.$refs.infiniteLoading.stateChanger.reset();
+    },
     infiniteHandler($state) {
       setTimeout(() => {
         axios
           .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/1/" + this.page
+            process.env.VUE_APP_ARTICLE +
+              "searchBy/allarticle/" +
+              this.active +
+              "/" +
+              this.page
           )
           .then((res) => {
             //console.log(res.data.data);
             if (!res.data.data.empty) {
               this.page += 1;
               this.articles.push(...res.data.data.content);
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          });
-      }, 200);
-    },
-
-    infiniteHandler2($state) {
-      setTimeout(() => {
-        axios
-          .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/0/" + this.page2
-          )
-          .then((res) => {
-            //console.log(res.data.data);
-            if (!res.data.data.empty) {
-              this.page2 += 1;
-              this.articles2.push(...res.data.data.content);
-              $state.loaded();
-            } else {
-              $state.complete();
-            }
-          });
-      }, 200);
-    },
-
-    infiniteHandler3($state) {
-      setTimeout(() => {
-        axios
-          .get(
-            process.env.VUE_APP_ARTICLE + "searchBy/allarticle/2/" + this.page3
-          )
-          .then((res) => {
-            //console.log(res.data.data);
-            if (!res.data.data.empty) {
-              this.page3 += 1;
-              this.articles3.push(...res.data.data.content);
               $state.loaded();
             } else {
               $state.complete();
