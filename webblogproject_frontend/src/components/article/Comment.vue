@@ -24,12 +24,14 @@
       id="comment-list"
     >
       <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
-        <div>{{ comment.commentcontent }}</div>
         <div>
-          <v-avatar>
+        <v-avatar>
           <img :src="commentorProfile(comment.commentorid)" @error="imgError" />
-          </v-avatar>
-          {{ comment.commentornickname }} |
+        </v-avatar>
+          {{ comment.commentornickname }}
+        </div>
+        <div>
+          {{ comment.commentcontent }} |
           {{ comment.commentdate | dateToString }}
           <div
             class="d-inline-block"
