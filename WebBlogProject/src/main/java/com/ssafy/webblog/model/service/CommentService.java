@@ -51,6 +51,7 @@ public class CommentService {
 		input.setCommentcontent(comment.getCommentcontent());
 		input.setCommentid(comment.getCommentid());
 		input.setCommentornickname(comment.getCommentornickname());
+		input.setCommentorid(comment.getCommentorid());
 		Comment result = cDao.save(input);
 		return result;
 	}
