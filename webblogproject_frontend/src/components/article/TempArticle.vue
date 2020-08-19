@@ -497,6 +497,7 @@ export default {
 
         this.title = this.article.title;
         this.content = this.article.content;
+        this.editorMarkdown = this.article.content;
         this.editornickname = this.article.editornickname;
         this.thumbnail = this.article.thumbnail;
         this.categoryInt = this.article.category;

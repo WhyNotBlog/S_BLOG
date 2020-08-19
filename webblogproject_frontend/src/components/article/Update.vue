@@ -406,11 +406,12 @@ export default {
 
         this.title = this.article.title;
         this.content = this.article.content;
+        this.editorMarkdown = this.content;
         this.editornickname = this.article.editornickname;
         this.editdate = this.article.editdate;
         this.modify = this.article.modify;
         this.thumbnailB = this.article.thumbnail;
-        //console.log(this.article);
+        
         if (this.article.thumbnail) {
           this.thumbnail = new File([""], "업로드한 이미지.jpg");
           this.imgSrc =
