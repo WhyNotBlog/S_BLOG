@@ -91,8 +91,7 @@ var json = {
           type: "radiogroup",
           name: "3",
           isRequired: true,
-          title:
-            "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
+          title: "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
           choices: ["시작 요일", "중복된 날짜"],
         },
       ],
@@ -316,7 +315,7 @@ export default {
     }
 
     this.survey.render();
-    await this.survey.onComplete.add(function (result) {
+    await this.survey.onComplete.add(function(result) {
       let front = 0;
       let back = 0;
       for (let key in result.data) {
@@ -357,7 +356,20 @@ export default {
   height: 100%;
 }
 
-#sq_100 {
+#sq_100,
+#sq_102,
+#sq_104,
+#sq_106,
+#sq_108,
+#sq_110,
+#sq_112,
+#sq_114,
+#sq_116,
+#sq_118,
+#sq_120,
+#sq_122,
+#sq_124,
+#sq_126 {
   display: flex !important;
   justify-content: center;
 }
