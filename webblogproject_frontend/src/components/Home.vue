@@ -1,46 +1,48 @@
 <template>
   <div>
-    <v-tabs
-      v-model="active"
-      background-color="#f1f3f5"
-      color="black"
-      style="margin-left:5px;margin-top:10px;margin-right:5px"
-      @change="changeEvent($event)"
-    >
-      <v-tab>
-        <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
-      </v-tab>
-      <v-tab>
-        <v-icon style="margin-right:5px">schedule</v-icon>최근
-      </v-tab>
-      <v-tab>
-        <v-icon style="margin-right:5px">favorite</v-icon>좋아요
-      </v-tab>
+    <v-container>
+      <v-tabs
+        v-model="active"
+        background-color="#f1f3f5"
+        color="black"
+        style="margin-left:5px;margin-top:10px;margin-right:5px"
+        @change="changeEvent($event)"
+      >
+        <v-tab>
+          <v-icon style="margin-right:5px">trending_up</v-icon>트랜딩
+        </v-tab>
+        <v-tab>
+          <v-icon style="margin-right:5px">schedule</v-icon>최근
+        </v-tab>
+        <v-tab>
+          <v-icon style="margin-right:5px">favorite</v-icon>좋아요
+        </v-tab>
 
-      <v-tab-item class="tab">
-        <br />
-        <PostView :data="this.articles" />
-      </v-tab-item>
+        <v-tab-item class="tab">
+          <br />
+          <PostView :data="this.articles" />
+        </v-tab-item>
 
-      <v-tab-item class="tab">
-        <br />
-        <PostView :data="this.articles" />
-      </v-tab-item>
+        <v-tab-item class="tab">
+          <br />
+          <PostView :data="this.articles" />
+        </v-tab-item>
 
-      <v-tab-item class="tab">
-        <br />
-        <PostView :data="this.articles" />
-      </v-tab-item>
-    </v-tabs>
+        <v-tab-item class="tab">
+          <br />
+          <PostView :data="this.articles" />
+        </v-tab-item>
+      </v-tabs>
 
-    <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
-      <div slot="no-more"></div>
-      <div slot="no-results">
-        <div class="no_result">
-          <span>조회 결과가 없습니다.</span>
+      <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler" spinner="waveDots">
+        <div slot="no-more"></div>
+        <div slot="no-results">
+          <div class="no_result">
+            <span>조회 결과가 없습니다.</span>
+          </div>
         </div>
-      </div>
-    </infinite-loading>
+      </infinite-loading>
+    </v-container>
   </div>
 </template>
 
