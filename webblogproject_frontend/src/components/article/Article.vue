@@ -433,4 +433,17 @@ export default {
   width: 90%;
   background-color: white;
 }
+
+.tui-editor-contents table {
+  margin: auto;
+}
+
+.tui-editor-contents {
+  margin: 20px;
+}
+
+.v-application code,
+.v-application kbd {
+  font-size: 100%;
+}
 </style>
