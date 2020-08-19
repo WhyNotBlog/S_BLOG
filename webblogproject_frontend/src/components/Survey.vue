@@ -57,7 +57,7 @@ var json = {
         {
           type: "html",
           html:
-            "<b style='font-size:1rem'>프론트엔드(FRONT END)? 백엔드(BACK END)? 풀스택(FULL STACK)?<br>과연 나의 성향은 무엇일까?<br>기대되지 않나요? 나의 개발자의 길을 찾아서..!</b> <br>*본 테스트는 개발자의 길에 앞서 가볍게 보는 성향검사입니다.",
+            "<b style='font-size:1rem'>과연 나의 개발자 성향은 무엇일까?<br>프론트엔드(FRONT END)? 백엔드(BACK END)? 풀스택(FULL STACK)?<br>무엇이 나올지 기대되지 않나요?<br>나의 개발자의 길을 찾아서..!</b> <br>*본 테스트는 개발자의 길에 앞서 가볍게 보는 성향검사입니다.",
         },
       ],
     },
@@ -351,13 +351,13 @@ export default {
 
       if (front - back > 4) {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=10tPeUx3o_kPk9YO8PCl-HCACpcX4Hj-C' />";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://miro.medium.com/max/1400/1*XR3rTO1O_RM69jFDcez7cw.gif' />";
       } else if (back - front > 4) {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=1I-qPWOF5Q55Yay7vanjQPqiNyiOKEg_7' />";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='http://www.ixploretech.com/img/electronics.gif' />";
       } else {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=1jiwiEPKSYywb_07G-Clr-Gn98XuGswjL'>";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='http://www.ixploretech.com/img/gif9.gif'>";
       }
     });
   },
@@ -377,8 +377,10 @@ export default {
 
 .sv_q,
 .sv_qstn,
-.sv_row {
+.sv_row,
+.sv_nav {
   min-width: 100% !important;
+  font-size: 1rem;
 }
 .sv_container {
   width: 50vw;

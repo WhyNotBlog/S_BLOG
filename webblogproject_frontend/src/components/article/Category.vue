@@ -4,7 +4,7 @@
     <h1>카테고리</h1>
     <v-container>
       <v-layout justify-center id="category">
-        <v-flex xs3 md3 xl3>
+        <v-flex xs12 sm3 md3 xl3 style="display: flex;justify-content: center;">
           <v-select
             id="selectedBigCategory"
             :items="bigCategories"
@@ -16,7 +16,7 @@
           ></v-select>
         </v-flex>
 
-        <v-flex xs3 md3 xl3>
+        <v-flex xs12 sm3 md3 xl3 style="display: flex;justify-content: center;">
           <v-select
             id="selectedMiddleCategory"
             :items="middleCategories"
@@ -28,7 +28,7 @@
           ></v-select>
         </v-flex>
 
-        <v-flex xs3 sm3 md3 xl3>
+        <v-flex xs12 sm3 md3 xl3 style="display: flex;justify-content: center;">
           <v-select
             id="selectedSmallCategory"
             :items="smallCategories"
