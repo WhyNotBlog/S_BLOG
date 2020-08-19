@@ -25,11 +25,10 @@
     >
       <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
         <div>
-        <v-avatar size="28">
-          <img :src="commentorProfile(comment.commentorid)" @error="imgError" />
-        </v-avatar>
-          {{ comment.commentornickname }} | 
-        </div>
+          <v-avatar size="28">
+          <img :src="commentorProfile(comment.commentorid)"  @error="imgError" />
+          </v-avatar>
+          {{ comment.commentornickname }} | </div>
         <div>
           {{ comment.commentcontent }}
         </div>
@@ -238,6 +237,10 @@ export default {
     },
     commentorProfile(commentorid) {
       return process.env.VUE_APP_ACCOUNT + "downloadFile/" + commentorid + ".jpg"
+    },
+    imgError() {
+      //console.log("err");
+      this.writerProfile = `${require("@/assets/profile.svg")}`;
     },
   },
   component: {},
