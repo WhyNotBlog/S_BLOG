@@ -26,6 +26,9 @@
       <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
         <div>{{ comment.commentcontent }}</div>
         <div>
+          <v-avatar>
+          <img :src="commentorProfile(comment.commentorid)" @error="imgError" />
+          </v-avatar>
           {{ comment.commentornickname }} |
           {{ comment.commentdate | dateToString }}
           <div
@@ -121,13 +124,13 @@ export default {
           this.snackbar = true;
           return;
         }
-
         axios
           .post(
             process.env.VUE_APP_COMMENT + "regist",
             {
               articleid: this.articleId,
               commentcontent: this.comment,
+              commentorid : this.userId,
               commentornickname: this.loggedIn,
             },
             {
@@ -229,6 +232,9 @@ export default {
               });
           });
     },
+    commentorProfile(commentorid) {
+      return process.env.VUE_APP_ACCOUNT + "downloadFile/" + commentorid + ".jpg"
+    },
   },
   component: {},
   computed: {
@@ -238,6 +244,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setLoggedIn", value);
+      },
+    },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
       },
     },
     jwtAuthToken: {
@@ -258,8 +272,8 @@ export default {
         this.comments.forEach(
           (comment) => (this.needUpdate[comment.commentid] = false)
         );
-        //console.log(this.needUpdate);
-        //console.log(this.comments);
+        // console.log(this.needUpdate);
+        // console.log(this.comments);
       });
   },
   filters: {

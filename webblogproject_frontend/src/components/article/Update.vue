@@ -414,7 +414,7 @@ export default {
         this.editdate = this.article.editdate;
         this.modify = this.article.modify;
         this.thumbnailB = this.article.thumbnail;
-        //console.log(this.article);
+        
         if (this.article.thumbnail) {
           this.thumbnail = new File([""], "업로드한 이미지.jpg");
           this.imgSrc =
