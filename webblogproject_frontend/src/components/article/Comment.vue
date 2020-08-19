@@ -28,7 +28,7 @@
         <v-avatar size="28">
           <img :src="commentorProfile(comment.commentorid)" @error="imgError" />
         </v-avatar>
-          {{ comment.commentornickname }}
+          {{ comment.commentornickname }} | 
         </div>
         <div>
           {{ comment.commentcontent }}
