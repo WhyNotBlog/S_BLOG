@@ -18,77 +18,82 @@
     </v-snackbar>
 
     <br />
-    <div
-      class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
-      id="title"
-    >{{ article.title }}</div>
-    <hr class="my-5" />
-    <div id="body">
-      <div class="font-weight-bold text-center" v-show="article.category!=1 && article.category!=2">
-        카테고리 : {{ bigCategory }} - {{ middleCategory }} -
-        {{ smallCategory }}
-      </div>
-      <div class="font-weight-bold text-center">
-        작성자 :
-        <v-avatar size="40">
-          <img :src="writerProfile" @error="imgError" />
-        </v-avatar>
-        <v-btn text @click="goProfile(article.writerid)">
-          <strong>{{ article.editornickname }}</strong>
-        </v-btn>
-
-        <v-btn text @click="checkFollow" v-if="userId != article.writerid">
-          <v-icon>{{ followOrUnfollow }}</v-icon>
-        </v-btn>
-        | 작성일 :
-        {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
-        <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
-          <v-btn color="black accent-4" icon @click="updateArticle()">
-            <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
-          </v-btn>
-          <v-btn color="black accent-4" icon @click="deleteArticle()">
-            <v-icon middle color="black accent-4">mdi-delete</v-icon>
-          </v-btn>
-        </div>
-        <div id="buttons">
-          <v-btn
-            color="red accent-4"
-            icon
-            v-if="checkLiked(article)"
-            @click.stop="changeLiked(article)"
-          >
-            <v-icon middle color="red accent-4">mdi-heart</v-icon>
-          </v-btn>
-          <v-btn color="red accent-4" icon v-else @click="changeLiked(article)">
-            <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
-          </v-btn>
-          {{ article.likecount }}명이 좋아합니다
-        </div>
-      </div>
-      <div class="text-center" id="catalogue">
-        <label>태그 :</label>
-        <v-chip
-          class="ma-2 text-button chip-btn"
-          color="secondary"
-          v-for="tag in tags"
-          :key="tag.tagid"
-          @click="searchTag(tag.tagname)"
-        >#{{ tag.tagname }}</v-chip>
-      </div>
+    <v-container>
       <div
-        class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
-        id="text"
-      >
-        <viewer
-          v-if="article.content"
-          id="markdown-viewer"
-          :initialValue="article.content"
-          :value="viewerText"
-          height="500px"
-        />
+        class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
+        id="title"
+      >{{ article.title }}</div>
+      <hr class="my-5" />
+      <div id="body">
+        <div
+          class="font-weight-bold text-center"
+          v-show="article.category!=1 && article.category!=2"
+        >
+          카테고리 : {{ bigCategory }} - {{ middleCategory }} -
+          {{ smallCategory }}
+        </div>
+        <div class="font-weight-bold text-center">
+          작성자 :
+          <v-avatar size="40">
+            <img :src="writerProfile" @error="imgError" />
+          </v-avatar>
+          <v-btn text @click="goProfile(article.writerid)">
+            <strong>{{ article.editornickname }}</strong>
+          </v-btn>
+
+          <v-btn text @click="checkFollow" v-if="userId != article.writerid">
+            <v-icon>{{ followOrUnfollow }}</v-icon>
+          </v-btn>
+          | 작성일 :
+          {{ article.editdate | dateToString }} | 조회수 : {{ article.hits }} |
+          <div class="d-inline-block" v-if="loggedIn !== null && userId === article.writerid">
+            <v-btn color="black accent-4" icon @click="updateArticle()">
+              <v-icon middle color="black accent-4">mdi-file-document-edit</v-icon>
+            </v-btn>
+            <v-btn color="black accent-4" icon @click="deleteArticle()">
+              <v-icon middle color="black accent-4">mdi-delete</v-icon>
+            </v-btn>
+          </div>
+          <div id="buttons">
+            <v-btn
+              color="red accent-4"
+              icon
+              v-if="checkLiked(article)"
+              @click.stop="changeLiked(article)"
+            >
+              <v-icon middle color="red accent-4">mdi-heart</v-icon>
+            </v-btn>
+            <v-btn color="red accent-4" icon v-else @click="changeLiked(article)">
+              <v-icon middle color="red accent-4">mdi-heart-outline</v-icon>
+            </v-btn>
+            {{ article.likecount }}명이 좋아합니다
+          </div>
+        </div>
+        <div class="text-center" id="catalogue">
+          <label>태그 :</label>
+          <v-chip
+            class="ma-2 text-button chip-btn"
+            color="secondary"
+            v-for="tag in tags"
+            :key="tag.tagid"
+            @click="searchTag(tag.tagname)"
+          >#{{ tag.tagname }}</v-chip>
+        </div>
+        <div
+          class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
+          id="text"
+        >
+          <viewer
+            v-if="article.content"
+            id="markdown-viewer"
+            :initialValue="article.content"
+            :value="viewerText"
+            height="500px"
+          />
+        </div>
       </div>
-    </div>
-    <Comment :articleId="articleId" />
+      <Comment :articleId="articleId" />
+    </v-container>
   </div>
 </template>
 
@@ -440,10 +445,16 @@ export default {
 
 .tui-editor-contents {
   margin: 20px;
+  word-break: break-all;
+  font-size: 1rem;
 }
 
 .v-application code,
 .v-application kbd {
-  font-size: 100%;
+  font-size: 0.875rem;
+}
+
+.tui-editor-contents pre {
+  text-align: left;
 }
 </style>
