@@ -211,6 +211,7 @@ export default {
             articleid: comment.articleid,
             commentid : comment.commentid,
             commentcontent: this.willUpdatedComment,
+            commentorid : comment.commentorid,
             commentornickname: comment.commentornickname,
           },
           {
@@ -234,6 +235,9 @@ export default {
                 this.comment = "";
               });
           });
+    },
+    goProfile(commentorid) {
+      this.$router.push("/user/profile/" + commentorid);
     },
     commentorProfile(commentorid) {
       return process.env.VUE_APP_ACCOUNT + "downloadFile/" + commentorid + ".jpg"
