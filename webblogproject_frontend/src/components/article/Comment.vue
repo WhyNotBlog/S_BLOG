@@ -130,6 +130,15 @@ export default {
           this.snackbar = true;
           return;
         }
+      let strByteLength = ~-encodeURI(this.comment).split(/%..|./).length;
+      if(strByteLength > 200) {
+        this.text = '댓글은 200bytes를 넘길 수 없습니다!';
+        this.snackbar = true;
+        setTimeout(() => {
+          this.text = '';
+          this.snackbar = false;
+        },1500);
+      } else {
         axios
           .post(
             process.env.VUE_APP_COMMENT + "regist",
@@ -160,6 +169,7 @@ export default {
                 this.comment = "";
               });
           });
+        }  
       } else {
         this.text = "댓글은 로그인해야 작성할 수 있습니다.";
         this.snackbar = true;
@@ -215,6 +225,16 @@ export default {
       this.needUpdate = tempList;
     },
     updateComment(comment) {
+      let strByteLength = ~-encodeURI(comment.commentcontent).split(/%..|./).length;
+      if(strByteLength > 200) {
+        this.text = '댓글은 200bytes를 넘길 수 없습니다!';
+        this.snackbar = true;
+        setTimeout(() => {
+          this.text = '';
+          this.snackbar = false;
+        },1500);
+      } else {
+
       axios
         .put(
           process.env.VUE_APP_COMMENT + "update",
@@ -246,6 +266,7 @@ export default {
                 this.comment = "";
               });
           });
+      }
     },
     goProfile(commentorid) {
       this.$router.push("/user/profile/" + commentorid);
