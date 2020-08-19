@@ -284,7 +284,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             thumbnail:
-              this.thumbnail.size != null || this.thumbnailB ? true : false,
+              this.thumbnail.size > 0 || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -347,7 +347,7 @@ export default {
             modify: this.modify,
             writerid: this.userId,
             thumbnail:
-              this.thumbnail.size != null || this.thumbnailB ? true : false,
+              this.thumbnail.size > 0 || this.thumbnailB ? true : false,
           },
           {
             headers: {
@@ -358,7 +358,7 @@ export default {
         .then((res) => {
           let data = res.data.data;
           this.articleid = data.articleid;
-          if (this.thumbnail.size != null) {
+          if (this.thumbnail.size > 0) {
             this.addItem(true);
           }
           axios
