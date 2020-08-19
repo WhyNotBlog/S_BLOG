@@ -72,9 +72,10 @@ public class ArticleService {
 
 	public Page<Article> searchAll(int sort, int page) {
 		Page<Article> result = null;
-		if(sort == 0) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"));
-		else if(sort == 1) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "hits"));
+		if(sort == 1) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"));
+		else if(sort == 0) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "hits"));
 		else if(sort == 2) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "likecount"));
+
 		return result;
 	}
 	
