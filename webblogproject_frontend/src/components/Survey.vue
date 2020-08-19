@@ -43,7 +43,24 @@ var choices = [
 ];
 
 var json = {
+  firstPageIsStarted: true,
+  startSurveyText: "시작하기",
   pages: [
+    {
+      questions: [
+        {
+          type: "image",
+          name: "banner0",
+          imageLink:
+            "https://blog.hyperiondev.com/wp-content/uploads/2018/10/Blog-Gif.gif",
+        },
+        {
+          type: "html",
+          html:
+            "<b style='font-size:1rem'>프론트엔드(FRONT END)? 백엔드(BACK END)? 풀스택(FULL STACK)?<br>과연 나의 성향은 무엇일까?<br>기대되지 않나요? 나의 개발자의 길을 찾아서..!</b> <br>*본 테스트는 개발자의 길에 앞서 가볍게 보는 성향검사입니다.",
+        },
+      ],
+    },
     {
       questions: [
         {
@@ -306,20 +323,22 @@ export default {
   data() {
     return {
       survey: model,
+      resultModal: false,
     };
   },
-  async created() {
+  mounted() {
     this.survey.pageNextText = "다음";
     this.survey.pagePrevText = "이전";
     this.survey.completeText = "결과보기";
 
-    for (let index = 1; index <= this.survey.pageCount; index++) {
+    this.survey.render();
+
+    for (let index = 0; index <= 13; index++) {
       this.survey.getQuestionByName("banner" + index).imageWidth = "100%";
       this.survey.getQuestionByName("banner" + index).imageHeight = "100%";
     }
 
-    this.survey.render();
-    await this.survey.onComplete.add(function (result) {
+    this.survey.onComplete.add((result) => {
       let front = 0;
       let back = 0;
       for (let key in result.data) {
@@ -330,16 +349,16 @@ export default {
         }
       }
 
-      if (front - back > 3) {
-        console.log("front");
-      } else if (back - front > 3) {
-        console.log("back");
+      if (front - back > 4) {
+        this.survey.completedHtml =
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=10tPeUx3o_kPk9YO8PCl-HCACpcX4Hj-C' />";
+      } else if (back - front > 4) {
+        this.survey.completedHtml =
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=1I-qPWOF5Q55Yay7vanjQPqiNyiOKEg_7' />";
       } else {
-        console.log("full");
+        this.survey.completedHtml =
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://drive.google.com/uc?id=1jiwiEPKSYywb_07G-Clr-Gn98XuGswjL'>";
       }
-
-      console.log(front);
-      console.log(back);
     });
   },
   components: { Survey },
@@ -356,12 +375,16 @@ export default {
   background: none;
 }
 
+.sv_q,
+.sv_qstn,
+.sv_row {
+  min-width: 100% !important;
+}
 .sv_container {
   width: 50vw;
   height: 100%;
 }
 
-#sq_100,
 #sq_102,
 #sq_104,
 #sq_106,
@@ -374,7 +397,8 @@ export default {
 #sq_120,
 #sq_122,
 #sq_124,
-#sq_126 {
+#sq_126,
+#sq_128 {
   display: flex !important;
   justify-content: center;
 }
@@ -386,7 +410,7 @@ export default {
   }
 }
 
-.sv_main .sv_container .sv_body .sv_p_root .sv_q {
+.sv_main .sv_container .sv_body .sv_p_root .sv_q .sv_completed_page {
   padding: 1em;
 }
 
@@ -398,6 +422,8 @@ h1 {
 
 .sv_body {
   border-top: 3px solid #726a95 !important;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px 1px #ccc;
 }
 
 .sv_main input[type="button"],

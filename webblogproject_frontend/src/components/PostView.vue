@@ -42,13 +42,15 @@
                   :src="imgSrc(article.articleid, article.thumbnail)"
                 ></v-img>
               </div>
-              <v-card-title class="card-title justify-center">{{
+              <v-card-title class="card-title justify-center">
+                {{
                 article.title
-                  ? article.title.length > 10
-                    ? article.title.slice(0, 10) + "..."
-                    : article.title.slice(0, 10)
-                  : "제목없음"
-              }}</v-card-title>
+                ? article.title.length > 10
+                ? article.title.slice(0, 10) + "..."
+                : article.title.slice(0, 10)
+                : "제목없음"
+                }}
+              </v-card-title>
             </a>
 
             <v-footer class="d-flex justify-space-around">
@@ -60,9 +62,11 @@
             <v-card-actions>
               <div style="margin-left:8px">
                 <v-icon style="margin-right:8px;color:black">face</v-icon>
-                <span style="font-family:Nanum Gothic Coding;font-size:17px">{{
+                <span style="font-family:Nanum Gothic Coding;font-size:17px">
+                  {{
                   article.editornickname
-                }}</span>
+                  }}
+                </span>
               </div>
               <v-spacer></v-spacer>
               <v-btn
@@ -187,7 +191,14 @@ export default {
   filters: {
     dateToString(date) {
       try {
-        return date.slice(0, 4) + "년 " + date.slice(5, 7) + "월 " + date.slice(8, 10) + "일";
+        return (
+          date.slice(0, 4) +
+          "년 " +
+          date.slice(5, 7) +
+          "월 " +
+          date.slice(8, 10) +
+          "일"
+        );
       } catch (e) {
         console.log("");
       }
@@ -223,7 +234,8 @@ export default {
     },
     copyLink(article) {
       const copyURL = document.createElement("input");
-      copyURL.value = process.env.VUE_APP_FRONTEND + `article/detail/${article.articleid}`;
+      copyURL.value =
+        process.env.VUE_APP_FRONTEND + `article/detail/${article.articleid}`;
       document.body.appendChild(copyURL);
       copyURL.select();
       document.execCommand("copy");
@@ -240,7 +252,8 @@ export default {
       });
     },
     checkLiked(article) {
-      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
+      if (this.loggedIn !== null)
+        return this.userLiked.includes(article.articleid);
       else return false;
     },
 
@@ -275,12 +288,16 @@ export default {
             });
         } else {
           axios
-            .delete(process.env.VUE_APP_LIKE + `delete/${this.userId}/${article.articleid}`, {
-              data: { userid: this.userId, articleid: article.articleid },
-              headers: {
-                "jwt-auth-token": this.jwtAuthToken,
-              },
-            })
+            .delete(
+              process.env.VUE_APP_LIKE +
+                `delete/${this.userId}/${article.articleid}`,
+              {
+                data: { userid: this.userId, articleid: article.articleid },
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then((res) => {
               article.likecount = res.data.data;
               axios
