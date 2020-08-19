@@ -190,7 +190,15 @@ export default {
         });
     },
     changeComment(currentComment) {
-      if (this.needUpdate[currentComment.commentid] === false) {
+      if (this.needUpdate.includes(true)) {
+        let tempList = [];
+        tempList.length = this.needUpdate.length;
+        tempList.fill(false);
+        tempList.splice(currentComment.commentid, 1, true);
+        this.needUpdate = tempList;
+        this.willUpdatedComment = currentComment.commentcontent;
+        this.willUpdatedCommentCopy = currentComment.commentcontent;
+      } else {
         let tempList = [...this.needUpdate];
         tempList.splice(currentComment.commentid, 1, true);
         this.needUpdate = tempList;
