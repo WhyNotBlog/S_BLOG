@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-container>
     <v-snackbar
       v-model="snackbar"
       :bottom="y === 'bottom'"
@@ -17,36 +18,37 @@
       </template>
     </v-snackbar>
 
-    <div
+    <v-layout
       v-for="comment in comments"
       :key="comment.commentid"
       class="d-block text-center"
       id="comment-list"
     >
       <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
-        <div>
+        <v-flex sm2>
           <v-avatar size="28">
           <img :src="commentorProfile(comment.commentorid)"  @error="imgError" />
           </v-avatar>
-          {{ comment.commentornickname }} | </div>
-        <div>
+          {{ comment.commentornickname }} | </v-flex>
+        <v-flex sm7 style="word-break:break-all;">
           {{ comment.commentcontent }}
-        </div>
-        <div> |
-          {{ comment.commentdate | dateToString }}
-          <div
-            class="d-inline-block"
+        </v-flex>
+        <v-flex sm2> |
+          {{ comment.commentdate | dateToString }} |
+        </v-flex>
+         <v-flex
+            sm1
+          ><div class="d-inline-block"
             v-if="loggedIn != null && loggedIn === comment.commentornickname"
-          >
-            |
+            >
             <v-btn color="black accent-4" icon @click="changeComment(comment)">
               <v-icon middle color="black accent-4">mdi-pencil-box-outline</v-icon>
             </v-btn>
             <v-btn color="red accent-4" icon @click="deleteComment(comment)">
               <v-icon middle color="red accent-4">mdi-alpha-x-box-outline</v-icon>
             </v-btn>
-          </div>
-        </div>
+            </div>
+          </v-flex>
       </div>
       <div v-else>
           <v-form
@@ -68,7 +70,7 @@
             <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="cancleUpdateComment(comment)">취소</v-btn>
           </v-form>
       </div>
-    </div>
+    </v-layout>
     <v-form
       ref="form"
       v-model="valid"
@@ -86,6 +88,7 @@
 
       <v-btn class="d-inline mx-1 my-auto" color="secondary" @click="validate">댓글 작성</v-btn>
     </v-form>
+    </v-container>
   </div>
 </template>
 
@@ -127,6 +130,15 @@ export default {
           this.snackbar = true;
           return;
         }
+      let strByteLength = ~-encodeURI(this.comment).split(/%..|./).length;
+      if(strByteLength > 200) {
+        this.text = '댓글은 200bytes를 넘길 수 없습니다!';
+        this.snackbar = true;
+        setTimeout(() => {
+          this.text = '';
+          this.snackbar = false;
+        },1500);
+      } else {
         axios
           .post(
             process.env.VUE_APP_COMMENT + "regist",
@@ -157,6 +169,7 @@ export default {
                 this.comment = "";
               });
           });
+        }  
       } else {
         this.text = "댓글은 로그인해야 작성할 수 있습니다.";
         this.snackbar = true;
@@ -212,6 +225,16 @@ export default {
       this.needUpdate = tempList;
     },
     updateComment(comment) {
+      let strByteLength = ~-encodeURI(comment.commentcontent).split(/%..|./).length;
+      if(strByteLength > 200) {
+        this.text = '댓글은 200bytes를 넘길 수 없습니다!';
+        this.snackbar = true;
+        setTimeout(() => {
+          this.text = '';
+          this.snackbar = false;
+        },1500);
+      } else {
+
       axios
         .put(
           process.env.VUE_APP_COMMENT + "update",
@@ -243,6 +266,7 @@ export default {
                 this.comment = "";
               });
           });
+      }
     },
     goProfile(commentorid) {
       this.$router.push("/user/profile/" + commentorid);
