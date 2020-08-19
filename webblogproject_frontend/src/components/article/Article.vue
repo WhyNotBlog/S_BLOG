@@ -30,12 +30,12 @@
       </div>
       <div class="font-weight-bold text-center">
         작성자 :
+        <v-avatar size="40">
+          <img :src="writerProfile" @error="imgError" />
+        </v-avatar>
         <v-btn text @click="goProfile(article.writerid)">
           <strong>{{ article.editornickname }}</strong>
         </v-btn>
-        <v-avatar>
-          <img :src="writerProfile" @error="imgError" />
-        </v-avatar>
 
         <v-btn text @click="checkFollow" v-if="userId != article.writerid">
           <v-icon>{{ followOrUnfollow }}</v-icon>
