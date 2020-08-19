@@ -124,7 +124,6 @@ export default {
           this.snackbar = true;
           return;
         }
-
         axios
           .post(
             process.env.VUE_APP_COMMENT + "regist",
@@ -233,6 +232,9 @@ export default {
               });
           });
     },
+    commentorProfile(commentorid) {
+      return process.env.VUE_APP_ACCOUNT + "downloadFile/" + commentorid + ".jpg"
+    },
   },
   component: {},
   computed: {
@@ -244,6 +246,14 @@ export default {
         this.$store.dispatch("setLoggedIn", value);
       },
     },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
     jwtAuthToken: {
       get() {
         return this.$store.getters.jwtAuthToken;
@@ -251,9 +261,6 @@ export default {
       set(value) {
         this.$store.dispatch("setJwtAuthToken", value);
       },
-    },
-    commentorProfile(commentorid) {
-      return process.env.VUE_APP_ACCOUNT + "downloadFile/" + commentorid + ".jpg"
     },
   },
 
