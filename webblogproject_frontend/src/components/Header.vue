@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="navActive"></v-app-bar-nav-icon>
 
       <v-btn @click="moveHome" :ripple="false" class="mainbtn">
-        <img src="@/assets/logo.png" width="120px" />
+        <img src="@/assets/logo.png" width="115px" />
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -325,6 +325,11 @@ export default {
 .mainbtn {
   box-shadow: none;
 }
+
+.mainbtn:hover {
+  cursor: pointer;
+}
+
 .v-application--is-ltr
   .v-toolbar__content
   > .v-btn.v-btn--icon:first-child
