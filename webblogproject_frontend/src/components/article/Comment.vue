@@ -31,7 +31,9 @@
           {{ comment.commentornickname }}
         </div>
         <div>
-          {{ comment.commentcontent }} |
+          {{ comment.commentcontent }}
+        </div>
+        <div> |
           {{ comment.commentdate | dateToString }}
           <div
             class="d-inline-block"
