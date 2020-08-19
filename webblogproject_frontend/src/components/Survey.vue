@@ -6,9 +6,40 @@
 </template>
 
 <script>
-var json = {
-  showProgressBar: "bottom",
+var choices = [
+  { pages: ["신경쓰인다", "이게 왜? 잠기기만 하면 된다"] },
+  { pages: ["정리된 자료로 ppt 만들기", "자료조사 및 정리"] },
+  { pages: ["시작 요일", "중복된 날짜"] },
+  { pages: ["빨강", "초록"] },
+  {
+    pages: [
+      "컬러풀한 화면을 보며 사용자가 보기 좋고 편리하게 정보 배치하기",
+      "흑백으로 이루어진 데이터베이스에서 원하는 정보만 쏙 뽑아내서 정리하기",
+    ],
+  },
+  { pages: ["보컬할래", "베이스기타 할래"] },
 
+  { pages: ["잘 모르겠다 얼른 닫는다", "해커 빙의한다 나 좀 멋있는듯"] },
+
+  {
+    pages: [
+      "전세계 컴퓨터에 침입하여 세계를 정복할 수 있는 AI 바이러스",
+      "온천을 터뜨려 세계를 정복할 수 있는 거대로봇",
+    ],
+  },
+
+  { pages: ["귀요미", "2"] },
+
+  { pages: ["알람을 수시로 확인한다", "올리고 끝"] },
+
+  { pages: ["공감해준다", "해답을 찾아준다"] },
+
+  { pages: ["Yes", "No"] },
+
+  { pages: ["솔직히 즐긴다. 짜릿해", "으으 부담스러워"] },
+];
+
+var json = {
   pages: [
     {
       questions: [
@@ -285,14 +316,11 @@ export default {
     }
 
     this.survey.render();
-    await this.survey.onComplete.add(function(result) {
+    await this.survey.onComplete.add(function (result) {
       let front = 0;
       let back = 0;
       for (let key in result.data) {
-        if (
-          json.pages[Number(key) - 1].questions[1].choices[0] ==
-          result.data[key]
-        ) {
+        if (choices[Number(key) - 1].pages[0] == result.data[key]) {
           front++;
         } else {
           back++;
@@ -322,5 +350,22 @@ export default {
 
 .sv_main {
   background: none;
+}
+
+.sv_container {
+  width: 50vw;
+  height: 100%;
+}
+
+#sq_100 {
+  display: flex !important;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1020px) {
+  .sv_container {
+    width: 90vw;
+    height: 100%;
+  }
 }
 </style>
