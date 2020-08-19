@@ -25,7 +25,7 @@
     >
       <div class="d-flex justify-space-around" :id="'comment' + comment.commentid" v-if="!needUpdate[comment.commentid]">
         <div>
-        <v-avatar>
+        <v-avatar size="28">
           <img :src="commentorProfile(comment.commentorid)" @error="imgError" />
         </v-avatar>
           {{ comment.commentornickname }}
