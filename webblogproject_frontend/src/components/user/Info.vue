@@ -40,9 +40,13 @@
 
           <v-dialog v-model="followerModal" width="650px">
             <template #activator="{ on: dialog , attrs}">
-              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog }">
-                {{ followerList.length }}
-              </div>
+              <div
+                text
+                fab
+                slot="activator"
+                v-bind="attrs"
+                v-on="{ ...dialog }"
+              >{{ followerList.length }}</div>
             </template>
             <Follow @close-modal="closeModal" type="Follower" :id="this.userId"></Follow>
           </v-dialog>
@@ -51,9 +55,13 @@
           <h4>팔로잉</h4>
           <v-dialog v-model="followingModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
-              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog }">
-                {{ followingList.length }}
-              </div>
+              <div
+                text
+                fab
+                slot="activator"
+                v-bind="attrs"
+                v-on="{ ...dialog }"
+              >{{ followingList.length }}</div>
             </template>
 
             <Follow @close-modal="closeModal2" type="Following" :id="this.userId"></Follow>
@@ -181,12 +189,14 @@ export default {
 
     this.getFollowingList();
 
-    axios.get(process.env.VUE_APP_ARTICLE + "user/" + this.userId + "/0").then((res) => {
-      this.contentCnt = res.data.data.totalElements;
-      this.articles = res.data.data.content;
-      this.isCard = true;
-      //console.log(this.articles);
-    });
+    axios
+      .get(process.env.VUE_APP_ARTICLE + "user/" + this.userId + "/0")
+      .then((res) => {
+        this.contentCnt = res.data.data.totalElements;
+        this.articles = res.data.data.content;
+        this.isCard = true;
+        //console.log(this.articles);
+      });
 
     axios
       .get(process.env.VUE_APP_ACCOUNT + "getUserInfo/" + this.loggedIn, {
@@ -213,18 +223,21 @@ export default {
       })
       .then((res) => {
         this.tempArticles = res.data.data;
-        console.log(this.tempArticles);
+        //console.log(this.tempArticles);
       });
 
     axios
-      .get(process.env.VUE_APP_ARTICLE + "searchBy/Liked/" + this.userId + "/0", {
-        headers: {
-          "jwt-auth-token": this.jwtAuthToken,
-        },
-      })
+      .get(
+        process.env.VUE_APP_ARTICLE + "searchBy/Liked/" + this.userId + "/0",
+        {
+          headers: {
+            "jwt-auth-token": this.jwtAuthToken,
+          },
+        }
+      )
       .then((res) => {
         this.likeArticles = res.data.data.content;
-        console.log(this.likeArticles);
+        //console.log(this.likeArticles);
       });
   },
 
@@ -242,9 +255,11 @@ export default {
       this.followingModal = false;
     },
     getFollowingList() {
-      axios.get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId).then((res) => {
-        this.followingList = res.data.data;
-      });
+      axios
+        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.userId)
+        .then((res) => {
+          this.followingList = res.data.data;
+        });
 
       axios
         .get(process.env.VUE_APP_FOLLOW + "followList/" + this.userId)

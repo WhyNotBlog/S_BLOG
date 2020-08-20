@@ -335,7 +335,7 @@ export default {
       ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+      //console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
@@ -347,7 +347,7 @@ export default {
       ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+      //console.log(this.categoryInt);
     },
     changeSmallCategory() {
       this.categoryInt = this.smallCategory;
@@ -356,8 +356,8 @@ export default {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
-      console.log(data);
-      console.log(this.thumbnail);
+      //console.log(data);
+      //console.log(this.thumbnail);
       //   데이터를 서버로 전송하는 코드 추가
       axios
         .post(process.env.VUE_APP_ARTICLE + "uploadThumbnail", data, {
@@ -366,9 +366,7 @@ export default {
             articleNum: this.article.articleid,
           },
         })
-        .then((res) => {
-          console.log(res);
-        })
+
         .catch((err) => {
           console.log(err);
         });

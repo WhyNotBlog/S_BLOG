@@ -274,7 +274,7 @@ export default {
               }
             )
             .then((res) => {
-              console.log(res);
+              //console.log(res);
               article.likecount = res.data.data;
               axios
                 .get(process.env.VUE_APP_LIKE + `userlike/${this.userId}`, {
