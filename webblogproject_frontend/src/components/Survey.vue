@@ -51,13 +51,12 @@ var json = {
         {
           type: "image",
           name: "banner0",
-          imageLink:
-            "https://blog.hyperiondev.com/wp-content/uploads/2018/10/Blog-Gif.gif",
+          imageLink: "https://blog.hyperiondev.com/wp-content/uploads/2018/10/Blog-Gif.gif",
         },
         {
           type: "html",
           html:
-            "<b style='font-size:1rem'>과연 나의 개발자 성향은 무엇일까?<br>프론트엔드(FRONT END)? 백엔드(BACK END)? 풀스택(FULL STACK)?<br>무엇이 나올지 기대되지 않나요?<br>나의 개발자의 길을 찾아서..!</b> <br>*본 테스트는 개발자의 길에 앞서 가볍게 보는 성향검사입니다.",
+            "<b style='font-size:1rem'>과연 나의 개발자 성향은 무엇일까?<br>프론트엔드(FRONT END)? 백엔드(BACK END)? 풀스택(FULL STACK)?<br>무엇이 나올지 기대되지 않나요? 나의 개발자의 길을 찾아서..!</b> <br>*본 테스트는 개발자의 길에 앞서 가볍게 보는 성향검사입니다.",
         },
       ],
     },
@@ -111,8 +110,7 @@ var json = {
           type: "radiogroup",
           name: "3",
           isRequired: true,
-          title:
-            "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
+          title: "달력을 봤는데 뭔가 이상한 것을 발견했어요. 가장 먼저 눈에 들어오는 것은?",
           choices: ["시작 요일", "중복된 날짜"],
         },
       ],
@@ -351,13 +349,13 @@ export default {
 
       if (front - back > 4) {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='https://miro.medium.com/max/1400/1*XR3rTO1O_RM69jFDcez7cw.gif' />";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..? <b style='color:#726a95;'> 프론트엔드</b> 입니다!</h2><br><img style='margin-bottom:5px;' width=90% src='https://miro.medium.com/max/1400/1*XR3rTO1O_RM69jFDcez7cw.gif' /><br><div>사용자에게 직접 눈으로 보이고 다르는 부분</div><div>즉, 현재 화면에서 보이는 글꼴, 색상, 메뉴, 그림 등 모든 것을 만드는 분야입니다.</div><div>대표적으로는 HTML, CSS, JavaScript 언어로 구성되어 있으며 이를 활용하여 개발합니다.</div>";
       } else if (back - front > 4) {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='http://www.ixploretech.com/img/electronics.gif' />";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..?<b style='color:#726a95;'> 백엔드</b> 입니다!</h2><br><img style='margin-bottom:5px;' width=90% src='http://www.ixploretech.com/img/electronics.gif' /><br><div>사용자가 다루는 부분에서 요청을 처리하고 그 결과를 프론트엔드에게 전달해 주는 서버의 역할</div><div>즉, 이는 눈에 보이지 않는 서버 부분과 데이터를 저장하는 공간이 DB 부분입니다.</div><div>대표적으로는 JavaScript, Python, Java, PHP, Ruby 등의 언어 활용 제작,</div><div>DB는 MySQL, MongoDB 등을 활용하여 개발합니다.</div>";
       } else {
         this.survey.completedHtml =
-          "<h2 style='font-size:2rem'>나의 성향 결과는..?</h2><br><img width=100% src='http://www.ixploretech.com/img/gif9.gif'>";
+          "<h2 style='font-size:2rem'>나의 성향 결과는..? <b style='color:#726a95;'> 풀스택</b> 입니다!</h2><br><img style='margin-bottom:5px;' width=90% src='http://www.ixploretech.com/img/gif9.gif'><br><div>프론트엔드와 백엔드 개발을 통해서 웹 or 앱이 나오게 됩니다.</div><div>이 과정에서 각 분야의 프로그래밍 언어와</div><div>이를 쉽게 만들 수 있게 도와주는 도구인 프레임워크와 DB에 대한 지식이 필요합니다.</div><div>그리고 프론트엔드/백엔드 개발을 모두 합쳐서 풀스택이라고 하고</div><div>이를 할 수 있는 개발자를 풀스택 개발자라고 합니다.</div>";
       }
     });
   },
@@ -433,5 +431,13 @@ h1 {
 .sv_main input[type="button"]:hover,
 .sv_main button:hover {
   background-color: #726a95;
+}
+
+.sv_main,
+.sv_container,
+.sv_body,
+.sv_p_root,
+.sv_q {
+  padding: 0.5em 1em 1em 1em;
 }
 </style>
