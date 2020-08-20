@@ -20,25 +20,18 @@
 
             <v-flex sm7 xs7 md7>
               <v-list>
-                <v-list-item
-                  v-for="(item, index) in person"
-                  :key="item.id"
-                  class="list"
-                >
+                <v-list-item v-for="(item, index) in person" :key="item.id" class="list">
                   <v-list-item-content>
                     <v-list-item-title>
                       <v-avatar style="margin-right:10px">
                         <img :src="imgSrc(item.id, item.picture)" />
                       </v-avatar>
-
                       {{ item.nickname }}
                     </v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-btn text @click="unFollow(item, index)" v-if="btnF(item)"
-                      >삭제</v-btn
-                    >
+                    <v-btn text @click="unFollow(item, index)" v-if="btnF(item)">삭제</v-btn>
                     <v-btn text @click="follow(item)" v-else>팔로우</v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -139,7 +132,7 @@ export default {
       this.person = this.followingList;
     }
 
-    console.log(this.followerList);
+    //console.log(this.followerList);
   },
 
   computed: {

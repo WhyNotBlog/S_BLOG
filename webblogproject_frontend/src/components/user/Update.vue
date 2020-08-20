@@ -365,8 +365,8 @@ export default {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.selectedFile; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
-      console.log(this.fileName);
-      console.log(data);
+      //console.log(this.fileName);
+      //console.log(data);
       //   데이터를 서버로 전송하는 코드 추가
       axios
         .post(process.env.VUE_APP_ACCOUNT + "upload", data, {

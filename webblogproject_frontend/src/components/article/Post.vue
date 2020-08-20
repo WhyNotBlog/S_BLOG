@@ -386,7 +386,7 @@ export default {
       ][0];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+      //console.log(this.categoryInt);
     },
     changeMiddleCategory() {
       let categoryIndexBig = this.bigCategories.indexOf(this.bigCategory);
@@ -398,24 +398,24 @@ export default {
       ][categoryIndexMiddle];
       this.smallCategory = this.smallCategories[0].value;
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+      //console.log(this.categoryInt);
     },
     changeSmallCategory() {
       this.categoryInt = this.smallCategory;
-      console.log(this.categoryInt);
+      //console.log(this.categoryInt);
     },
 
     addItem(isTemp) {
       const data = new FormData(); // 서버로 전송할 폼데이터
       const file = this.thumbnail; // 선택된 파일객체
       data.append("file", file); // 폼데이터에 파일을 추가
-      console.log(data);
-      console.log(file);
+      //console.log(data);
+      //console.log(file);
       //   데이터를 서버로 전송하는 코드 추가
 
       var go = process.env.VUE_APP_ARTICLE;
 
-      console.log(this.articleid);
+      //console.log(this.articleid);
       if (isTemp) go = process.env.VUE_APP_ARTICLETEMP;
       axios
         .post(go + "uploadThumbnail", data, {
@@ -424,9 +424,6 @@ export default {
             articleNum: this.articleid,
             "jwt-auth-token": this.jwtAuthToken,
           },
-        })
-        .then((res) => {
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);

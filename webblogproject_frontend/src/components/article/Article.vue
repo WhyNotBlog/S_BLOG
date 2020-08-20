@@ -22,9 +22,7 @@
       <div
         class="text-xl-h2 text-lg-h2 text-md-h3 text-sm-h4 text-h5 font-weight-bold text-center"
         id="title"
-      >
-        {{ article.title }}
-      </div>
+      >{{ article.title }}</div>
       <hr class="my-5" />
       <div id="body">
         <div
@@ -78,8 +76,7 @@
             v-for="tag in tags"
             :key="tag.tagid"
             @click="searchTag(tag.tagname)"
-            >#{{ tag.tagname }}</v-chip
-          >
+          >#{{ tag.tagname }}</v-chip>
         </div>
         <div
           class="text-xl-body-1 text-lg-body-1 text-md-body-1 text-sm-body-2 text-body-2 text-center my-5"
@@ -174,7 +171,10 @@ export default {
     this.article = response.data.data;
     this.categoryInt = this.article.category;
     this.writerProfile =
-      process.env.VUE_APP_ACCOUNT + "downloadFile/" + this.article.writerid + ".jpg";
+      process.env.VUE_APP_ACCOUNT +
+      "downloadFile/" +
+      this.article.writerid +
+      ".jpg";
 
     if (this.categoryInt != 1 && this.categoryInt != 2) {
       const bigCategoryIndex = parseInt(String(this.categoryInt)[0]) - 1;
@@ -182,10 +182,12 @@ export default {
       const smallCategoryIndex = parseInt(String(this.categoryInt)[2]) - 1;
 
       const bigCategories = this.$store.state.bigCategories;
-      const middleCategories = this.$store.state.middleCategories[bigCategoryIndex];
-      const smallCategories = this.$store.state.smallCategories[bigCategoryIndex][
-        middleCategoryIndex
+      const middleCategories = this.$store.state.middleCategories[
+        bigCategoryIndex
       ];
+      const smallCategories = this.$store.state.smallCategories[
+        bigCategoryIndex
+      ][middleCategoryIndex];
 
       this.bigCategory = bigCategories[bigCategoryIndex];
       this.middleCategory = middleCategories[middleCategoryIndex];
@@ -198,10 +200,12 @@ export default {
       }
     });
 
-    axios.get(process.env.VUE_APP_TAG + "taglist/" + this.articleId).then((res) => {
-      let tagData = res.data.data;
-      this.tags = tagData;
-    });
+    axios
+      .get(process.env.VUE_APP_TAG + "taglist/" + this.articleId)
+      .then((res) => {
+        let tagData = res.data.data;
+        this.tags = tagData;
+      });
   },
 
   computed: {
@@ -298,7 +302,11 @@ export default {
     unFollow() {
       axios
         .delete(
-          process.env.VUE_APP_FOLLOW + "delete/" + this.userId + "/" + this.article.writerid,
+          process.env.VUE_APP_FOLLOW +
+            "delete/" +
+            this.userId +
+            "/" +
+            this.article.writerid,
 
           {
             headers: {
@@ -341,7 +349,8 @@ export default {
         });
     },
     checkLiked(article) {
-      if (this.loggedIn !== null) return this.userLiked.includes(article.articleid);
+      if (this.loggedIn !== null)
+        return this.userLiked.includes(article.articleid);
       else return false;
     },
 
@@ -375,12 +384,15 @@ export default {
             });
         } else {
           axios
-            .delete(`${process.env.VUE_APP_LIKE}delete/${this.user.id}/${article.articleid}`, {
-              data: { userid: this.userId, articleid: article.articleid },
-              headers: {
-                "jwt-auth-token": this.jwtAuthToken,
-              },
-            })
+            .delete(
+              `${process.env.VUE_APP_LIKE}delete/${this.user.id}/${article.articleid}`,
+              {
+                data: { userid: this.userId, articleid: article.articleid },
+                headers: {
+                  "jwt-auth-token": this.jwtAuthToken,
+                },
+              }
+            )
             .then((res) => {
               article.likecount = res.data.data;
               axios
@@ -405,7 +417,7 @@ export default {
       try {
         return date.slice(0, 10);
       } catch (e) {
-        console.log(e);
+        console.log("");
       }
     },
   },
