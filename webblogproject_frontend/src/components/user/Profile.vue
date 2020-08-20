@@ -40,13 +40,7 @@
 
           <v-dialog v-model="followerModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
-              <div
-                text
-                fab
-                slot="activator"
-                v-bind="attrs"
-                v-on="{ ...dialog }"
-              >
+              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog }">
                 {{ userFollowerList.length }}
               </div>
             </template>
@@ -62,13 +56,7 @@
           <h4>팔로잉</h4>
           <v-dialog v-model="followingModal" width="650px">
             <template #activator="{ on: dialog, attrs}">
-              <div
-                text
-                fab
-                slot="activator"
-                v-bind="attrs"
-                v-on="{ ...dialog }"
-              >
+              <div text fab slot="activator" v-bind="attrs" v-on="{ ...dialog }">
                 {{ userFollowingList.length }}
               </div>
             </template>
@@ -84,10 +72,20 @@
       </v-layout>
     </div>
     <br />
+    <br />
+    <v-card height="100%" style="margin:auto; width:80%">
+      <v-tabs background-color="#f1f3f5" color="black">
+        <v-tab>최근 게시물</v-tab>
 
-    <div class="post" style="margin-left:10px; margin-right:10px">
-      <Card :data="this.articles" v-if="isCard" />
-    </div>
+        <v-tab-item class="tab">
+          <br />
+          <div class="post" style="margin-left:10px; margin-right:10px">
+            <Card :data="this.articles" v-if="isCard" :isTemp="false" />
+          </div>
+          <br />
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
   </div>
 </template>
 <script src="https://unpkg.com/vue-infinite-loading@2.4.4/dist/vue-infinite-loading.js"></script>
@@ -140,28 +138,23 @@ export default {
   created() {
     this.getFollowingList();
 
-    axios
-      .get(process.env.VUE_APP_ARTICLE + "user/" + this.id + "/0")
-      .then((res) => {
-        this.contentCnt = res.data.data.totalElements;
-        this.articles = res.data.data.content;
-        this.isCard = true;
-        //console.log(this.articles);
-      });
+    axios.get(process.env.VUE_APP_ARTICLE + "user/" + this.id + "/0").then((res) => {
+      this.contentCnt = res.data.data.totalElements;
+      this.articles = res.data.data.content;
+      this.isCard = true;
+      //console.log(this.articles);
+    });
 
-    axios
-      .get(process.env.VUE_APP_ACCOUNT + "getUserInfoById/" + this.id)
-      .then((res) => {
-        if (res.status) {
-          let data = res.data.data;
-          this.nickname = data.nickname;
-          this.email = data.email;
-          this.gitUrl = data.giturl;
-          this.imgSrc =
-            process.env.VUE_APP_ACCOUNT + "downloadFile/" + this.id + ".jpg";
-          this.introduce = data.introduce;
-        }
-      });
+    axios.get(process.env.VUE_APP_ACCOUNT + "getUserInfoById/" + this.id).then((res) => {
+      if (res.status) {
+        let data = res.data.data;
+        this.nickname = data.nickname;
+        this.email = data.email;
+        this.gitUrl = data.giturl;
+        this.imgSrc = process.env.VUE_APP_ACCOUNT + "downloadFile/" + this.id + ".jpg";
+        this.introduce = data.introduce;
+      }
+    });
   },
 
   methods: {
@@ -179,17 +172,13 @@ export default {
       this.followingModal = false;
     },
     getFollowingList() {
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followingList/" + this.id)
-        .then((res) => {
-          this.userFollowingList = res.data.data;
-        });
+      axios.get(process.env.VUE_APP_FOLLOW + "followingList/" + this.id).then((res) => {
+        this.userFollowingList = res.data.data;
+      });
 
-      axios
-        .get(process.env.VUE_APP_FOLLOW + "followList/" + this.id)
-        .then((res) => {
-          this.userFollowerList = res.data.data;
-        });
+      axios.get(process.env.VUE_APP_FOLLOW + "followList/" + this.id).then((res) => {
+        this.userFollowerList = res.data.data;
+      });
     },
   },
 
@@ -246,5 +235,9 @@ export default {
 
 .infoBox {
   color: black;
+}
+
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none;
 }
 </style>
