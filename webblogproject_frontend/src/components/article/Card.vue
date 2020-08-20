@@ -1,5 +1,5 @@
 <template>
-  <carousel-3d class="card">
+  <carousel-3d class="card" :controls-visible="true">
     <slide v-for="(article, i) in articles" :index="i" :key="i">
       <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
         <div
@@ -11,7 +11,7 @@
           }"
         >
           <v-card class="content">
-            <a @click="goPost(isCurrent,article.articleid)" style="color:black">
+            <a @click="goPost(isCurrent, article.articleid)" style="color:black">
               <v-img
                 contain
                 height="135px"
@@ -20,8 +20,7 @@
               ></v-img>
 
               <v-card-title class="card-title justify-center">
-                {{ article.title.slice(0, 10)
-                }}{{ article.title.length > 10 ? "..." : "" }}
+                {{ article.title.slice(0, 10) }}{{ article.title.length > 10 ? "..." : "" }}
               </v-card-title>
             </a>
 
@@ -58,10 +57,7 @@ export default {
     imgSrc(id, flag) {
       return flag
         ? this.isTemp
-          ? process.env.VUE_APP_ARTICLE +
-            "downloadThumbnail/temp_" +
-            id +
-            ".jpg"
+          ? process.env.VUE_APP_ARTICLE + "downloadThumbnail/temp_" + id + ".jpg"
           : process.env.VUE_APP_ARTICLE + "downloadThumbnail/" + id + ".jpg"
         : require("@/assets/basic.jpg");
     },
@@ -75,14 +71,7 @@ export default {
   filters: {
     dateToString(date) {
       try {
-        return (
-          date.slice(0, 4) +
-          "년 " +
-          date.slice(5, 7) +
-          "월 " +
-          date.slice(8, 10) +
-          "일"
-        );
+        return date.slice(0, 4) + "년 " + date.slice(5, 7) + "월 " + date.slice(8, 10) + "일";
       } catch (e) {
         console.log("");
       }
@@ -98,8 +87,8 @@ export default {
   border: none;
   background: white;
   border-radius: 4px;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .v-sheet.v-card:not(.v-sheet--outlined) {
