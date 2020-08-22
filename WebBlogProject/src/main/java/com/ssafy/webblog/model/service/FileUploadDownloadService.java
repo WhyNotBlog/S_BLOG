@@ -1,4 +1,4 @@
-package com.ssafy.webblog.controller.article;
+package com.ssafy.webblog.model.service;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public class FileUploadDownloadService {
 	                throw new FileUploadException("파일명에 부적합 문자가 포함되어 있습니다. " + fileName);
 	            
 	            Path targetLocation = this.fileLocation.resolve(fileName);
-	            
+	            System.out.println(targetLocation);
 	            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 	            
 	            return fileName;

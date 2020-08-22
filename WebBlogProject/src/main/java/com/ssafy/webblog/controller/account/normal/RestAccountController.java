@@ -2,6 +2,7 @@ package com.ssafy.webblog.controller.account.normal;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -22,7 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +44,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.webblog.controller.account.kakao.HttpConnection;
 import com.ssafy.webblog.model.dto.SignupInformation;
 import com.ssafy.webblog.model.dto.User;
+import com.ssafy.webblog.model.service.FileUploadDownloadService;
 import com.ssafy.webblog.model.service.JwtDecoder;
 import com.ssafy.webblog.model.service.JwtService;
 import com.ssafy.webblog.model.service.SendEmailService;
@@ -62,11 +67,17 @@ public class RestAccountController {
 
 	@Autowired
 	SendEmailService sService;	
+	
+	@Autowired
+    private FileUploadDownloadService service;
 
 	@Value("${backurl}")
 	private String backurl;
 	@Value("${fronturl}")
 	private String fronturl;
+	@Value("${profileUrl}")
+	private String profileUrl;	
+	
 	
 	@PostMapping("/login")
 	@ApiOperation(value = "로그인")
@@ -263,46 +274,7 @@ public class RestAccountController {
 		return entity;
 	}
 	
-	@PostMapping("/setProfile")
-	@ApiOperation(value = "프로필 사진 업로드")
-	public ResponseEntity<Map<String, Object>> setProfile(HttpServletResponse res, HttpServletRequest req, @RequestParam("file") MultipartFile[] file)
-			throws JsonProcessingException, IOException {
-		logger.debug("프로필 사진 업로드");
-		ResponseEntity<Map<String, Object>> entity = null;		
-		try {
-			String filename = req.getHeader("filename");
-			String realPath = System.getProperty("user.dir") + "\\profile\\" + filename;
-			System.out.println(realPath);
-			User user = userAccountService.getUserById(Integer.parseInt(filename));
-			for (MultipartFile multipartFile : file) {			
-				multipartFile.transferTo(new File(realPath + ".jpg"));
-			}		
-			user.setPicture(realPath + ".jpg");
-			userAccountService.updateUser(user);
-			entity = handleSuccess("");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
-	
-	@PostMapping("/getProfile")
-	@ApiOperation(value = "프로필 사진 업로드")
-	public ResponseEntity<Map<String, Object>> getProfile(HttpServletResponse res, HttpServletRequest req, String email)
-			throws JsonProcessingException, IOException {
-		logger.debug("프로필 사진 가져오기");
-		ResponseEntity<Map<String, Object>> entity = null;		
-		try {
-			String realPath = System.getProperty("user.dir") + "\\profile\\";
-			File file = new File(realPath + email + ".jpg"); 
-			MultipartFile multipartFile = (MultipartFile) file;
-			multipartFile.transferTo(new File(realPath + "egawrgwag.jpg"));
-			entity = handleSuccess("");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
+
 
 	HttpConnection conn = HttpConnection.getInstance();
 
@@ -378,6 +350,69 @@ public class RestAccountController {
 		User result = userAccountService.getUserByEmail(email);
 		if(result != null) entity = handleSuccess(0);
 		else entity = handleSuccess(1);
+		return entity;
+	}
+	
+	@PostMapping("/upload")
+	@ApiOperation(value = "파일 업로드")
+	public ResponseEntity<Map<String, Object>> getArticle(HttpServletResponse res, HttpServletRequest req, @RequestParam("file") MultipartFile[] file)
+			throws JsonProcessingException, IOException {
+		ResponseEntity<Map<String, Object>> entity = null;		
+		try {
+			String filename = req.getHeader("filename");
+			String realPath = System.getProperty("user.dir") + profileUrl + filename;
+			System.out.println(realPath);
+			User user = userAccountService.getUserById(Integer.parseInt(filename));
+			for (MultipartFile multipartFile : file) {			
+				multipartFile.transferTo(new File(realPath + ".jpg"));
+			}		
+			user.setPicture(realPath + ".jpg");
+			userAccountService.updateUser(user);
+			entity = handleSuccess("");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException{
+         // Load file as Resource
+        Resource resource = service.loadFileAsResource(fileName);
+ 
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+ 
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+ 
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+	@GetMapping("/getUserInfoById/{id}")
+	@ApiOperation(value = "다른 사용자 정보 조회")
+	public ResponseEntity<Map<String, Object>> getUserInfoById(@PathVariable int id) throws AddressException, MessagingException{		
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			User result = userAccountService.getUserById(id);
+			Map<String, Object> resultMap = new HashMap<>();
+			resultMap.put("nickname", result.getNickname());
+			resultMap.put("introduce", result.getIntroduce());
+			resultMap.put("giturl", result.getGiturl());
+			entity = handleSuccess(resultMap);
+		} catch (Exception e) {
+			entity = handleException(e);
+		}
 		return entity;
 	}
 

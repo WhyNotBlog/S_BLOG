@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="navActive"></v-app-bar-nav-icon>
 
       <v-btn @click="moveHome" :ripple="false" class="mainbtn">
-        <img src="@/assets/logo.png" width="130px" />
+        <img src="@/assets/logo.png" width="115px" />
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -21,16 +21,24 @@
       <div v-if="loggedIn != null">
         <v-tooltip bottom color="secondary">
           <template #activator="{ on}">
-            <v-btn class="icon2" text fab slot="activator" @click="moveInfo" min-width="56px">
-              <v-icon v-on="on">account_circle</v-icon>
-            </v-btn>
+            <v-avatar
+              style="border:1px solid"
+              class="icon2"
+              slot="activator"
+              @click="moveInfo"
+              width="35px"
+              height="35px"
+              min-width="35px"
+            >
+              <img class="myprofile" v-on="on" :src="profile" @error="imgError" width="35px" />
+            </v-avatar>
           </template>
-          <span>회원정보</span>
+          <span>내 정보</span>
         </v-tooltip>
 
         <v-tooltip bottom color="secondary">
           <template #activator="{ on}">
-            <v-btn text fab slot="activator" @click="movePost" min-width="56px">
+            <v-btn class="icon2" text fab slot="activator" @click="movePost" min-width="56px">
               <v-icon v-on="on">mdi-pencil</v-icon>
             </v-btn>
           </template>
@@ -38,7 +46,7 @@
         </v-tooltip>
 
         <v-btn color="#9FA9D8" slot="activator" @click="logout" :small="true">
-          <strong>logout</strong>
+          <b>logout</b>
         </v-btn>
       </div>
       <div v-else>
@@ -83,7 +91,7 @@
       <v-list>
         <v-list style="text-align:center; color:white">
           <div v-if="loggedIn">
-            <v-avatar>
+            <v-avatar class="hImg">
               <img :src="profile" @error="imgError" />
             </v-avatar>
             <br />
@@ -101,6 +109,8 @@
           </div>
         </v-list>
 
+        <v-divider></v-divider>
+
         <br />
 
         <v-list>
@@ -116,6 +126,18 @@
         </v-list>
 
         <v-divider></v-divider>
+
+        <br />
+        <div style="display:flex; justify-content:center">
+          <v-btn v-for="icon in icons" :key="icon" class="mx-3 white--text" icon>
+            <v-icon size="24px">{{ icon }}</v-icon>
+          </v-btn>
+        </div>
+        <v-col class="text-center" cols="12" style="color:white">
+          {{ new Date().getFullYear() }},
+          <v-icon color="white" size="16px">copyright</v-icon>
+          <strong>외않되</strong>
+        </v-col>
       </v-list>
     </v-navigation-drawer>
   </nav>
@@ -124,12 +146,13 @@
 <script>
 import Login from "@/components/user/Login";
 import Register from "@/components/user/Register";
-
-import axios from "axios";
+//import axios from "axios";
 
 export default {
   data() {
     return {
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"],
+
       drawer: false,
       links: [
         {
@@ -137,8 +160,9 @@ export default {
           text: "Home",
           route: "/",
         },
-        { icon: "find_in_page", text: "Search", route: "/search" },
-        { icon: "account_circle", text: "Profile", route: "/user/info" },
+        { icon: "find_in_page", text: "Search", route: "/search/title/blank" },
+        { icon: "account_circle", text: "MyPage", route: "/user/info" },
+        { icon: "mdi-pencil", text: "Write", route: "/article/post" },
       ],
     };
   },
@@ -152,6 +176,15 @@ export default {
         this.$store.dispatch("setJwtAuthToken", value);
       },
     },
+    userId: {
+      get() {
+        return this.$store.getters.userId;
+      },
+      set(value) {
+        this.$store.dispatch("setUserId", value);
+      },
+    },
+
     loggedIn: {
       get() {
         return this.$store.getters.loggedIn;
@@ -185,11 +218,27 @@ export default {
         this.$store.dispatch("setLoginModal", value);
       },
     },
+    followingList: {
+      get() {
+        return this.$store.getters.followingList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowingList", value);
+      },
+    },
+    followerList: {
+      get() {
+        return this.$store.getters.followerList;
+      },
+      set(value) {
+        this.$store.dispatch("setFollowerList", value);
+      },
+    },
   },
 
   methods: {
     imgError() {
-      console.log("err");
+      //console.log("err");
       this.profile = `${require("@/assets/profile.svg")}`;
     },
     navActive() {
@@ -199,7 +248,7 @@ export default {
       this.$router.push("/");
     },
     moveSearch() {
-      this.$router.push("/search");
+      this.$router.push("/search/title/blank");
     },
     moveInfo() {
       this.$router.push("/user/info");
@@ -214,26 +263,33 @@ export default {
       this.registModal = false;
     },
     logout() {
-      axios
-        .post(
-          process.env.VUE_APP_ACCOUNT + "logout",
-          {},
-          {
-            headers: {
-              "jwt-auth-token": this.jwtAuthToken,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status) {
-            this.loggedIn = null;
-            this.jwtAuthToken = null;
-            this.$router.push("/");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.loggedIn = null;
+      this.jwtAuthToken = null;
+      this.$router.push("/");
+      // axios
+      //   .post(
+      //     process.env.VUE_APP_ACCOUNT + "logout",
+      //     {},
+      //     {
+      //       headers: {
+      //         "jwt-auth-token": this.jwtAuthToken,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     if (res.status) {
+      //       this.loggedIn = null;
+      //       this.jwtAuthToken = null;
+      //       this.profile = `${require("@/assets/profile.svg")}`;
+      //       this.userId = null;
+      //       this.followingList = new Array();
+      //       this.followerList = new Array();
+      //       this.$router.push("/");
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
   },
 };
@@ -253,7 +309,7 @@ export default {
     width: 80% !important;
   }
 }
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 400px) {
   .icon2 {
     display: none;
   }
@@ -269,6 +325,11 @@ export default {
 .mainbtn {
   box-shadow: none;
 }
+
+.mainbtn:hover {
+  cursor: pointer;
+}
+
 .v-application--is-ltr
   .v-toolbar__content
   > .v-btn.v-btn--icon:first-child
@@ -280,7 +341,7 @@ export default {
   padding: 0;
 }
 
-.v-avatar {
+.hImg {
   width: 100px !important;
   height: 100px !important;
 }
@@ -291,5 +352,9 @@ export default {
 
 .v-btn:not(.v-btn--round).v-size--default {
   padding: 0;
+}
+
+.myprofile:hover {
+  cursor: pointer;
 }
 </style>

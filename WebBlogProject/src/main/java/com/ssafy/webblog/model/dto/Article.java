@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 //글번호	제목	내용	작성자id	작성자nickname	카테고리	작성일자	수정여부
 public class Article {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="articleid")
     private int articleid;
     
@@ -32,11 +33,15 @@ public class Article {
     
     private String editornickname;
     
-    private String category;
+    private int category;
     
     @Column(insertable = false, updatable = false)
     private LocalDateTime editdate;
     
     private int modify;
-
+    private int hits;
+    
+    private int writerid;
+    private boolean thumbnail;
+    private int likecount;
 }

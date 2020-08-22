@@ -6,6 +6,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.webblog.model.dto.Article;
@@ -58,16 +62,13 @@ public class TagService {
 	}
 	
 	
-	public List<Article> getArticleListByTagname(String tagname) {
-		List<Tag> searchingTagList = tDao.getTagByTagname(tagname);
+	public List<Article> getArticleListByTagname(String tagname, int page) {
+		Page<Tag> searchingTagList = tDao.getTagByTagname(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), tagname);
 		List<Article> result = new ArrayList<Article>();
 		Article temp = null;
-
 		for (Tag tag : searchingTagList) {
 			temp = aDao.getArticleByArticleid(tag.getArticleid());
-			if (temp != null && !result.contains(temp)) {
-				result.add(temp);
-			}
+			result.add(temp);
 		}
 		if(result.size() == 0) {
 			return null;
@@ -83,6 +84,19 @@ public class TagService {
 	public Tag getTagByArticleidAndTagname(int articleid, String tagname) {
 		Tag result = tDao.getTagByArticleidAndTagname(articleid, tagname);
 		return result;
+	}
+	
+	public Page<Tag> getTagByTagname(Pageable pageable, String tagname){
+		Page<Tag> result = tDao.getTagByTagname(pageable, tagname);
+		return result;
+	}
+	
+	public List<Tag> getTagByTagname(String tagname){
+		return tDao.getTagByTagname(tagname);
+	}
+	
+	public int countByTagname(String tagname) {
+		return tDao.countByTagname(tagname);
 	}
 
 }

@@ -1,15 +1,22 @@
 package com.ssafy.webblog.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.webblog.model.dto.Article;
+import com.ssafy.webblog.model.dto.Likearticle;
+import com.ssafy.webblog.model.dto.Tag;
 import com.ssafy.webblog.model.repo.ArticleDao;
+import com.ssafy.webblog.model.repo.LikearticleDao;
 
 @Service
 @Transactional
@@ -36,9 +43,8 @@ public class ArticleService {
 	}
 	
 	// 삭제
-	public void deleteArticle(String articleid) {
-		Article deleteArticle = artiDao.getArticleByArticleid(Integer.parseInt(articleid));
-		artiDao.delete(deleteArticle);
+	public void deleteArticle(int articleid) {
+		artiDao.deleteArticleByArticleid(articleid);
 	}
 
 	// 업데이트
@@ -49,25 +55,67 @@ public class ArticleService {
 	}
 
 	// 목록 조회
-	public List<Article> searchBy(String input, int By) {
-		List<Article> result = null;
+	public Page<Article> searchBy(String input, int By, int page) {
+		Page<Article> result = null;
 		/*
 		 * 0 : default search => title 1 : nickname검색 2 : 카테고리별 검색
 		 */
 		if (By == 1) {
-			result = artiDao.getArticleByEditornickname(input);
+			result = artiDao.getArticleByEditornicknameContaining(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), input);
 		} else if (By == 2) {
-			result = artiDao.getArticleByCategory(input);
+			result = artiDao.getArticleByCategory(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), Integer.parseInt(input));
 		} else {
-			result = artiDao.getArticleByTitle(input);
+			result = artiDao.getArticleByTitleContaining(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), input);
 		}
 		return result;
 	}
 
-	public List<Article> searchAll() {
-		List<Article> result = null;
-		result = artiDao.getArticleBy();
+	public Page<Article> searchAll(int sort, int page) {
+		Page<Article> result = null;
+		if(sort == 1) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"));
+		else if(sort == 0) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "hits"));
+		else if(sort == 2) result = artiDao.findAll(PageRequest.of(page, 6, Sort.Direction.DESC, "likecount"));
+
 		return result;
+	}
+	
+	public Page<Article> getArticleListByWriterid(int writerid, int page){
+		Page<Article> result = artiDao.getArticleByWriterid(PageRequest.of(page, 6, Sort.Direction.DESC, "articleid"), writerid);
+		return result;
+	}
+	
+	@Autowired
+	LikearticleDao lDao;
+	
+	public List<Article> getLikedArticleListByUserId(int userid, int page) {
+		Page<Likearticle> searchingLikedList = lDao.getLikearticleByUserid(PageRequest.of(page, 6, Sort.Direction.DESC, "likekey"), userid);
+		List<Article> result = new ArrayList<Article>();
+		Article temp = null;
+		for (Likearticle likearticle : searchingLikedList) {
+			temp = artiDao.getArticleByArticleid(likearticle.getArticleid());
+			result.add(temp);
+		}
+		if(result.size() == 0) {
+			return null;
+		}
+		return result;
+	}
+	
+	public int addLikeToArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setLikecount(article.getLikecount()+1);
+		return article.getLikecount();
+	}
+	public int dropLikeToArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setLikecount(article.getLikecount()-1);
+		return article.getLikecount();
+	}
+	
+	public int visitedArticle(int articleid) {
+		Article article = artiDao.getArticleByArticleid(articleid);
+		article.setHits(article.getHits()+1);
+		return article.getHits();
 	}
 
 }
