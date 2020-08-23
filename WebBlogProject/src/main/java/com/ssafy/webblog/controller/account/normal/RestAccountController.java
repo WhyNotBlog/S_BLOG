@@ -130,13 +130,12 @@ public class RestAccountController {
              
             // SMTP 서버 설정
             final String host = "smtp.gmail.com"; // 사용할 smtp host, naver라면 smtp.naver.com
-            final String accountId = "";
-            final String accountPwd = "";
+            final String accountId = ""; //보내는 사람 이메일
+            final String accountPwd = ""; //보내는 사람 메일 패스워드
             final int port = 465; // SMTP 포트
              
             String receiver = user.getEmail(); // 받는사람 이메일
-            String sender = "ssafy@muticampus.com"; // 보내는사람 이메일
-             
+          
             // Property 정보 생성
             Properties props = System.getProperties();
             props.put("mail.smtp.host", host);
@@ -156,22 +155,19 @@ public class RestAccountController {
             Message mimeMessage = new MimeMessage(session); //MimeMesage 생성
             
             try {
-				mimeMessage.setFrom(new InternetAddress(sender));
-			    mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver)); 
+		    mimeMessage.setFrom(new InternetAddress(sender));
+		    mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver)); 
 	             
 	            // Message Setting
 	            mimeMessage.setSubject(subject);
 	            mimeMessage.setText(message);
 	            Transport.send(mimeMessage); // Transfer
 	            
-			} catch (AddressException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // 보내는 EMAIL (정확히 적어야 SMTP 서버에서 인증 실패되지 않음)
-            
+		} catch (AddressException e) {	
+			e.printStackTrace();
+		} catch (MessagingException e) {		
+			e.printStackTrace();
+		} // 보내는 EMAIL (정확히 적어야 SMTP 서버에서 인증 실패되지 않음)
 			entity = handleSuccess(result);
 		} catch (RuntimeException e) {
 			entity = handleException(e);
