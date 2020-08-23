@@ -130,8 +130,8 @@ public class RestAccountController {
              
             // SMTP 서버 설정
             final String host = "smtp.gmail.com"; // 사용할 smtp host, naver라면 smtp.naver.com
-            final String accountId = "A601dummy";
-            final String accountPwd = "@123@123";
+            final String accountId = "";
+            final String accountPwd = "";
             final int port = 465; // SMTP 포트
              
             String receiver = user.getEmail(); // 받는사람 이메일
