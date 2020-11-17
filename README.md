@@ -34,17 +34,6 @@
 
 <br>
 
-## Contributors
-
-| Name   | GitHub                                        | Role     |
-| ------ | --------------------------------------------- | -------- |
-| 강민형 | [rkdals213](https://github.com/rkdals213)     | BackEnd  |
-| 이진영 | [leejinzero](https://github.com/leejinzero)   | FrontEnd |
-| 박춘화 | [Winters0727](https://github.com/Winters0727) | FrontEnd |
-| 유한석 | [yusw10](https://github.com/yusw10)     | BackEnd  |
-
-<br>
-
 ## Build
 
 ### FrontEnd
@@ -75,3 +64,15 @@ java -jar demo-0.0.1-SNAPSHOT.jar
 ## ERD
 
 ![ERD](./image/ERD.png)
+
+<br>
+
+## Contributors
+
+| Name   | GitHub                                        | Role     |
+| ------ | --------------------------------------------- | -------- |
+| 강민형 | [rkdals213](https://github.com/rkdals213)       | BackEnd  |
+| 이진영 | [leejinzero](https://github.com/leejinzero)     | FrontEnd |
+| 박춘화 | [Winters0727](https://github.com/Winters0727)   | FrontEnd |
+| 유한석 | [yusw10](https://github.com/yusw10)             | BackEnd  | 
+ 
